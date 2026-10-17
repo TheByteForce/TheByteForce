@@ -8,7 +8,7 @@ never hides new data.
 import from ekata.store { get_hub }
 import from ekata.locking { graph_writer }
 import from ekata.views { QueueRow }
-import from ekata.appeal_check { check_all_appeals }
+import from ekata.casework { refresh_appeals }
 import from ekata.api { submit_message }
 import from ekata.portal {
     DivisionView, RequestView, NgoView, BulletinView, CitizenStatus, EscalationRow, DistrictOverview,
@@ -87,7 +87,7 @@ def:pub citizen_send(text: str, channel: str = "SMS") -> CitizenStatus {
     mid = step.message.msg_id if step.message is not None else "";
     if step.message is not None and step.message.kind in ["APPEAL", "RUMOUR"] {
         with graph_writer() {
-            check_all_appeals(hub, True);
+            refresh_appeals(hub);
             commit();
         }
     }
