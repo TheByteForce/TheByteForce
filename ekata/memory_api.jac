@@ -9,7 +9,8 @@ Readers take a tick argument because the client caches reads for 60 s.
 
 import from ekata.store { get_hub }
 import from ekata.memory {
-    agent_run_in, rule_stats_in, precedents_in, AgentRunView, RuleStat, Precedent
+    agent_run_in, rule_stats_in, precedents_in, usage_ledger_in, rule_citations_in,
+    AgentRunView, RuleStat, Precedent, LedgerView, RuleCount
 }
 
 def:pub agent_run(msg_id: str, tick: int = 0) -> AgentRunView {
@@ -22,4 +23,12 @@ def:pub rule_stats(tick: int = 0) -> list[RuleStat] {
 
 def:pub precedent_stats(tick: int = 0) -> list[Precedent] {
     return precedents_in(get_hub());
+}
+
+def:pub usage_ledger(tick: int = 0) -> LedgerView {
+    return usage_ledger_in();
+}
+
+def:pub rule_citations(tick: int = 0) -> list[RuleCount] {
+    return rule_citations_in();
 }

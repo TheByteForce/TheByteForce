@@ -106,6 +106,7 @@ import from ekata.blocking {
 import from ekata.freshness { Facts, apply_facts }
 import from ekata.priority { refresh_priority, priority_now }
 import from ekata.referee { referee_merge, r5_claim, OPEN_STATUSES }
+import from ekata.memory { memory_mark, record_run }
 import from ekata.ai.intake { extract_report, extract_report_rules, intake_run_info }
 import from ekata.ai.resolver { Resolver }
 import from ekata.ai.triage { overlay_rank }
@@ -621,6 +622,7 @@ def register_appeal(
 def process_in_hub(
     hub: EkataHub, text: str, channel: str, storm_time: str, msg_id: str = ""
 ) -> Message {
+    mem_mark = memory_mark();
     t = storm_time if storm_time != "" else hub.storm_time;
     advance_clock(hub, t);
     ch = channel.upper() if channel != "" else "WEB";
@@ -709,6 +711,7 @@ def process_in_hub(
             d +>:About:+> inc;
         }
     }
+    record_run(hub, msg, mem_mark);
     return msg;
 }
 
