@@ -17,8 +17,90 @@ import from ekata.portal_api {
 }
 import from .atoms { RequestBadge, pretty, people_label }
 import from .shell { AppShell, WorkspaceSelect, Surface }
+import from ekata.geo_api { map_layers, division_route }
+import type from ekata.geo { MapLayers, RoutePlan }
+import from .map { EkataMap, MapLegend, RouteSummary }
 import from .queue { OfficerQueue }
 import from .incident { CasePanel }
+
+def:pub OfficerMap(ds: str, onOpen: Callable[[str], None]) -> JsxElement {
+    has layers: MapLayers | None = None;
+    has route: RoutePlan | None = None;
+    has stops: str = "5";
+    has busy: bool = False;
+    has error: str = "";
+
+    async def load -> None {
+        try {
+            layers = await map_layers("ds:" + ds, int(Date.now()));
+            error = "";
+        } except Exception as e {
+            error = "Could not load the map. It will retry.";
+        }
+    }
+    async def plan -> None {
+        busy = True;
+        try {
+            route = await division_route(ds, int(stops));
+            error = "";
+        } except Exception as e {
+            error = "Could not plan a route for " + ds + ".";
+        }
+        busy = False;
+    }
+    async can with [ds] entry {
+        route = None;
+        await load();
+    }
+    useEffect(
+        lambda {
+            timer = setInterval(lambda { load(); }, 8000);
+            return lambda { clearInterval(timer); };
+        },
+        [ds]
+    );
+
+    <section className="space-y-4">
+        {if error != "" {
+            <p role="alert" className="text-[13px] text-blocked">{error}</p>
+        }}
+        <div className="flex flex-wrap items-center gap-3">
+            <button
+                type="button"
+                disabled={busy}
+                onClick={lambda { plan(); }}
+                className="rounded-md bg-[#0E3550] px-4 py-2 text-[15px] font-semibold text-white disabled:opacity-60"
+            >
+                {"Planning the route..." if busy else "Plan the best route"}
+            </button>
+            <label className="flex items-center gap-2 text-[15px] text-muted-foreground">
+                Stops
+                <select
+                    value={stops}
+                    className="rounded-md border border-border bg-card px-2 py-2 text-[15px] text-foreground"
+                    onChange={lambda (e: ChangeEvent) { stops = e.target.value; }}
+                >
+                    {for n in ["3", "4", "5", "6", "7", "8"] {
+                        <option key={n} value={n}>{n}</option>
+                    }}
+                </select>
+            </label>
+        </div>
+        <div className="grid gap-4 lg:grid-cols-3">
+            <div className={"space-y-3 " + ("lg:col-span-2" if route is not None else "lg:col-span-3")}>
+                <div className="overflow-hidden rounded-xl border border-border bg-card">
+                    <EkataMap layers={layers} route={route} height="h-[560px]" onSelect={onOpen}/>
+                </div>
+                <MapLegend withRoute={route is not None}/>
+            </div>
+            {if route is not None {
+                <div className="lg:col-span-1">
+                    <RouteSummary route={route}/>
+                </div>
+            }}
+        </div>
+    </section>
+}
 
 def:pub OfficerPortal -> JsxElement {
     has ds: str = "";
@@ -149,7 +231,8 @@ def:pub OfficerPortal -> JsxElement {
     nav = [
         ["queue", "Call queue", "call"],
         ["case", "Open case", "people"],
-        ["requests", "Relief requests", "truck"]
+        ["requests", "Relief requests", "truck"],
+        ["map", "Map and route", "pin"]
     ];
     page_title = "Call queue";
     page_sub = f"{len(queue)} households waiting in {ds}, most vulnerable first" if len(queue) != 1 else f"1 household waiting in {ds}";
@@ -160,6 +243,10 @@ def:pub OfficerPortal -> JsxElement {
     if page == "requests" {
         page_title = "Relief requests";
         page_sub = f"Everything asked of relief groups for households in {ds}.";
+    }
+    if page == "map" {
+        page_title = "Map and route";
+        page_sub = f"Households in {ds}, and the best run for your rescue team.";
     }
     if ds == "" {
         page_title = "Division officer desk";
@@ -218,6 +305,9 @@ def:pub OfficerPortal -> JsxElement {
                 onChanged={on_changed}
                 onRefresh={on_refresh}
             />
+        }}
+        {if ds != "" and page == "map" {
+            <OfficerMap ds={ds} onOpen={lambda (id: str) { open_case(id); }}/>
         }}
         {if ds != "" and page == "requests" {
             <Surface>
