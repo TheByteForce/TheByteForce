@@ -36,7 +36,7 @@ leaflet = "latest"
 react-leaflet = "5.0.0"
 
 [client.app_meta_data]
-title = "CrisisConnect Â· Flood response desk"
+title = "CrisisConnect · Flood response desk"
 description = "CrisisConnect: one trusted inbox for a flood duty desk. Merges SOS messages into incidents, ranks who to call first, and checks appeals."
 theme_color = "#ffffff"
 icon = "/static/assets/crisisconnect-mark.svg"
@@ -45,17 +45,17 @@ icon = "/static/assets/crisisconnect-mark.svg"
 plugins = ["tailwindcss()"]
 lib_imports = ["import tailwindcss from '@tailwindcss/vite'"]
 
-# Native admin metrics and deployment observability backends.
+# Admin metrics, distributed traces and aggregated deployment logs.
 [scale.monitoring]
 enabled = true
 walker_metrics = true
 
-[scale.tracing]
-enabled = true
-
 [scale.gateway.tracing]
 enabled = true
-sample_ratio = 1.0
 
 [scale.gateway.logs]
+enabled = true
+
+# Install the tracing runtime extras along with the application.
+[scale.tracing]
 enabled = true

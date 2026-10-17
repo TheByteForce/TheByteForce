@@ -49,25 +49,25 @@
   ],
   "bulletins": [
     {
-      "issuer": "DMC",
+      "issuer": "District Flood Desk",
       "area": "Kegalle",
       "issued_at": "18:30",
       "text": "Kotmale and other reservoirs are under observation. No dam breach has been reported. Do not share unverified dam messages."
     },
     {
-      "issuer": "DMC",
+      "issuer": "District Flood Desk",
       "area": "Mawanella",
       "issued_at": "19:30",
       "text": "Rescue operations are continuing in Mawanella with navy and army boats."
     },
     {
-      "issuer": "Irrigation",
+      "issuer": "Reservoir Office",
       "area": "Kegalle",
       "issued_at": "20:00",
       "text": "Kelani river levels are below major flood level; a minor flood warning only is in force."
     },
     {
-      "issuer": "NBRO",
+      "issuer": "Landslide Watch",
       "area": "Aranayake",
       "issued_at": "18:00",
       "text": "Level 2 landslide warning for Aranayake and Kolonna divisions. Residents on slopes should move to safe locations."

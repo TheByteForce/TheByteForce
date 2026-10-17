@@ -106,8 +106,8 @@ test "bulletins match by area and channel resolves" {
     seed_registry(hub);
     seed_bulletins(hub);
     s = official_bulletins_in(hub, "kegalle");
-    assert "NBRO" in s;
-    assert "DMC" in s;
+    assert "Landslide Watch" in s;
+    assert "District Flood Desk" in s;
     c = official_channel_for_in(hub, "Mawanella North");
     assert "Kegalle" in c;
     assert "Divisional Secretariat" in c;

@@ -1,4 +1,4 @@
-"""Referee: plain Jac rules, no LLM (plan section 12: R1-R7, R13, R14).
+"""Referee: plain Jac rules, no LLM (plan section 12: R1-R7, R12, R13, R14).
 
 Every rule is a pure function over typed inputs and returns a RefereeVerdict
 (outcome + rule id + reason). The coordinator gathers the facts (from the
@@ -6,6 +6,7 @@ graph) and the referee decides; nothing here touches the graph.
 Tier names come from blocking: STRONG, MEDIUM, WEAK (or "" for no evidence).
 """
 
+import re;
 import from ekata.schema { RefereeOutcome }
 
 # A merge proposal scoring below this goes to a person even with strong evidence.
@@ -160,6 +161,28 @@ def r7_queue_eligible(kind: str) -> RefereeVerdict {
         return mk_verdict(RefereeOutcome.BLOCKED, "R7", "rumours never enter the call queue");
     }
     return mk_verdict(RefereeOutcome.APPLIED, "R7", "eligible for an incident");
+}
+
+# R12: real people's names and real office titles never appear in fixtures or
+# generated warnings. Fixtures and seeded bulletins use invented issuers; a
+# test runs this over every fixture so a real agency can't slip back in.
+glob REAL_OFFICE_TITLES: list[str] = [
+    "disaster management centre", "dmc", "nbro", "national building research",
+    "irrigation department", "department of meteorology", "met department",
+    "red cross", "slcert", "sarvodaya"
+];
+
+def r12_no_real_names(text: str) -> RefereeVerdict {
+    low = text.lower();
+    for title in REAL_OFFICE_TITLES {
+        if re.search(r"\b" + re.escape(title) + r"\b", low) {
+            return mk_verdict(
+                RefereeOutcome.BLOCKED, "R12",
+                "names a real office (" + title + "); use an invented issuer"
+            );
+        }
+    }
+    return mk_verdict(RefereeOutcome.APPLIED, "R12", "no real office titles");
 }
 
 # R13: every applied change carries a Decision with agent, action and reason.

@@ -1,11 +1,12 @@
 """A bounded top-five explainer; deterministic vulnerability floors always win."""
-import from ekata.instrumentation { NativeSpan }
 import os;
+import from ekata.instrumentation { NativeSpan }
 import from ekata.schema { EkataHub, Incident, Holds }
 import from ekata.views { QueueRow }
 import from ekata.store { find_incident, log_decision }
 import from ekata.priority { enforce_floor }
 import from ekata.ai.models { strong, budget_hook, drain_agent_steps, last_model }
+import from ekata.agent_tools { incident_summary_in, vulnerable_flags_in, waiting_time_in }
 
 glob rank_model: any = strong;
 obj RankExplanation {
@@ -19,22 +20,28 @@ node RankNote {
     has reason: str;
     has epoch: int;
 }
+# The ranker's tools are the shared read-only tools in agent_tools.jac, bound
+# to the hub being ranked; without a hub they answer from the queue rows.
 obj Ranker {
     has rows: list[QueueRow];
+    has hub: EkataHub | None = None;
     def incident_summary(inc_id: str) -> str {
         with NativeSpan(name="incident_summary", args={"inc_id": inc_id}, kind="tool") as span {
+            if self.hub is not None { return span.finish(incident_summary_in(self.hub, inc_id)); }
             for r in self.rows { if r.inc_id == inc_id { return span.finish(r.headline + ": " + r.place + "; " + r.reason); } }
             return span.finish("Not in the current top five");
         }
     }
-    def vulnerable_flags(inc_id: str) -> list[str] {
+    def vulnerable_flags(inc_id: str) -> str {
         with NativeSpan(name="vulnerable_flags", args={"inc_id": inc_id}, kind="tool") as span {
-            for r in self.rows { if r.inc_id == inc_id { return span.finish(r.vulnerable); } }
-            return span.finish([]);
+            if self.hub is not None { return span.finish(vulnerable_flags_in(self.hub, inc_id)); }
+            for r in self.rows { if r.inc_id == inc_id { return span.finish(", ".join(r.vulnerable) or "none"); } }
+            return span.finish("none");
         }
     }
     def waiting_time(inc_id: str) -> str {
         with NativeSpan(name="waiting_time", args={"inc_id": inc_id}, kind="tool") as span {
+            if self.hub is not None { return span.finish(waiting_time_in(self.hub, inc_id)); }
             for r in self.rows { if r.inc_id == inc_id { return span.finish(r.waiting); } }
             return span.finish("unknown");
         }
@@ -50,7 +57,7 @@ def explain_top(hub: EkataHub, rows: list[QueueRow]) -> list[QueueRow] {
     top = rows[:5];
     notes = [RankExplanation(inc_id=r.inc_id, score=r.priority, reason=r.reason) for r in top];
     if os.environ.get("EKATA_AI", "on") != "off" {
-        try { notes = Ranker(rows=top).explain(); } except Exception { return overlay_rank(hub, rows); }
+        try { notes = Ranker(rows=top, hub=hub).explain(); } except Exception { return overlay_rank(hub, rows); }
     }
     allowed = [r.inc_id for r in top];
     for old in [hub ->:Holds:->[?:RankNote]] { del old; }

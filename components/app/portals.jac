@@ -40,6 +40,7 @@ glob PORTALS: list[dict[str, any]] = [
         "workspace": "Your division",
         "nav": [
             {"to": "/officer", "label": "Call queue", "icon": Call02Icon},
+            {"to": "/officer/register", "label": "GN register", "icon": UserGroupIcon},
             {"to": "/officer/requests", "label": "Relief requests", "icon": TruckIcon},
             {"to": "/officer/map", "label": "Map and route", "icon": Route01Icon}
         ]

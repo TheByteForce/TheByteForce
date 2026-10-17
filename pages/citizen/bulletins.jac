@@ -27,7 +27,7 @@ def:pub BulletinsPage -> JsxPage {
         <PageHero
             eyebrow="Citizen · Official bulletins"
             title="What the authorities are saying."
-            description="Warnings and notices from the Disaster Management Centre, NBRO, the Irrigation Department and the District Secretariat."
+            description="Warnings and notices from the district flood desk, the landslide watch, the reservoir office and the District Secretariat."
             image="/static/assets/images/officials-meeting.jpg"
             imageAlt="Officials around a table at an emergency operations centre"
             capsules={[[plural(len(rows), "bulletin", "bulletins"), "blue"], [ctx.area if ctx.area != "" else "All areas", "green"]]}

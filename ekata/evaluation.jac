@@ -159,7 +159,14 @@ def evaluate_fixture(messages_path: str, labels_path: str, mode: str = "rules", 
                 ids.append(str(mid)); truth[str(mid)] = str(label_row["incident"]);
             }
             if label_row.get("language") { languages[str(mid)] = str(label_row["language"]); }
-            if label_row.get("verdict") { expected_appeals[str(mid)] = str(label_row["verdict"]); }
+            if label_row.get("verdict") {
+                expected_appeals[str(mid)] = str(label_row["verdict"]);
+            } elif str(label_row.get("kind", "")) == "APPEAL" and label_row.get("expected") {
+                # MATCHED_IF_CONFIRMED needs a logged confirming call; an evaluation
+                # logs no calls, so the expected verdict here is UNVERIFIED.
+                want = str(label_row["expected"]);
+                expected_appeals[str(mid)] = "UNVERIFIED" if want == "MATCHED_IF_CONFIRMED" else want;
+            }
         }
         (tp, pp, actual) = pair_counts(ids, truth, predicted);
         predicted_incidents = len(set([predicted.get(mid, "unassigned:" + mid) for mid in ids]));

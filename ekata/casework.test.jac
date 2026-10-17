@@ -12,8 +12,17 @@ test "R9 matched requires both a human-confirmed need and an official channel" {
     assert referee_appeal([], False, True) == "UNVERIFIED";
     assert referee_appeal(["requests_reader_credentials"], True, True) == "SUSPICIOUS";
 }
-test "R10 and R11 public warnings require analyst and native review" {
+test "R10 nothing is shown publicly or sent without analyst approval" {
+    assert not r10_publish_allowed("");
+    assert not r10_publish_allowed("   ");
+    assert r10_publish_allowed("analyst-1");
     assert not warning_allowed(False, "en", True);
+}
+test "R11 Sinhala and Tamil drafts are marked until a native speaker checks them" {
+    assert r11_native_label("si", False) == "needs native-speaker check";
+    assert r11_native_label("ta", False) == "needs native-speaker check";
+    assert r11_native_label("si", True) == "";
+    assert r11_native_label("en", False) == "";
     assert not warning_allowed(True, "si", False);
     assert not warning_allowed(True, "ta", False);
     assert warning_allowed(True, "si", True);

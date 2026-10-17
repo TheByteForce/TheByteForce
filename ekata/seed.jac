@@ -57,27 +57,27 @@ def registry_seeds() -> list[RegistrySeed] {
 def bulletin_seeds() -> list[BulletinSeed] {
     return [
         BulletinSeed(
-            issuer="DMC", area="Kegalle",
+            issuer="District Flood Desk", area="Kegalle",
             text="Situation note 19:30: heavy rain continues over Kegalle and Ratnapura districts. Residents near river banks should be ready to move to higher ground.",
             issued_at="19:30"
         ),
         BulletinSeed(
-            issuer="NBRO", area="Kegalle",
+            issuer="Landslide Watch", area="Kegalle",
             text="Landslide alert (level 2) for the Mawanella, Aranayaka and Warakapola divisions. Avoid steep slopes and cut banks tonight.",
             issued_at="20:15"
         ),
         BulletinSeed(
-            issuer="Irrigation", area="Kotmale",
+            issuer="Reservoir Office", area="Kotmale",
             text="Kotmale dam: spill gates are operating as planned and water levels are within safe limits. The dam is safe; reports of a breach are false.",
             issued_at="21:00"
         ),
         BulletinSeed(
-            issuer="Irrigation", area="Ratnapura",
+            issuer="Reservoir Office", area="Ratnapura",
             text="River level rising at the Ratnapura gauge. Flood warning for low-lying areas along the river.",
             issued_at="22:00"
         ),
         BulletinSeed(
-            issuer="DMC", area="Ratnapura",
+            issuer="District Flood Desk", area="Ratnapura",
             text="Relief shelters are open at schools in Ratnapura and Kuruwita. Families should bring identity papers and essential medicine.",
             issued_at="22:30"
         )

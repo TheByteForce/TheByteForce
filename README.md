@@ -4,6 +4,17 @@
 
 Built by TheByteForce during AI Hackathon 2026 at the University of Moratuwa. All demonstration households, contacts, organisations and bulletins are fictional.
 
+- **Live app:** https://preview-jac-sbx-e4cfaadb8da1492db89a01fdc902a284.jachammer.app (Jac Hammer sandbox, synthetic data; the first visit takes in the opening backlog of reports, so allow about 30 seconds)
+- **Demo video:** _link added at submission_
+
+## The problem
+
+On a flood night, the same family appears in many messages: an SMS, a relative's WhatsApp, a hotline call. Volunteers phone every one of them to confirm the location, needs and headcount, so the most vulnerable people get buried under repeats. During the 2025 floods one volunteer platform alone took requests from more than 300,000 people. Fake relief appeals ride the same channels: one posing as a deputy minister collected about Rs 600,000, and a false dam-breach rumour tied up the emergency hotline with hundreds of calls.
+
+**Ekata merges duplicate pleas into one verified household record, ranks who to call next (most vulnerable first, with a three-question call brief), routes relief to a registered group, and checks donation appeals against the households an officer verified by phone.** Unverified is never treated as fraud.
+
+Who it's for: Grama Niladhari and divisional desk officers making the calls, registered relief groups, district coordinators, and families in the flood, who can track their own request.
+
 ## Run
 
 Use Linux or WSL with Jac **0.37.25**. Keep the checkout in the Linux filesystem.
@@ -40,6 +51,12 @@ The operator panel supplies fictional messages and recorded human actions to the
 
 Messages, identifiers, incidents, calls, appeals and resource requests share a persistent graph anchored explicitly on `root.shared`. Walkers find candidates through shared identifiers. The resolver uses `visit ... by llm` to choose a graph neighbour and a typed scoring function to assess the household match. Typed `by llm` functions perform intake, briefing and resource matching. Tool-using agents inspect read-only evidence. Plain Jac referee rules constrain automatic actions, while humans verify calls and review consequential findings. Decision nodes preserve the reasoning and outcome; `commit()` makes each completed unit visible to other requests. The frontend is also written in Jac.
 
+- **Agents:** intake (typed `by llm`, canonical names and phones), resolver (`visit [->:Candidate:->] by llm` plus a typed scorer, retried once with the referee's block reason), call brief (typed, exactly three questions), ranker (a ReAct agent capped at 4 iterations that explains the top five but can never push a vulnerable household below its deterministic score), and appeal investigator (`visit [-->] by llm` picks which lead to check first — payee, phone, link, claimed office or household — then a ReAct agent with five read-only tools cites what it found).
+- **Referee:** fourteen plain Jac rules (R1–R14), each with a test. Nothing an agent proposes changes the graph until a rule allows it or a person approves it.
+- **Agent memory in the same graph:** a memory hub keeps one run per message with its ordered steps, every model call (model, latency, tokens), the rule each decision cites, desk feedback on merge proposals and a usage ledger that survives resets. The resolver reads tonight's desk precedents as evidence, as counts, never as old message text.
+- **Reliability:** a fallback model pool, a spend and call cap, a rules-only mode (phone-match merges and the priority score keep working with every model down), and a labelled recorded run of real model outputs.
+- **Storage:** the whole graph (the flood night and the agents' memory) lives in the Postgres that Jac Hammer provisions. There is no separate database.
+
 ```mermaid
 flowchart LR
     Message --> Intake --> Identifiers
@@ -73,6 +90,16 @@ Evaluation reads raw messages first and opens the separate truth labels only aft
 - Human decision precedents are retrieved graph memory, not model fine-tuning.
 - A recorded model run must be labelled; unseen inputs may still invoke the live provider.
 - Real deployment requires access controls, verified relief registries, operational data feeds and field validation.
+- Fixtures and seeded bulletins use invented issuers. Referee rule R12 has a test that fails if a real agency's name appears in any fixture or seeded bulletin.
+- Sinhala and Tamil messages in the fixture need a native speaker's check; warning drafts in those languages stay marked "needs native-speaker check" (R11) until one approves them.
+- Data minimisation: Ekata keeps only what a call needs (names, phones, place, headcount, needs) and nothing from appeals beyond the evidence cited. A production version would mask resolved households after the emergency.
+
+## What's next
+
+- An SMS gateway and a WhatsApp webhook feeding the same intake, so people without data can reach the desk.
+- Verified relief registries and official bulletin feeds in place of the fictional registry.
+- Officer logins per division, and a print-ready hand-over sheet for each Divisional Secretariat.
+- An independent, separately written held-out set to measure merge and appeal accuracy.
 
 MIT licensed. See [LICENSE](LICENSE).
 
@@ -80,6 +107,16 @@ MIT licensed. See [LICENSE](LICENSE).
 ## Recorded development baseline
 
 `results/development-rules.json` contains a completed rules-only run of the integrated 94-message fixture. It is supplied as a reproducible development baseline, not an independent held-out or live-model result. Pairwise counts, engine, timestamp, language groups and unavailable measurements are included in the JSON.
+
+| Development fixture (94 synthetic messages, 64 rescue) | Rules only |
+|---|---|
+| Calls needed (incidents) | 40 instead of 64, **24 calls saved** |
+| Merge precision (no wrong merges) | **100%** (29 of 29 proposed pairs) |
+| Merge recall | 65.9% (29 of 44 true pairs) |
+| Message kind accuracy | 81.9% |
+| Referee interventions | 11 blocks or hand-offs to a person, 8 retries |
+
+These are development numbers on synthetic data the team wrote, not held-out performance.
 
 ## Deployment
 
