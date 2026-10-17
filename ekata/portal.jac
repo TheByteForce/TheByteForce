@@ -185,6 +185,31 @@ def officer_for(ds_name: str) -> str {
     return f"Divisional desk, {ds_name}";
 }
 
+glob VERIFIED_OUTCOMES: list[str] = ["REACHED_CONFIRMED", "STILL_IN_NEED", "RESCUED"];
+
+def calls_of(inc: Incident) -> list[CallLog] {
+    return [inc <-:Logged:<-[?:CallLog]];
+}
+
+# The newest call that actually reached the household (no-answer calls never verify).
+def verifying_call(inc: Incident) -> CallLog | None {
+    best: CallLog | None = None;
+    for c in calls_of(inc) {
+        if c.outcome in VERIFIED_OUTCOMES and (best is None or c.storm_time >= best.storm_time) {
+            best = c;
+        }
+    }
+    return best;
+}
+
+def is_verified(inc: Incident) -> bool {
+    return verifying_call(inc) is not None;
+}
+
+def no_answer_count(inc: Incident) -> int {
+    return len([c for c in calls_of(inc) if c.outcome == "NO_ANSWER"]);
+}
+
 def is_open(inc: Incident) -> bool {
     return inc.status in OPEN_STATUSES;
 }
@@ -214,7 +239,7 @@ def division_views(hub: EkataHub) -> list[DivisionView] {
         if len(inc.vulnerable) > 0 {
             v.vulnerable_open += 1;
         }
-        if not has_call_log(inc) {
+        if not is_verified(inc) {
             v.unanswered += 1;
         }
     }
@@ -306,6 +331,11 @@ def rank_candidates(hub: EkataHub, need: str, division: str, district: str, excl
         prof = ngo_profile(reg.office);
         areas = prof["areas"];
         offers = prof["offers"];
+        # Eligibility first: a group must offer the need and serve the area.
+        serves = (division != "" and division in areas) or (district != "" and district in areas);
+        if need not in offers or not serves {
+            continue;
+        }
         score = 0.0;
         if division != "" and division in areas {
             score += 2.0;
@@ -340,13 +370,19 @@ def route_request(hub: EkataHub, req: ResourceRequest, inc: Incident) -> bool {
     if len(cands) == 0 {
         req.status = "UNCOVERED";
         req.ngo = "";
-        req.reason = "Every registered group in reach has declined. The district desk must find cover.";
+        tried = len(req.declined_by);
+        where = division or district or "this area";
+        req.reason = (
+            f"Every eligible group for {req.need} in {where} has declined. The district desk must find cover."
+            if tried > 0
+            else f"No registered group offers {req.need} in {where}. Sent to the district desk."
+        );
         log_decision(hub, "matcher", "no_cover", req.reason, "NEEDS_HUMAN", hub.storm_time, [inc], target_label=req.req_id);
         return False;
     }
     top = cands[:3];
     best = top[0];
-    reason = f"{best.office} serves {division or district or 'the area'} and offers {req.need}" if req.need in best.offers else f"{best.office} is the closest group with capacity";
+    reason = f"{best.office} serves {division or district or 'the area'} and offers {req.need}; {len(cands)} eligible group(s)";
     model = "rules";
     if os.environ.get("EKATA_AI", "on").lower() != "off" and len(top) > 1 {
         try {
@@ -391,12 +427,25 @@ def create_request(hub: EkataHub, inc_id: str, need: str, officer: str) -> Resou
     kind = normal_need(need);
     for r in requests_of(inc) {
         if r.need == kind and r.status in ["REQUESTED", "ACCEPTED", "DISPATCHED"] {
+            log_decision(
+                hub, "matcher", "duplicate_blocked",
+                f"{inc_id} already has {kind} {r.status.lower()} with {r.ngo or 'the district desk'} ({r.req_id}); no second request sent",
+                "BLOCKED", hub.storm_time, [inc], confidence=1.0, model="rules", target_label=r.req_id
+            );
             return r;
         }
     }
+    delivered = [r for r in requests_of(inc) if r.need == kind and r.status == "DELIVERED"];
     req = ResourceRequest(req_id=next_request_id(hub), need=kind, requested_by=officer, storm_time=hub.storm_time);
     hub +>:Holds:+> req;
     req +>:RequestFor:+> inc;
+    if len(delivered) > 0 {
+        log_decision(
+            hub, "matcher", "repeat_flagged",
+            f"{kind} was already delivered to {inc_id} by {delivered[0].ngo}; a second delivery needs a person to confirm",
+            "NEEDS_HUMAN", hub.storm_time, [inc], confidence=1.0, model="rules", target_label=req.req_id
+        );
+    }
     route_request(hub, req, inc);
     return req;
 }
@@ -540,24 +589,40 @@ def citizen_status(hub: EkataHub, msg_id: str) -> CitizenStatus {
     }
     reqs = requests_of(inc);
     st.help = [f"{r.need}: {r.status.lower()}" + (f" ({r.ngo})" if r.ngo != "" else "") for r in reqs];
-    delivered = len([r for r in reqs if r.status == "DELIVERED"]) > 0;
-    on_way = len([r for r in reqs if r.status in ["ACCEPTED", "DISPATCHED"]]) > 0;
-    if inc.status in ["RESOLVED", "HANDED_OVER"] or delivered {
+    states = [r.status for r in reqs];
+    vcall = verifying_call(inc);
+    misses = no_answer_count(inc);
+    # Stages, each earned by a real event (never by a call that went unanswered):
+    # 0 received, 1 sent to division, 2 officer confirmed by phone,
+    # 3 a group accepted, 4 help on the way, 5 delivered or household safe.
+    if inc.status in ["RESOLVED", "HANDED_OVER"] {
+        st.stage = 5;
+        st.stage_label = "Marked safe";
+        st.detail = "The desk has recorded that your household is safe.";
+    } elif "DELIVERED" in states {
+        st.stage = 5;
+        st.stage_label = "Help delivered";
+        st.detail = "The relief group recorded the delivery. Tell the desk if anyone still needs help.";
+    } elif "DISPATCHED" in states {
         st.stage = 4;
-        st.stage_label = "Help reached you";
-        st.detail = "The desk has marked your household as reached.";
-    } elif on_way {
-        st.stage = 3;
         st.stage_label = "Help is on the way";
-        st.detail = "A registered group has accepted your request.";
-    } elif inc.status == "CONFIRMED" or has_call_log(inc) {
+        st.detail = "A registered group has set off to you.";
+    } elif "ACCEPTED" in states {
+        st.stage = 3;
+        st.stage_label = "A group accepted";
+        st.detail = "A registered relief group accepted your request and is preparing.";
+    } elif vcall is not None {
         st.stage = 2;
         st.stage_label = "Officer confirmed";
-        st.detail = "An officer has spoken to your household and confirmed the details.";
+        st.detail = f"An officer reached your household at {vcall.storm_time} and confirmed the details.";
     } else {
         st.stage = 1;
         st.stage_label = "Sent to your division";
-        st.detail = f"Your request reached {st.officer or 'the district desk'}. Keep your phone on.";
+        st.detail = (
+            f"We called {misses} time(s) and could not get through. Keep your phone on; you stay at the front of the queue."
+            if misses > 0
+            else f"Your request reached {st.officer or 'the district desk'}. Keep your phone on."
+        );
     }
     return st;
 }
@@ -570,17 +635,19 @@ glob ESCALATE_DISTRICT_MIN: int = 60;
 def escalation_rows(hub: EkataHub) -> list[EscalationRow] {
     out: list[EscalationRow] = [];
     for inc in all_incidents(hub) {
-        if not is_open(inc) or has_call_log(inc) {
+        if not is_open(inc) or is_verified(inc) {
             continue;
         }
         mins = storm_diff(hub.storm_time, inc.first_seen);
-        limit = ESCALATE_DS_MIN // 2 if len(inc.vulnerable) > 0 else ESCALATE_DS_MIN;
+        misses = no_answer_count(inc);
+        # Vulnerable people, or calls that went unanswered, escalate twice as fast.
+        limit = ESCALATE_DS_MIN // 2 if len(inc.vulnerable) > 0 or misses > 0 else ESCALATE_DS_MIN;
         if mins < limit {
             continue;
         }
         level = "District" if mins >= ESCALATE_DISTRICT_MIN else "Division";
         ds = ds_of(inc);
-        why = f"No call after {fmt_minutes(mins)}" + (", vulnerable people waiting" if len(inc.vulnerable) > 0 else "");
+        why = (f"No answer on {misses} call(s) in {fmt_minutes(mins)}" if misses > 0 else f"Not reached after {fmt_minutes(mins)}") + (", vulnerable people waiting" if len(inc.vulnerable) > 0 else "");
         out.append(EscalationRow(
             inc_id=inc.inc_id, place=inc.place, ds=ds.name if ds is not None else "Not placed",
             waiting_min=mins, waiting=fmt_minutes(mins), level=level, reason=why,
@@ -597,7 +664,7 @@ def district_overview(hub: EkataHub) -> DistrictOverview {
         storm_time=hub.storm_time,
         messages=len([hub ->:Holds:->[?:Message]]),
         open_incidents=len(incs),
-        unanswered=len([i for i in incs if not has_call_log(i)]),
+        unanswered=len([i for i in incs if not is_verified(i)]),
         vulnerable_open=len([i for i in incs if len(i.vulnerable) > 0]),
         open_requests=len([r for r in reqs if r.status in ["REQUESTED", "ACCEPTED", "DISPATCHED"]]),
         uncovered_requests=len([r for r in reqs if r.status == "UNCOVERED"]),

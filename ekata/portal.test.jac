@@ -3,7 +3,7 @@
 import os;
 import from ekata.store { fresh_hub }
 import from ekata.seed { seed_spine, seed_registry }
-import from ekata.schema { PartOf }
+import from ekata.schema { PartOf, Logged, Decision }
 
 def must(r: ResourceRequest | None) -> ResourceRequest {
     if r is None {
@@ -117,4 +117,73 @@ test "unanswered vulnerable households escalate sooner" {
     rows = escalation_rows(hub);
     assert len(rows) == 2;
     assert rows[0].level == "District";
+}
+
+def mk_call(hub: EkataHub, inc: Incident, outcome: str, t: str) {
+    c = CallLog(outcome=outcome, desk="desk", storm_time=t);
+    hub +>:Holds:+> c;
+    c +>:Logged:+> inc;
+}
+
+test "an unanswered call never counts as officer confirmation" {
+    hub = mk_hub("t-po-na");
+    inc = mk_inc(hub, "INC-001", "Mawanella");
+    m = Message(msg_id="m001", text="help", kind="SOS", seq=1);
+    hub +>:Holds:+> m;
+    m +>:PartOf:+> inc;
+    mk_call(hub, inc, "NO_ANSWER", "18:20");
+    st = citizen_status(hub, "m001");
+    assert st.stage == 1;
+    assert "could not get through" in st.detail;
+    hub.storm_time = "18:30";
+    assert "INC-001" in [e.inc_id for e in escalation_rows(hub)];
+    mk_call(hub, inc, "REACHED_CONFIRMED", "18:40");
+    assert citizen_status(hub, "m001").stage == 2;
+    assert "INC-001" not in [e.inc_id for e in escalation_rows(hub)];
+}
+
+test "accepted, dispatched and delivered are separate stages" {
+    hub = mk_hub("t-po-st");
+    inc = mk_inc(hub, "INC-001", "Mawanella");
+    m = Message(msg_id="m001", text="help", kind="SOS", seq=1);
+    hub +>:Holds:+> m;
+    m +>:PartOf:+> inc;
+    req = must(create_request(hub, "INC-001", "boat", "desk"));
+    answer_request(hub, req.req_id, req.ngo, "accept");
+    assert citizen_status(hub, "m001").stage == 3;
+    answer_request(hub, req.req_id, req.ngo, "dispatched");
+    assert citizen_status(hub, "m001").stage == 4;
+    answer_request(hub, req.req_id, req.ngo, "delivered");
+    assert citizen_status(hub, "m001").stage_label == "Help delivered";
+}
+
+test "only eligible groups are offered a request" {
+    hub = mk_hub("t-po-el");
+    mk_inc(hub, "INC-001", "Mawanella");
+    names = [c.office for c in rank_candidates(hub, "boat", "Mawanella", "Kegalle", [])];
+    assert "Kegalle Volunteer Kitchen" not in names;
+    assert len(names) > 0;
+    for n in names {
+        assert "boat" in ngo_profile(n)["offers"];
+    }
+    req = must(create_request(hub, "INC-001", "shelter", "desk"));
+    assert req.ngo == "Kegalle Volunteer Kitchen";
+}
+
+test "no eligible group goes straight to the district" {
+    hub = mk_hub("t-po-ne");
+    mk_inc(hub, "INC-001", "Balangoda");
+    req = must(create_request(hub, "INC-001", "water", "desk"));
+    assert req.status == "UNCOVERED";
+    assert "No registered group offers" in req.reason;
+}
+
+test "a second request for the same need is blocked" {
+    hub = mk_hub("t-po-dup");
+    mk_inc(hub, "INC-001", "Mawanella");
+    a = must(create_request(hub, "INC-001", "boat", "desk"));
+    answer_request(hub, a.req_id, a.ngo, "accept");
+    b = must(create_request(hub, "INC-001", "boat", "desk"));
+    assert b.req_id == a.req_id;
+    assert len([d for d in [hub ->:Holds:->[?:Decision]] if d.action == "duplicate_blocked"]) == 1;
 }

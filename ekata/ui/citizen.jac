@@ -16,9 +16,10 @@ import from .shell { AppShell, WorkspaceSelect, Surface }
 glob STAGES: list[str] = [
     "Received",
     "Sent to your division",
-    "Officer confirmed",
+    "Officer confirmed by phone",
+    "A relief group accepted",
     "Help is on the way",
-    "Help reached you"
+    "Help delivered or marked safe"
 ];
 
 glob AREAS: list[str] = [
