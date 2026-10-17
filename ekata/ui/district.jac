@@ -10,7 +10,7 @@ import from .district_registry { RegistryTab }
 import from .shell { AppShell, WorkspaceSelect }
 
 def:pub Figure(label: str, value: int, hot: bool = False) -> JsxElement {
-    <div className="min-w-0">
+    <div className="min-w-0 rounded-xl border border-border bg-card px-5 py-4">
         <p className="text-[13px] text-muted-foreground">{label}</p>
         <p
             className={"text-[28px] font-semibold leading-tight tabular-nums "
@@ -50,12 +50,12 @@ def:pub OverviewTab -> JsxElement {
         []
     );
 
-    <section aria-label="Overview" className="space-y-8">
+    <section aria-label="Overview" className="space-y-7">
         {if error != "" {
             <p role="alert" className="text-[13px] text-blocked">{error}</p>
         }}
         {if board is not None {
-            <div className="grid grid-cols-2 gap-x-6 gap-y-4 border-b border-border pb-6 sm:grid-cols-3 lg:grid-cols-5">
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
                 <Figure label="Open households" value={board.open_incidents}/>
                 <Figure label="Not yet called" value={board.unanswered}/>
                 <Figure label="With vulnerable people" value={board.vulnerable_open}/>
@@ -68,7 +68,7 @@ def:pub OverviewTab -> JsxElement {
                     <Empty title="Nothing has waited too long" hint="Households that wait past the limit appear here, oldest first."/>
                 }}
                 {if len(board.escalations) > 0 {
-                    <div className="overflow-x-auto border-y border-border">
+                    <div className="overflow-x-auto rounded-xl border border-border bg-card px-5">
                         <table className="w-full text-left text-[15px]">
                             <thead>
                                 <tr className="border-b border-border text-[13px] text-muted-foreground">
@@ -110,7 +110,7 @@ def:pub OverviewTab -> JsxElement {
             </div>
             <div>
                 <h2 className="mb-2 text-[17px] font-semibold">Divisions</h2>
-                <div className="overflow-x-auto border-y border-border">
+                <div className="overflow-x-auto rounded-xl border border-border bg-card px-5">
                     <table className="w-full text-left text-[15px]">
                         <thead>
                             <tr className="border-b border-border text-[13px] text-muted-foreground">
@@ -147,7 +147,7 @@ def:pub OverviewTab -> JsxElement {
                 <Empty title="No requests to groups yet" hint="Officers raise these when a household needs boats, food or medicine."/>
             }}
             {if len(reqs) > 0 {
-                <div className="overflow-x-auto border-y border-border">
+                <div className="overflow-x-auto rounded-xl border border-border bg-card px-5">
                     <table className="w-full text-left text-[15px]">
                         <thead>
                             <tr className="border-b border-border text-[13px] text-muted-foreground">
