@@ -1,6 +1,7 @@
 """Agent memory tests: derived views on private hubs."""
 
-import from ekata.store { fresh_hub, log_decision }
+import from ekata.store { fresh_hub, log_decision, all_proposals, find_message }
+import from ekata.ai.models { call_log, agent_steps }
 
 def mk_msg(hub: EkataHub, mid: str) -> Message {
     m = Message(msg_id=mid, text="x");
@@ -115,4 +116,121 @@ test "desk_precedents text" {
     assert "REJECTED 1 and APPROVED 0" in t;
     assert "WEAK:surname+road" in t;
     assert desk_precedents_in(hub, "STRONG:phone") == "no precedents yet";
+}
+
+# ---------- persisted memory (private hub + private memory hub) ----------
+
+def seed_ordered(hub: EkataHub, mid: str, ma: str, mb: str) -> Message {
+    m = mk_msg(hub, mid);
+    m.kind = "SOS";
+    log_decision(hub, "intake", "extract", "parsed the sos", "APPLIED", "18:00", [m], 0.9, ma);
+    log_decision(hub, "referee", "merge_check", "R1: weak tier blocked", "BLOCKED", "18:01", [m], 0.5, "rules");
+    log_decision(hub, "referee", "merge_check", "R2: second block", "NEW_INCIDENT", "18:02", [m], 1.0, mb);
+    return m;
+}
+
+test "record_run builds an ordered run with Next chain and Cites" {
+    hub = fresh_hub("t-mem-r1");
+    mem = "t-mem-hub-1";
+    reset_memory(mem);
+    m = seed_ordered(hub, "W-001", "rules", "rules");
+    run = record_run(hub, m, memory_mark(), mem);
+    assert run.run_id == "RUN-001";
+    assert run.lane == "SOS";
+    assert run.mode == "RULES";
+    mh = get_memory_hub(mem);
+    assert len([mh ->:Remembers:->[?:AgentRun]]) == 1;
+    steps = [run ->:Step:->[?:Decision]];
+    assert len(steps) == 3;
+    ordered = sorted(steps, key=lambda (d: Decision) { d.seq; });
+    firsts = [ordered[0] ->:Next:->[?:Decision]];
+    assert len(firsts) == 1 and firsts[0].seq == ordered[1].seq;
+    assert len([ordered[2] ->:Next:->[?:Decision]]) == 0;
+    ed = [edge run ->:Step:-> ordered[2]];
+    assert ed[0].order == 3;
+    assert len([ordered[0] ->:Cites:->[?:Rule]]) == 0;
+    cited = [ordered[1] ->:Cites:->[?:Rule]];
+    assert len(cited) == 1 and cited[0].rule_id == "R1";
+    again = record_run(hub, m, memory_mark(), mem);
+    assert again.run_id == "RUN-001";
+    counts = rule_citations_in(mem);
+    assert counts[0].rule == "R1" and counts[0].cites == 1;
+    assert counts[1].cites == 1;
+}
+
+test "LlmCall and ToolCall rows come from buffers since the mark" {
+    hub = fresh_hub("t-mem-r2");
+    mem = "t-mem-hub-2";
+    reset_memory(mem);
+    call_log.append({"caller": "before", "model": "old", "latency_ms": 1.0, "total_tokens": 99, "status": "success", "error": ""});
+    mark = memory_mark();
+    call_log.append({"caller": "extract", "model": "model-a", "latency_ms": 12.5, "total_tokens": 40, "status": "success", "error": ""});
+    call_log.append({"caller": "pick", "model": "model-b", "latency_ms": 7.0, "total_tokens": 60, "status": "error", "error": "provider failure"});
+    agent_steps.append({"iteration": 1, "tool": "lookup", "result_preview": "ok", "tokens": 10, "cost": 0.0});
+    m = seed_ordered(hub, "W-001", "model-a", "rules");
+    run = record_run(hub, m, mark, mem);
+    assert run.llm_calls == 2 and run.tokens == 100;
+    assert run.mode == "LIVE";
+    lcs = [run ->:Called:->[?:LlmCall]];
+    assert len(lcs) == 2;
+    assert sorted([c.model for c in lcs]) == ["model-a", "model-b"];
+    tcs = [run ->:Used:->[?:ToolCall]];
+    assert len(tcs) == 1 and tcs[0].tool == "lookup";
+    v = agent_run_in(hub, "W-001", mem);
+    assert v.run_id == "RUN-001" and v.llm_calls == 2 and v.tokens == 100;
+    assert sorted(v.call_models) == ["model-a", "model-b"];
+    reset_memory(mem);
+}
+
+test "mode is CACHED when any decision model is cached" {
+    hub = fresh_hub("t-mem-r3");
+    mem = "t-mem-hub-3";
+    reset_memory(mem);
+    m = seed_ordered(hub, "W-001", "cached:model-a", "rules");
+    run = record_run(hub, m, memory_mark(), mem);
+    assert run.mode == "CACHED";
+    assert usage_ledger_in(mem).cached_calls >= 1;
+}
+
+test "feedback is materialised once" {
+    hub = fresh_hub("t-mem-r4");
+    mem = "t-mem-hub-4";
+    reset_memory(mem);
+    inc = mk_inc(hub, "INC-001");
+    seed_proposal(hub, inc, "W-010", "REJECTED", "[WEAK] same surname 'Silva' on the same road");
+    p = all_proposals(hub)[0];
+    p.decided_by = "desk-a";
+    pm = find_message(hub, "W-010");
+    assert pm is not None;
+    log_decision(hub, "desk", "merge_rejected", "desk-a kept apart", "REJECTED", "18:05", [pm, inc, p], 1.0, "human");
+    m = seed_ordered(hub, "W-001", "rules", "rules");
+    record_run(hub, m, memory_mark(), mem);
+    m2 = seed_ordered(hub, "W-002", "rules", "rules");
+    record_run(hub, m2, memory_mark(), mem);
+    mh = get_memory_hub(mem);
+    fbs = [mh ->:Remembers:->[?:Feedback]];
+    assert len(fbs) == 1;
+    assert fbs[0].action == "REJECTED" and fbs[0].pattern == "WEAK:surname+road";
+    assert fbs[0].actor == "desk-a";
+    assert len([fbs[0] ->:On:->[?:MergeProposal]]) == 1;
+}
+
+test "reset empties runs but keeps the ledger, which accumulates" {
+    hub = fresh_hub("t-mem-r5");
+    mem = "t-mem-hub-5";
+    reset_memory(mem);
+    base = usage_ledger_in(mem);
+    m = seed_ordered(hub, "W-001", "rules", "rules");
+    record_run(hub, m, memory_mark(), mem);
+    m2 = seed_ordered(hub, "W-002", "rules", "rules");
+    record_run(hub, m2, memory_mark(), mem);
+    led = usage_ledger_in(mem);
+    assert led.rule_runs == base.rule_runs + 2;
+    reset_memory(mem);
+    mh = get_memory_hub(mem);
+    assert len([mh ->:Remembers:->[?:AgentRun]]) == 0;
+    assert len([mh ->:Remembers:->[?:Rule]]) == 14;
+    after = usage_ledger_in(mem);
+    assert after.rule_runs == led.rule_runs;
+    assert after.since == led.since;
 }

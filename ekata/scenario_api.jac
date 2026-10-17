@@ -3,10 +3,12 @@
 import from ekata.store { get_hub }
 import from ekata.locking { graph_writer }
 import from ekata.scenario { ScenarioView, scenario_reset_in, scenario_next_in, scenario_state_in }
+import from ekata.memory { reset_memory }
 
 def:pub scenario_reset() -> ScenarioView {
     with graph_writer() {
         v = scenario_reset_in(get_hub());
+        reset_memory();
         commit();
         return v;
     }
