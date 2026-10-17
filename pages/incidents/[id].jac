@@ -3,7 +3,7 @@
 import from "@jac/runtime" { Link, useParams }
 import from "@hugeicons/react" { HugeiconsIcon }
 import from "@hugeicons/core-free-icons" {
-    Location01Icon, UserGroupIcon, ArrowLeft01Icon, Search01Icon, CheckmarkCircle01Icon, Cancel01Icon
+    ArrowLeft01Icon, Search01Icon, CheckmarkCircle01Icon, Cancel01Icon
 }
 import type from ekata.views { IncidentView }
 import from ekata.api { incident_detail, decide_merge, log_call }
@@ -17,9 +17,24 @@ import from ...components.ui.breadcrumb {
 }
 import from ...components.app.desk_state { use_desk }
 import from ...components.app.items { MessageItem, TraceItem }
-import from ...components.app.tags { Tag, StatusTag, VulnerableTag, RefereeTag }
-import from ...components.app.labels { people_label, place_label, call_outcome_label, pretty }
-import from ...components.app.page_parts { EmptyNote, LoadingRows, SelectField }
+import from ...components.app.tags { Tag, VulnerableTag, RefereeTag, status_tone }
+import from ...components.app.labels { people_label, place_label, call_outcome_label, pretty, plural }
+import from ...components.app.page_parts { PageHero, EmptyNote, LoadingRows, SelectField }
+
+def:pub incident_capsules(inc: IncidentView) -> list[list[str]] {
+    out: list[list[str]] = [
+        [pretty(inc.status), status_tone(inc.status)],
+        [f"Priority {inc.priority:.1f}", "blue"]
+    ];
+    if inc.claimed_by != "" {
+        out = out + [["Claimed by " + inc.claimed_by, "violet"]];
+    }
+    for v in inc.vulnerable {
+        out = out + [["Vulnerable: " + v, "amber"]];
+    }
+    out = out + [[plural(len(inc.calls), "call logged", "calls logged"), "green"]];
+    return out;
+}
 
 def:pub IncidentPage -> JsxPage {
     ctx: any = use_desk();
@@ -124,24 +139,13 @@ def:pub IncidentPage -> JsxPage {
             </EmptyNote>
         } else {
             <div className="flex flex-col gap-6">
-                <div className="flex flex-col gap-2">
-                    <div className="flex flex-wrap items-center gap-2">
-                        <StatusTag status={inc.status} />
-                        {if inc.claimed_by != "" {
-                            <Tag label={"Claimed by " + inc.claimed_by} tone="violet" />
-                        }}
-                        <span className="text-sm text-muted-foreground tabular-nums">{f"Priority {inc.priority:.1f}"}</span>
-                    </div>
-                    <h1 className="text-balance text-2xl font-semibold tracking-tight sm:text-3xl">
-                        {inc.inc_id}
-                        {" · "}
-                        {people_label(inc.headcount)}
-                    </h1>
-                    <p className="flex items-center gap-1 text-muted-foreground">
-                        <HugeiconsIcon icon={Location01Icon} strokeWidth={2} className="size-4" />
-                        {place_label(inc.place)}
-                    </p>
-                </div>
+                <PageHero
+                    eyebrow={"Incident " + inc.inc_id}
+                    title={people_label(inc.headcount) + " · " + place_label(inc.place)}
+                    image="/static/assets/images/aerial-rescue.jpg"
+                    imageAlt="A rescue helicopter above a flooded river valley"
+                    capsules={incident_capsules(inc)}
+                />
 
                 {if notice != "" {
                     <Alert>
@@ -216,11 +220,11 @@ def:pub IncidentPage -> JsxPage {
                                         }}
                                         {if p.outcome == "NEEDS_HUMAN" {
                                             <div className="mt-4 flex flex-wrap gap-2">
-                                                <Button size="sm" disabled={saving} onClick={lambda (e: MouseEvent) { decide(p.msg_id, True); }}>
+                                                <Button size="sm" className="rounded-full pl-3 pr-3" disabled={saving} onClick={lambda (e: MouseEvent) { decide(p.msg_id, True); }}>
                                                     <HugeiconsIcon icon={CheckmarkCircle01Icon} strokeWidth={2} data-icon="inline-start" />
                                                     Approve merge
                                                 </Button>
-                                                <Button size="sm" variant="outline" disabled={saving} onClick={lambda (e: MouseEvent) { decide(p.msg_id, False); }}>
+                                                <Button size="sm" variant="outline" className="rounded-full pl-3 pr-3" disabled={saving} onClick={lambda (e: MouseEvent) { decide(p.msg_id, False); }}>
                                                     <HugeiconsIcon icon={Cancel01Icon} strokeWidth={2} data-icon="inline-start" />
                                                     Reject
                                                 </Button>
@@ -290,7 +294,7 @@ def:pub IncidentPage -> JsxPage {
                                             onChange={lambda (e: ChangeEvent) { note = e.target.value; }}
                                         />
                                     </div>
-                                    <Button type="submit" disabled={saving or outcome == ""}>
+                                    <Button type="submit" className="rounded-full" disabled={saving or outcome == ""}>
                                         {"Saving..." if saving else "Log call"}
                                     </Button>
                                 </form>

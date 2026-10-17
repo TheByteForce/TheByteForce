@@ -3,7 +3,7 @@
 import from "@jac/runtime" { Link }
 import from ..components.ui.card { Card, CardHeader, CardTitle, CardDescription, CardContent }
 import from ..components.ui.separator { Separator }
-import from ..components.app.brand { LogoMark }
+import from ..components.app.page_parts { PageHero }
 
 glob STEPS: list[list[str]] = [
     ["1", "Read", "Each SOS, update, offer or appeal is read into the same fields: who, how many, where, which phone, and who is vulnerable."],
@@ -22,19 +22,28 @@ glob PRINCIPLES: list[str] = [
 glob CREDITS: list[list[str]] = [
     ["Water rescue team in Oklahoma", "Marvin Nauman / FEMA", "Public domain", "https://commons.wikimedia.org/wiki/File:FEMA_-_32076_-_A_water_rescue_team_in_a_boat_searching_for_people_in_Oklahoma.jpg"],
     ["Rescue workers traveling by boat in Iowa", "Leo 'Jace' Anderson / FEMA", "Public domain", "https://commons.wikimedia.org/wiki/File:FEMA_-_44983_-_Rescue_workers_traveling_by_boat_in_Iowa.jpg"],
-    ["Indian aid for the 2016 Sri Lankan floods", "Indian Navy", "GODL-India", "https://commons.wikimedia.org/wiki/File:Indian_aid_for_the_2016_Sri_Lankan_floods_(3).jpg"],
+    ["Inside the Bexar County Emergency Operations Center", "Jocelyn Augustino / FEMA", "Public domain", "https://commons.wikimedia.org/wiki/File:FEMA_-_38187_-_Inside_the_Bexar_County_Emergency_Operations_Center_in_Texas.jpg"],
+    ["Texas Emergency Operations Center", "Jocelyn Augustino / FEMA", "Public domain", "https://commons.wikimedia.org/wiki/File:FEMA_-_38220_-_Texas_Emergency_Operations_Center.jpg"],
+    ["FEMA Community Relations workers speak with a resident", "Adam Dubrowa / FEMA", "Public domain", "https://commons.wikimedia.org/wiki/File:FEMA_-_39900_-_FEMA_Community_Relations_workers_speak_with_a_resident_in_Washington.jpg"],
+    ["FCO meeting at the MEMA Emergency Operations Center", "George Armstrong / FEMA", "Public domain", "https://commons.wikimedia.org/wiki/File:FEMA_-_44036_-_FEMA_FCO_Meeting_at_MEMA_Emergency_Operations_Center_Yazoo_City.jpg"],
+    ["Local volunteers at a Disaster Recovery Center in Ohio", "Mark Wolfe / FEMA", "Public domain", "https://commons.wikimedia.org/wiki/File:FEMA_-_32252_-_Local_Volunteers_help_at_the_Disaster_Recovery_Center_in_Ohio.jpg"],
+    ["National Guard Black Hawk flood rescue", "Spc. Megan Zander / National Guard", "Public domain", "https://commons.wikimedia.org/wiki/File:National_Guard_assists_flood_fight_with_Blackhawk_rescue_160310-Z-KY097-004.jpg"],
+    ["Colorado National Guard flood response", "The National Guard", "Public domain", "https://commons.wikimedia.org/wiki/File:Colorado_National_Guard_Flood_Response_(9772169535).jpg"],
     ["Flooding in Sri Lanka, MODIS, 9 December 2025", "MODIS Land Rapid Response Team, NASA GSFC", "Public domain", "https://commons.wikimedia.org/wiki/File:Flooding_in_Sri_Lanka_(MODIS_2025-12-09).jpg"]
 ];
 
+glob STEP_TONES: list[str] = ["bg-blue-50 text-blue-600", "bg-violet-50 text-violet-600", "bg-amber-50 text-amber-700", "bg-emerald-50 text-emerald-600"];
+
 def:pub AboutPage -> JsxPage {
-    <div className="flex max-w-4xl flex-col gap-6">
-        <div className="flex items-center gap-4">
-            <LogoMark className="size-12" />
-            <div>
-                <h1 className="text-balance text-2xl font-semibold tracking-tight sm:text-3xl">About CrisisConnect</h1>
-                <p className="text-muted-foreground">One trusted inbox for a flood duty desk.</p>
-            </div>
-        </div>
+    <div className="flex flex-col gap-6">
+        <PageHero
+            eyebrow="Help · About"
+            title="One trusted inbox for a flood duty desk."
+            description="CrisisConnect turns a night of scattered SOS messages into one ranked, explained call queue, so duty officers spend their calls on the people who need them most."
+            image="/static/assets/images/helicopter-response.jpg"
+            imageAlt="A rescue helicopter flying low over trees during a flood response"
+            capsules={[["People decide", "blue"], ["Every rank explained", "violet"], ["Synthetic demo data", "amber"]]}
+        />
 
         <Card>
             <CardHeader>
@@ -43,9 +52,9 @@ def:pub AboutPage -> JsxPage {
             </CardHeader>
             <CardContent>
                 <ol className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                    {for s in STEPS {
+                    {for (i, s) in enumerate(STEPS) {
                         <li key={s[0]} className="flex gap-4 rounded-lg border pt-4 pb-4 pl-4 pr-4">
-                            <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-semibold text-primary-foreground">
+                            <span className={"flex size-9 shrink-0 items-center justify-center rounded-full text-sm font-semibold " + STEP_TONES[i % 4]}>
                                 {s[0]}
                             </span>
                             <div>

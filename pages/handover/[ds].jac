@@ -13,8 +13,8 @@ import from ...components.ui.breadcrumb {
 }
 import from ...components.app.desk_state { use_desk }
 import from ...components.app.tags { StatusTag, VulnerableTag }
-import from ...components.app.labels { people_label }
-import from ...components.app.page_parts { EmptyNote, LoadingRows }
+import from ...components.app.labels { people_label, plural }
+import from ...components.app.page_parts { PageHero, EmptyNote, LoadingRows }
 
 def:pub print_page -> None {
     win: any = window;
@@ -61,21 +61,29 @@ def:pub HandoverSheet -> JsxPage {
         } elif sheet is None {
             <EmptyNote title="Sheet unavailable" description={f"No hand-over sheet could be built for {ds}."} icon={CallIcon} />
         } else {
+            <PageHero
+                eyebrow="DS hand-over sheet"
+                title={sheet.ds + " DS division"}
+                description={f"{sheet.district} district, as of {sheet.storm_time} on the storm clock."}
+                image="/static/assets/images/officials-meeting.jpg"
+                imageAlt="Officials around a table at an emergency operations centre"
+                capsules={[
+                    [f"{sheet.confirmed} confirmed", "green"],
+                    [f"{sheet.open_count} open", "amber"],
+                    [plural(len(sheet.rows), "row on the sheet", "rows on the sheet"), "blue"]
+                ]}
+            >
+                <Button className="rounded-full pl-4 pr-4" onClick={lambda (e: MouseEvent) { print_page(); }}>
+                    <HugeiconsIcon icon={PrinterIcon} strokeWidth={2} data-icon="inline-start" />
+                    Print sheet
+                </Button>
+            </PageHero>
             <Card>
                 <CardHeader>
-                    <div className="flex items-start justify-between gap-4">
-                        <div className="flex flex-col gap-1">
-                            <CardTitle className="text-xl">{sheet.ds + " DS division"}</CardTitle>
-                            <CardDescription>{f"{sheet.district} district · as of {sheet.storm_time} · {sheet.confirmed} confirmed, {sheet.open_count} open"}</CardDescription>
-                        </div>
-                        <Button variant="outline" size="sm" onClick={lambda (e: MouseEvent) { print_page(); }}>
-                            <HugeiconsIcon icon={PrinterIcon} strokeWidth={2} data-icon="inline-start" />
-                            Print
-                        </Button>
-                    </div>
+                    <CardTitle>Phone-verified incidents</CardTitle>
+                    <CardDescription>{sheet.note}</CardDescription>
                 </CardHeader>
                 <CardContent className="flex flex-col gap-4">
-                    <p className="text-sm text-muted-foreground">{sheet.note}</p>
                     {if len(sheet.rows) == 0 {
                         <EmptyNote
                             title="No phone-verified incidents yet"

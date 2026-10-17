@@ -7,7 +7,7 @@ import type from ekata.ds_sheet { DsCount }
 import from ekata.coordination_api { ds_divisions }
 import from ...components.app.desk_state { use_desk }
 import from ...components.app.labels { plural }
-import from ...components.app.page_parts { PageHeader, EmptyNote, LoadingRows }
+import from ...components.app.page_parts { PageHero, EmptyNote, LoadingRows, IconChip }
 
 def:pub HandoverIndex -> JsxPage {
     ctx: any = use_desk();
@@ -27,12 +27,21 @@ def:pub HandoverIndex -> JsxPage {
         await load(ctx.tick);
     }
 
+    confirmed_n: int = sum([d.confirmed for d in rows]);
+    open_n: int = sum([d.open_count for d in rows]);
+
     <div className="flex flex-col gap-6">
-        <PageHeader
-            title="DS hand-over"
-            description="A clean sheet of phone-verified incidents for each Divisional Secretariat division, ready to hand to DS and GN officers."
-            image="/static/assets/images/satellite.jpg"
-            imageAlt="Satellite view of flooding across Sri Lanka"
+        <PageHero
+            eyebrow="Coordination · DS hand-over"
+            title="Clean sheets for DS officers."
+            description="Phone-verified incidents for each Divisional Secretariat division, ready to hand to DS and GN officers. Pick a division to open its sheet."
+            image="/static/assets/images/officials-meeting.jpg"
+            imageAlt="Officials around a table at an emergency operations centre"
+            capsules={[
+                [plural(len(rows), "division", "divisions"), "blue"],
+                [f"{confirmed_n} confirmed", "green"],
+                [f"{open_n} open", "amber"]
+            ]}
         />
         {if not loaded {
             <LoadingRows count={3} className="h-20" />
@@ -50,6 +59,7 @@ def:pub HandoverIndex -> JsxPage {
                         to={"/handover/" + d.ds}
                         className="group flex items-center gap-4 rounded-xl border bg-card pt-6 pb-6 pl-6 pr-6 transition-colors hover:bg-muted/50"
                     >
+                        <IconChip icon={File01Icon} tone="blue" />
                         <div className="min-w-0 flex-1">
                             <p className="font-semibold">{d.ds}</p>
                             <p className="text-sm text-muted-foreground">{d.district + " district"}</p>

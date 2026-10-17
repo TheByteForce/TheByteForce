@@ -17,9 +17,13 @@ glob DOT: dict[str, str] = {
     "slate": "bg-zinc-400"
 };
 
+def:pub dot_class(tone: str) -> str {
+    return DOT[tone] or "bg-zinc-400";
+}
+
 def:pub Tag(label: str, tone: str = "slate", className: str = "") -> JsxElement {
-    <Badge variant="outline" className={cn("h-6 gap-1.5 bg-background pl-2 pr-2 font-medium", className)}>
-        <span aria-hidden="true" className={cn("size-1.5 shrink-0 rounded-full", DOT[tone] or "bg-zinc-400")}></span>
+    <Badge variant="outline" className={cn("h-6 gap-1.5 rounded-full bg-background pl-2.5 pr-2.5 font-medium", className)}>
+        <span aria-hidden="true" className={cn("size-1.5 shrink-0 rounded-full", dot_class(tone))}></span>
         {label}
     </Badge>
 }

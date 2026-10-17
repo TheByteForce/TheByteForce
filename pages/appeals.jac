@@ -10,7 +10,11 @@ import from ..components.ui.alert { Alert, AlertTitle, AlertDescription }
 import from ..components.app.desk_state { use_desk }
 import from ..components.app.tags { Tag, VerdictTag }
 import from ..components.app.labels { plural, pretty }
-import from ..components.app.page_parts { PageHeader, EmptyNote, LoadingRows }
+import from ..components.app.page_parts { PageHero, EmptyNote, LoadingRows }
+
+def:pub count_verdict(rows: list[AppealVerdict], verdict: str) -> int {
+    return len([v for v in rows if v.verdict == verdict]);
+}
 
 def:pub AppealsPage -> JsxPage {
     ctx: any = use_desk();
@@ -48,15 +52,24 @@ def:pub AppealsPage -> JsxPage {
     }
 
     <div className="flex flex-col gap-6">
-        <PageHeader
-            title="Appeal checks"
-            description="Fundraising and help appeals are checked for shared bank accounts across appeals, impersonation of officials, and requests for OTPs, NIC photos or bank logins."
+        <PageHero
+            eyebrow="Coordination · Appeal checks"
+            title="Check an appeal before anyone pays."
+            description="Fundraising and help appeals are checked for bank accounts shared across appeals, impersonation of officials, and requests for OTPs, NIC photos or bank logins."
+            image="/static/assets/images/community-check.jpg"
+            imageAlt="Response workers speaking with a resident at their door"
+            capsules={[
+                [f"{count_verdict(rows, 'LIKELY_SCAM')} likely scam", "red"],
+                [f"{count_verdict(rows, 'SUSPICIOUS')} suspicious", "orange"],
+                [f"{count_verdict(rows, 'MATCHED')} matched", "green"],
+                [f"{count_verdict(rows, 'UNVERIFIED')} unverified", "slate"]
+            ]}
         >
-            <Button disabled={checking} onClick={lambda (e: MouseEvent) { run_checks(); }}>
+            <Button className="rounded-full pl-4 pr-4" disabled={checking} onClick={lambda (e: MouseEvent) { run_checks(); }}>
                 <HugeiconsIcon icon={SecurityCheckIcon} strokeWidth={2} data-icon="inline-start" />
                 {"Checking..." if checking else "Run appeal checks"}
             </Button>
-        </PageHeader>
+        </PageHero>
 
         <Alert>
             <HugeiconsIcon icon={Shield01Icon} strokeWidth={2} />

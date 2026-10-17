@@ -7,12 +7,16 @@ import from ..components.ui.tabs { Tabs, TabsList, TabsTrigger }
 import from ..components.app.desk_state { use_desk }
 import from ..components.app.items { TraceItem, fetch_trace }
 import from ..components.app.labels { plural }
-import from ..components.app.page_parts { PageHeader, EmptyNote, LoadingRows }
+import from ..components.app.page_parts { PageHero, EmptyNote, LoadingRows }
 
 glob AGENT_FILTERS: list[list[str]] = [
     ["all", "All"], ["intake", "Intake"], ["blocking", "Blocking"], ["referee", "Referee"],
     ["freshness", "Freshness"], ["priority", "Priority"]
 ];
+
+def:pub count_outcome(rows: list[TraceRow], outcome: str) -> int {
+    return len([r for r in rows if r.outcome == outcome]);
+}
 
 def:pub ActivityPage -> JsxPage {
     ctx: any = use_desk();
@@ -37,9 +41,18 @@ def:pub ActivityPage -> JsxPage {
     shown: list[TraceRow] = newest if agent == "all" else [r for r in newest if r.agent == agent];
 
     <div className="flex flex-col gap-6">
-        <PageHeader
-            title="Agent activity"
-            description="Every step the pipeline took, newest first: which agent acted, why, and whether the referee applied it, blocked it or sent it to a person."
+        <PageHero
+            eyebrow="Duty desk · Agent activity"
+            title="Every decision, explained."
+            description="Each step the pipeline took, newest first: which agent acted, why, and whether the referee applied it, blocked it or sent it to a person."
+            image="/static/assets/images/desk-operators.jpg"
+            imageAlt="Duty officers working at screens in an operations centre"
+            capsules={[
+                [plural(len(rows), "decision", "decisions"), "blue"],
+                [f"{count_outcome(rows, 'APPLIED')} applied", "green"],
+                [f"{count_outcome(rows, 'NEEDS_HUMAN')} need a person", "amber"],
+                [f"{count_outcome(rows, 'BLOCKED')} blocked", "red"]
+            ]}
         />
         <Card>
             <CardHeader>
@@ -48,9 +61,9 @@ def:pub ActivityPage -> JsxPage {
             </CardHeader>
             <CardContent className="flex flex-col gap-4">
                 <Tabs value={agent} onValueChange={lambda (v: str) { agent = v; }}>
-                    <TabsList>
+                    <TabsList className="h-auto flex-wrap rounded-full pt-1 pb-1 pl-1 pr-1">
                         {for f in AGENT_FILTERS {
-                            <TabsTrigger key={f[0]} value={f[0]}>{f[1]}</TabsTrigger>
+                            <TabsTrigger key={f[0]} value={f[0]} className="rounded-full pl-3 pr-3">{f[1]}</TabsTrigger>
                         }}
                     </TabsList>
                 </Tabs>

@@ -6,7 +6,7 @@ import from ekata.api { call_queue }
 import from ..components.app.desk_state { use_desk }
 import from ..components.app.items { QueueItem }
 import from ..components.app.labels { plural }
-import from ..components.app.page_parts { PageHeader, EmptyNote, LoadingRows }
+import from ..components.app.page_parts { PageHero, EmptyNote, LoadingRows }
 
 def:pub QueuePage -> JsxPage {
     ctx: any = use_desk();
@@ -26,14 +26,24 @@ def:pub QueuePage -> JsxPage {
         await load(ctx.tick);
     }
 
+    vulnerable_n: int = len([r for r in rows if len(r.vulnerable) > 0]);
+    merged_n: int = len([r for r in rows if r.msg_count > 1]);
+    people_n: int = sum([r.headcount for r in rows if r.headcount > 0]);
+
     <div className="flex flex-col gap-6">
-        <PageHeader
-            title="Call queue"
-            description="Open incidents ranked by who needs a call first. Every rank says why. Open an incident to see its evidence and log a call."
+        <PageHero
+            eyebrow="Duty desk · Call queue"
+            title="Who needs a call first."
+            description="Open incidents ranked by risk, vulnerable people and waiting time. Every rank says why. Open an incident to see its evidence and log a call."
             image="/static/assets/images/boat-crossing.jpg"
             imageAlt="Rescue workers crossing flood water by boat"
+            capsules={[
+                [plural(len(rows), "open incident", "open incidents"), "blue"],
+                [f"{vulnerable_n} with vulnerable people", "amber"],
+                [f"{people_n} people reported", "green"],
+                [f"{merged_n} merged from several reports", "violet"]
+            ]}
         />
-        <p className="text-sm text-muted-foreground">{plural(len(rows), "open incident", "open incidents")}</p>
         {if not loaded {
             <LoadingRows count={5} className="h-28" />
         } elif len(rows) == 0 {

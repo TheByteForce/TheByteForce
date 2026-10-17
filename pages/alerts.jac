@@ -9,7 +9,7 @@ import from ..components.ui.table { Table, TableHeader, TableBody, TableRow, Tab
 import from ..components.app.desk_state { use_desk }
 import from ..components.app.tags { LevelTag }
 import from ..components.app.labels { plural }
-import from ..components.app.page_parts { PageHeader, EmptyNote, LoadingRows }
+import from ..components.app.page_parts { PageHero, EmptyNote, LoadingRows }
 
 glob LEVEL_GUIDE: list[list[str]] = [
     ["5", "Life at risk now", "Call immediately"],
@@ -18,6 +18,10 @@ glob LEVEL_GUIDE: list[list[str]] = [
     ["2", "Verify or confirm", "Call when free"],
     ["1", "Closed", "No call needed"]
 ];
+
+def:pub count_level(rows: list[AlertRow], level: int) -> int {
+    return len([a for a in rows if a.level == level]);
+}
 
 def:pub AlertsPage -> JsxPage {
     ctx: any = use_desk();
@@ -38,11 +42,18 @@ def:pub AlertsPage -> JsxPage {
     }
 
     <div className="flex flex-col gap-6">
-        <PageHeader
-            title="Alert levels"
-            description="Each open incident gets a level from 1 to 5 that says how soon it needs a call. Levels are set by fixed rules, not by a model."
+        <PageHero
+            eyebrow="Coordination · Alert levels"
+            title="How soon each incident needs a call."
+            description="Every open incident gets a level from 1 to 5. Levels come from fixed rules, not from a model, so the same facts always give the same level."
             image="/static/assets/images/satellite.jpg"
             imageAlt="Satellite view of flooding across Sri Lanka"
+            capsules={[
+                [f"{count_level(rows, 5)} life at risk", "red"],
+                [f"{count_level(rows, 4)} rescue needed", "orange"],
+                [f"{count_level(rows, 3)} vulnerable first", "amber"],
+                [f"{count_level(rows, 2)} to verify", "blue"]
+            ]}
         />
 
         <div className="grid grid-cols-2 gap-2 sm:grid-cols-5">

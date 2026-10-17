@@ -13,7 +13,7 @@ import from ..components.ui.alert { Alert, AlertDescription }
 import from ..components.app.desk_state { use_desk }
 import from ..components.app.items { MessageItem }
 import from ..components.app.labels { plural }
-import from ..components.app.page_parts { PageHeader, EmptyNote, LoadingRows, SelectField }
+import from ..components.app.page_parts { PageHero, EmptyNote, LoadingRows, SelectField }
 
 glob KIND_FILTERS: list[list[str]] = [
     ["ALL", "All"], ["SOS", "SOS"], ["UPDATE", "Updates"], ["OFFER", "Offers"],
@@ -64,11 +64,23 @@ def:pub InboxPage -> JsxPage {
     }
 
     shown: list[MsgView] = messages if filter == "ALL" else [m for m in messages if m.kind == filter];
+    sos_n: int = len([m for m in messages if m.kind == "SOS"]);
+    offer_n: int = len([m for m in messages if m.kind == "OFFER"]);
+    appeal_n: int = len([m for m in messages if m.kind == "APPEAL"]);
 
     <div className="flex flex-col gap-6">
-        <PageHeader
-            title="Inbox"
-            description="Every message received tonight, newest first. Paste a message to run it through the same pipeline."
+        <PageHero
+            eyebrow="Duty desk · Inbox"
+            title="Every message, in one place."
+            description="SMS, WhatsApp, hotline and web reports arrive here newest first. Paste a message to run it through the same pipeline."
+            image="/static/assets/images/operations-center.jpg"
+            imageAlt="Operators at their desks in an emergency operations centre"
+            capsules={[
+                [plural(len(messages), "message", "messages"), "blue"],
+                [f"{sos_n} SOS", "red"],
+                [plural(offer_n, "offer", "offers"), "green"],
+                [plural(appeal_n, "appeal", "appeals"), "violet"]
+            ]}
         />
 
         <Card>
@@ -101,7 +113,7 @@ def:pub InboxPage -> JsxPage {
                             <NativeSelectOption value="WHATSAPP">WhatsApp</NativeSelectOption>
                             <NativeSelectOption value="HOTLINE">Hotline</NativeSelectOption>
                         </SelectField>
-                        <Button type="submit" className="ml-auto" disabled={sending or draft.strip() == ""}>
+                        <Button type="submit" className="ml-auto rounded-full pl-4 pr-4" disabled={sending or draft.strip() == ""}>
                             <HugeiconsIcon icon={SentIcon} strokeWidth={2} data-icon="inline-start" />
                             {"Sending..." if sending else "Submit message"}
                         </Button>
@@ -121,9 +133,9 @@ def:pub InboxPage -> JsxPage {
         <div className="flex flex-col gap-4">
             <div className="flex flex-wrap items-center justify-between gap-2">
                 <Tabs value={filter} onValueChange={lambda (v: str) { filter = v; }}>
-                    <TabsList>
+                    <TabsList className="h-auto flex-wrap rounded-full pt-1 pb-1 pl-1 pr-1">
                         {for f in KIND_FILTERS {
-                            <TabsTrigger key={f[0]} value={f[0]}>{f[1]}</TabsTrigger>
+                            <TabsTrigger key={f[0]} value={f[0]} className="rounded-full pl-3 pr-3">{f[1]}</TabsTrigger>
                         }}
                     </TabsList>
                 </Tabs>

@@ -11,7 +11,7 @@ import from ..components.ui.card { Card, CardHeader, CardTitle, CardDescription,
 import from ..components.app.desk_state { use_desk }
 import from ..components.app.tags { Tag }
 import from ..components.app.labels { plural, place_label, pretty }
-import from ..components.app.page_parts { PageHeader, EmptyNote, LoadingRows }
+import from ..components.app.page_parts { PageHero, EmptyNote, LoadingRows, IconChip }
 
 def:pub resource_icon(resource: str) -> any {
     if resource == "boat" {
@@ -53,14 +53,27 @@ def:pub VolunteersPage -> JsxPage {
         await load(ctx.tick);
     }
 
+    same_n: int = len([o for o in rows if o.same_area]);
+    offer_ids: list[str] = [];
+    for o in rows {
+        if o.offer_msg_id not in offer_ids {
+            offer_ids = offer_ids + [o.offer_msg_id];
+        }
+    }
+
     <div className="flex flex-col gap-6">
-        <PageHeader
-            title="Volunteer offers"
-            description="Offers of boats, vehicles, food, water, shelter and medical help, listed against the open incidents they could serve. This page only lists matches; a person decides who to dispatch."
-            image="/static/assets/images/relief-supplies.jpg"
-            imageAlt="Bottled water and medical supplies stacked for flood relief"
+        <PageHero
+            eyebrow="Coordination · Volunteer offers"
+            title="Offers of help, matched to needs."
+            description="Boats, vehicles, food, water, shelter and medical help, listed against the open incidents they could serve. This page only lists matches; a person decides who to dispatch."
+            image="/static/assets/images/volunteers-desk.jpg"
+            imageAlt="Volunteers helping residents at a disaster recovery centre"
+            capsules={[
+                [plural(len(offer_ids), "offer", "offers"), "green"],
+                [plural(len(rows), "match", "matches"), "blue"],
+                [f"{same_n} in the same area", "violet"]
+            ]}
         />
-        <p className="text-sm text-muted-foreground">{plural(len(rows), "match", "matches")}</p>
         {if not loaded {
             <LoadingRows count={3} className="h-24" />
         } elif len(rows) == 0 {
@@ -75,9 +88,7 @@ def:pub VolunteersPage -> JsxPage {
                     <Card key={o.offer_msg_id + ">" + o.inc_id}>
                         <CardHeader>
                             <div className="flex items-center gap-2">
-                                <span className="flex size-8 items-center justify-center rounded-lg bg-muted">
-                                    <HugeiconsIcon icon={resource_icon(o.resource)} strokeWidth={2} className="size-4" />
-                                </span>
+                                <IconChip icon={resource_icon(o.resource)} tone="green" />
                                 <CardTitle>{pretty(o.resource)}</CardTitle>
                             </div>
                             <CardDescription>{"Offer " + o.offer_msg_id}</CardDescription>
