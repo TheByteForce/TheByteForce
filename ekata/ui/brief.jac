@@ -21,9 +21,10 @@ def:pub BriefPanel(incId: str) -> JsxElement {
     }
     <section aria-label="Call brief">
         <div className="flex items-center justify-between gap-2">
-            <h3 className="text-[17px] font-semibold">What to ask on the call</h3>
+            <p className="text-[13px] text-muted-foreground">Questions drafted from what we know so far.</p>
             <Button
                 variant="outline"
+                size="sm"
                 disabled={busy}
                 onClick={lambda (e: MouseEvent) { generate(); }}
             >
@@ -34,10 +35,10 @@ def:pub BriefPanel(incId: str) -> JsxElement {
             <p role="alert" className="mt-2 text-[13px] text-blocked">{error}</p>
         }}
         {if brief is not None {
-            <div className="mt-2 rounded-lg border border-border bg-background p-3 text-[15px]">
+            <div className="mt-2 rounded-lg bg-muted p-4 text-[15px]">
                 {if len(brief.known) > 0 {
                     <div>
-                        <p className="text-[13px] font-semibold text-muted-foreground">
+                        <p className="text-[13px] text-muted-foreground">
                             What we know
                         </p>
                         <ul className="mt-1 list-disc space-y-0.5 pl-5">
@@ -61,7 +62,7 @@ def:pub BriefPanel(incId: str) -> JsxElement {
                 }}
                 {if len(brief.questions) > 0 {
                     <div className="mt-3">
-                        <p className="text-[13px] font-semibold text-muted-foreground">
+                        <p className="text-[13px] text-muted-foreground">
                             Questions
                         </p>
                         <ol className="mt-1 list-decimal space-y-1.5 pl-5">

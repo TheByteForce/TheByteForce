@@ -1,4 +1,4 @@
-"""Officer queue: the Next call hero sentence, then a dense list of the rest."""
+"""Officer queue: the next call on a hero card, then the rest as a quiet list."""
 
 import type from ekata.views { QueueRow }
 import from ...components.ui.button { Button }
@@ -24,11 +24,11 @@ def:pub call_sentence(row: QueueRow) -> str {
 def:pub NextCall(row: QueueRow, selected: bool, onSelect: Callable[[str], None]) -> JsxElement {
     <section
         aria-label="Next call"
-        className="rounded-lg border border-border border-l-[6px] border-l-alert bg-card p-5"
+        className="rounded-xl border border-border border-l-4 border-l-alert bg-card p-6"
     >
-        <p className="text-[15px] font-semibold text-muted-foreground">Next call</p>
-        <p className="mt-1 text-[28px] font-bold leading-tight">{call_sentence(row)}</p>
-        <div className="mt-3 flex flex-wrap items-center gap-2">
+        <p className="text-[14px] font-semibold text-alert">Next call</p>
+        <p className="mt-1.5 text-[24px] font-semibold leading-snug tracking-tight">{call_sentence(row)}</p>
+        <div className="mt-4 flex flex-wrap items-center gap-2">
             <StatusBadge status={row.status}/>
             {for v in row.vulnerable {
                 <VulnerableBadge key={v} flag={v}/>
@@ -38,15 +38,14 @@ def:pub NextCall(row: QueueRow, selected: bool, onSelect: Callable[[str], None])
             </span>
         </div>
         {if row.reason != "" {
-            <p className="mt-2 text-[15px] leading-snug">{row.reason}</p>
+            <p className="mt-3 text-[15px] leading-snug text-muted-foreground">{row.reason}</p>
         }}
-        <div className="mt-4">
+        <div className="mt-5">
             <Button
-                className="h-11 px-5 text-[15px]"
-                disabled={selected}
+                className="h-11 bg-[#0E3550] px-5 text-[15px] text-white hover:bg-[#0E3550]/90"
                 onClick={lambda (e: MouseEvent) { onSelect(row.inc_id); }}
             >
-                {"Case is open" if selected else "Open this case"}
+                Open this case
             </Button>
         </div>
     </section>
@@ -55,35 +54,29 @@ def:pub NextCall(row: QueueRow, selected: bool, onSelect: Callable[[str], None])
 def:pub QueueItem(
     row: QueueRow, position: int, selected: bool, onSelect: Callable[[str], None]
 ) -> JsxElement {
-    frame: str = "border-border bg-card hover:bg-muted";
-    if selected {
-        frame = "border-primary bg-accent";
-    }
-    <li>
+    <li className="border-b border-border last:border-0">
         <button
             type="button"
             aria-pressed={selected}
-            className={"flex w-full gap-3 rounded-lg border px-3 py-2.5 text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary "
-                + frame}
+            className={"flex w-full gap-4 px-5 py-4 text-left transition-colors hover:bg-muted focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-primary "
+                + ("bg-muted" if selected else "")}
             onClick={lambda (e: MouseEvent) { onSelect(row.inc_id); }}
         >
-            <span
-                className="w-7 shrink-0 pt-0.5 text-[21px] font-bold tabular-nums text-muted-foreground"
-            >
+            <span className="w-6 shrink-0 text-[15px] font-semibold tabular-nums text-muted-foreground">
                 {str(position)}
             </span>
             <span className="min-w-0 flex-1">
                 <span className="block text-[15px] font-semibold leading-snug">
                     {call_sentence(row)}
                 </span>
-                <span className="mt-1.5 flex flex-wrap items-center gap-1.5">
+                <span className="mt-2 flex flex-wrap items-center gap-1.5">
                     <StatusBadge status={row.status}/>
                     {for v in row.vulnerable {
                         <VulnerableBadge key={v} flag={v}/>
                     }}
                 </span>
                 {if row.reason != "" {
-                    <span className="mt-1 block text-[13px] text-muted-foreground">
+                    <span className="mt-1.5 block text-[13px] text-muted-foreground">
                         {row.reason}
                     </span>
                 }}
@@ -97,14 +90,14 @@ def:pub OfficerQueue(
 ) -> JsxElement {
     if len(rows) == 0 {
         return
-            <div className="rounded-lg border border-dashed border-border bg-card px-4 py-10 text-center">
+            <div className="rounded-xl border border-border bg-card px-5 py-14 text-center">
                 <p className="text-[17px] font-semibold">No one is waiting in this division</p>
-                <p className="mt-1 text-[13px] text-muted-foreground">
+                <p className="mt-1 text-[15px] text-muted-foreground">
                     New calls for help appear here as soon as they arrive.
                 </p>
             </div>;
     }
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-6">
         <NextCall
             row={rows[0]}
             selected={rows[0].inc_id == selected}
@@ -112,10 +105,10 @@ def:pub OfficerQueue(
         />
         {if len(rows) > 1 {
             <section aria-label="Waiting after that">
-                <h2 className="mb-2 text-[17px] font-semibold">
+                <h2 className="mb-3 text-[16px] font-semibold">
                     {f"Waiting after that ({len(rows) - 1})"}
                 </h2>
-                <ol className="flex flex-col gap-2">
+                <ol className="overflow-hidden rounded-xl border border-border bg-card">
                     {for (i, r) in enumerate(rows) {
                         if i > 0 {
                             <QueueItem
