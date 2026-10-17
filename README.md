@@ -104,19 +104,23 @@ Evaluation reads raw messages first and opens the separate truth labels only aft
 MIT licensed. See [LICENSE](LICENSE).
 
 
-## Recorded development baseline
+## Recorded development results
 
-`results/development-rules.json` contains a completed rules-only run of the integrated 94-message fixture. It is supplied as a reproducible development baseline, not an independent held-out or live-model result. Pairwise counts, engine, timestamp, language groups and unavailable measurements are included in the JSON.
+Two completed runs of the integrated 94-message fixture: `results/development-rules.json` (rules only, no model) and `results/development-live.json` (live Gemini 2.5 Flash agents, 17 Oct 2026). Pairwise counts, engine, timestamp, language groups and unavailable measurements are in each JSON.
 
-| Development fixture (94 synthetic messages, 64 rescue) | Rules only |
-|---|---|
-| Calls needed (incidents) | 40 instead of 64, **24 calls saved** |
-| Merge precision (no wrong merges) | **100%** (29 of 29 proposed pairs) |
-| Merge recall | 65.9% (29 of 44 true pairs) |
-| Message kind accuracy | 81.9% |
-| Referee interventions | 11 blocks or hand-offs to a person, 8 retries |
+| Development fixture (94 synthetic messages, 64 rescue) | Rules only | Live model agents |
+|---|---|---|
+| Calls needed (incidents) | 40, **24 calls saved** | 39, **25 calls saved** |
+| Merge precision (no wrong merges) | **100%** (29 of 29 pairs) | **100%** (38 of 38 pairs) |
+| Merge recall | 65.9% (29 of 44 pairs) | **86.4%** (38 of 44 pairs) |
+| Message kind accuracy | 81.9% | **92.6%** |
+| Referee interventions | 11 blocks or hand-offs, 8 retries | 24 blocks or hand-offs, 8 retries |
+| Model calls, cost, median time per message | none | 189 calls, US$0.35 for the night, 9.1 s |
+| Failed messages | 0 | 0 |
 
-These are development numbers on synthetic data the team wrote, not held-out performance.
+The agents find a third more of the true duplicates than the rules alone, with still no wrong merge: the referee blocked every unsafe proposal. These are development numbers on synthetic data the team wrote, not held-out performance.
+
+**Recorded run:** `crisisconnect/fixtures/recorded_run.json` holds the real model outputs from the live run (94 intake results, 7 appeal investigations). With `CRISISCONNECT_CACHE_MODE=cached` the app replays them and every screen says "Cached replay · live on cache miss". It is a demo backup for when the model is unreachable, never presented as live.
 
 ## Deployment
 
