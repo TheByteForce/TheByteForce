@@ -13,7 +13,7 @@ sem MatchAssessment.same_household = "True only if the message refers to this ex
 sem MatchAssessment.confidence = "Confidence between 0 and 1; uncertainty must reduce the score.";
 sem MatchAssessment.reason = "Explain the exact shared identifiers or the reason this is a different household.";
 
-def assess_match(message: str, incident: str, evidence: list[str], feedback: str) -> MatchAssessment by resolver_model(temperature=0.0);
+def assess_match(message: str, incident: str, evidence: list[str], feedback: str) -> MatchAssessment by resolver_model(temperature=0.0, incl_info={"policy": "Return same_household=false if the household is different. An exact phone or a canonical full name PLUS a household-level location is strong evidence. A shared surname or road alone is insufficient. Confidence is 0..1. Explain and respect the referee feedback."});
 sem assess_match = "Independently assess whether a new emergency message belongs to an existing household. A shared surname or road is never enough. Respect referee feedback. Return false for a new household.";
 
 walker Resolver {

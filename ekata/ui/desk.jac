@@ -5,6 +5,7 @@ every writer call is followed by a full re-fetch.
 """
 
 import from "react" { useEffect }
+import from ekata.case_api { explain_queue }
 import from ekata.views { DemoState, ReplayStep, MsgView, QueueRow, TraceRow, IncidentView }
 import from ekata.api {
     load_demo, demo_state, replay_next, call_queue, incident_detail, trace_since, recent_messages
@@ -215,6 +216,13 @@ def:pub Desk -> JsxElement {
         refresh();
     }
 
+    async def explain_top_queue -> None {
+        busy = True;
+        try { queue = await explain_queue(); await refresh(); }
+        except Exception as ex { error = str(ex); }
+        busy = False;
+    }
+
     async def poll -> None {
         if busy or running or loadingDemo {
             return;
@@ -292,6 +300,7 @@ def:pub Desk -> JsxElement {
                 {error}
             </div>
         }}
+        <div className="flex justify-end border-b px-6 py-2"><button className="rounded border px-3 py-1 text-sm font-semibold" onClick={lambda (e: MouseEvent) { explain_top_queue(); }}>Explain top five</button></div>
         <main className="grid min-h-[26rem] flex-1 grid-cols-1 gap-4 p-4 lg:min-h-0 lg:grid-cols-12 lg:grid-rows-[minmax(0,1fr)] lg:px-6">
             <section aria-label="Inbox" className="lg:col-span-3 lg:min-h-0">
                 <Inbox messages={inbox} onSent={on_sent} />

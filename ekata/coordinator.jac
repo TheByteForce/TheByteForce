@@ -108,6 +108,8 @@ import from ekata.priority { refresh_priority, priority_now }
 import from ekata.referee { referee_merge, r5_claim, OPEN_STATUSES }
 import from ekata.ai.intake { extract_report, extract_report_rules, intake_run_info }
 import from ekata.ai.resolver { Resolver }
+import from ekata.ai.triage { overlay_rank }
+import from ekata.casework { refresh_appeals, link_bulletins, CredentialRequest, Asks }
 
 # ---------- AI switch ----------
 
@@ -566,11 +568,20 @@ def register_appeal(
         appeal_id=f"APL-{msg.seq:03d}",
         text=msg.text,
         channel=msg.channel,
-        verdict="CHECKING",
+        source_msg_id=msg.msg_id,
+        beneficiary_names=rep.claims_for_names + [p.canonical for p in rep.names],
+        place_text=rep.place_text,
+        credential_requests=rep.asks_credentials,
+        verdict="UNVERIFIED",
         reason="",
         storm_time=t
     );
     hub +>:Holds:+> ap;
+    for kind in rep.asks_credentials {
+        req = CredentialRequest(kind=kind);
+        hub +>:Holds:+> req;
+        ap +>:Asks:+> req;
+    }
     for ph in phones {
         ap +>:AppealHasPhone:+> ensure_phone(hub, ph);
     }
@@ -601,6 +612,7 @@ def register_appeal(
         model="rules",
         target_label=ap.appeal_id
     );
+    refresh_appeals(hub, ap.appeal_id);
     return ap;
 }
 
@@ -659,11 +671,12 @@ def process_in_hub(
         register_appeal(hub, msg, rep, phones, t);
     } elif rep.kind == MsgKind.RUMOUR {
         claim = RumourClaim(
-            claim=rep.summary if rep.summary != "" else text[:140],
+            claim=text, source_msg_id=msg.msg_id,
             stance="UNCONFIRMED",
             storm_time=t
         );
         hub +>:Holds:+> claim;
+        link_bulletins(hub, claim);
         log_decision(
             hub,
             "intake",
@@ -689,6 +702,7 @@ def process_in_hub(
             model=out.model
         );
     }
+    refresh_appeals(hub);
     if inc is not None {
         for d in decs {
             d +>:About:+> inc;
@@ -771,7 +785,7 @@ def build_queue(hub: EkataHub) -> list[QueueRow] {
     for (i, r) in enumerate(rows) {
         r.rank = i + 1;
     }
-    return rows;
+    return overlay_rank(hub, rows);
 }
 
 def build_incident_view(hub: EkataHub, inc: Incident) -> IncidentView {
@@ -1029,6 +1043,7 @@ def record_call(
         model="rules",
         target_label=inc_id
     );
+    refresh_appeals(hub);
     return inc;
 }
 

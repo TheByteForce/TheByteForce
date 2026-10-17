@@ -1,6 +1,7 @@
 """Right column: the selected incident, its evidence, merge proposals and call log."""
 
 import from ekata.views { IncidentView }
+import from .brief { BriefPanel }
 import from ekata.api { decide_merge, log_call, claim_incident, resolve_change }
 import from ...components.ui.button { Button }
 import from .atoms {
@@ -225,6 +226,7 @@ def:pub IncidentCard(
                 <Button variant="outline" onClick={lambda (e: MouseEvent) { review(iid, p.field, False); }}>Keep previous value</Button>
             </div>
         }}
+        <BriefPanel key={iid + str(len(inc.messages)) + str(len(inc.calls))} incId={iid} />
         <h3 className="mt-4 text-base font-semibold">Log a call</h3>
         <form
             className="mt-1 rounded-lg border bg-muted/40 p-3"

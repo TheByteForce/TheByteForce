@@ -63,7 +63,7 @@ def:pub TopBar(
                 }}
                 <div className="min-w-40" aria-label="Replay progress">
                     <div className="flex justify-between text-sm tabular-nums">
-                        <span className="text-muted-foreground">Replay</span>
+                        <span className="text-muted-foreground">Replay · 1 message / 1.5 s</span>
                         <span className="font-semibold">{f"{position} / {total}"}</span>
                     </div>
                     <div

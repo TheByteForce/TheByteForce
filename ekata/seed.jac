@@ -6,6 +6,8 @@ GN division names, offices, NGOs and contacts are invented. Phones follow
 07X-555-01NN with a literal X so nobody can dial them.
 """
 
+import json;
+import os;
 import from ekata.schema {
     EkataHub, Holds, District, DSDivision, GNDivision, InDS, InDistrict,
     RegistryEntry, Bulletin
@@ -35,6 +37,11 @@ obj BulletinSeed {
 }
 
 def registry_seeds() -> list[RegistrySeed] {
+    path = os.path.join("ekata", "fixtures", "registry.json");
+    if os.path.exists(path) {
+        with open(path, encoding="utf-8") as fh { data = json.load(fh); }
+        return [RegistrySeed(office=str(x["office"]), contact=str(x["contact"]), kind=str(x.get("kind", "OFFICE"))) for x in data["offices"]];
+    }
     return [
         RegistrySeed(office="Relief Coordinator, Kegalle Relief Unit", contact="07X-555-0190", kind="OFFICE"),
         RegistrySeed(office="Relief Coordinator, Ratnapura Relief Unit", contact="07X-555-0191", kind="OFFICE"),
