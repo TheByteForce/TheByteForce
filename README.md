@@ -106,7 +106,7 @@ MIT licensed. See [LICENSE](LICENSE).
 
 ## Recorded development results
 
-Two completed runs of the integrated 94-message fixture: `results/development-rules.json` (rules only, no model) and `results/development-live.json` (live Gemini 2.5 Flash agents, 17 Oct 2026). Pairwise counts, engine, timestamp, language groups and unavailable measurements are in each JSON.
+Two completed runs of the integrated 94-message fixture: `results/development-rules.json` (rules only, no model) , `results/development-live.json` (live Gemini 2.5 Flash agents, 17 Oct 2026) and `results/development-cached.json` (the same live outputs re-scored from the recorded run, which adds appeal accuracy). Pairwise counts, engine, timestamp, language groups and unavailable measurements are in each JSON.
 
 | Development fixture (94 synthetic messages, 64 rescue) | Rules only | Live model agents |
 |---|---|---|
@@ -115,6 +115,7 @@ Two completed runs of the integrated 94-message fixture: `results/development-ru
 | Merge recall | 65.9% (29 of 44 pairs) | **86.4%** (38 of 44 pairs) |
 | Message kind accuracy | 81.9% | **92.6%** |
 | Referee interventions | 11 blocks or hand-offs, 8 retries | 24 blocks or hand-offs, 8 retries |
+| Appeal verdict accuracy (20 labelled appeals) | not measured | **70%** (14 of 20) |
 | Model calls, cost, median time per message | none | 189 calls, US$0.35 for the night, 9.1 s |
 | Failed messages | 0 | 0 |
 
