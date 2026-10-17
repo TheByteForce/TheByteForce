@@ -1,6 +1,10 @@
 @import "tailwindcss";
 @import "tw-animate-css";
-@import "@fontsource-variable/inter";
+@import "@fontsource-variable/atkinson-hyperlegible-next";
+@import "@fontsource/noto-sans-sinhala/400.css";
+@import "@fontsource/noto-sans-sinhala/600.css";
+@import "@fontsource/noto-sans-tamil/400.css";
+@import "@fontsource/noto-sans-tamil/600.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -102,38 +106,46 @@
 }
 
 :root {
-    --background: oklch(1 0 0);
-    --foreground: oklch(0.145 0 0);
-    --card: oklch(1 0 0);
-    --card-foreground: oklch(0.145 0 0);
-    --popover: oklch(1 0 0);
-    --popover-foreground: oklch(0.145 0 0);
-    --primary: oklch(0.586 0.253 17.585);
-    --primary-foreground: oklch(0.969 0.015 12.422);
-    --secondary: oklch(0.967 0.001 286.375);
-    --secondary-foreground: oklch(0.21 0.006 285.885);
-    --muted: oklch(0.97 0 0);
-    --muted-foreground: oklch(0.556 0 0);
-    --accent: oklch(0.97 0 0);
-    --accent-foreground: oklch(0.205 0 0);
-    --destructive: oklch(0.58 0.22 27);
-    --border: oklch(0.922 0 0);
-    --input: oklch(0.922 0 0);
-    --ring: oklch(0.708 0 0);
-    --chart-1: oklch(0.81 0.117 11.638);
-    --chart-2: oklch(0.645 0.246 16.439);
-    --chart-3: oklch(0.586 0.253 17.585);
-    --chart-4: oklch(0.514 0.222 16.935);
-    --chart-5: oklch(0.455 0.188 13.697);
-    --radius: 0.625rem;
-    --sidebar: oklch(0.985 0 0);
-    --sidebar-foreground: oklch(0.145 0 0);
-    --sidebar-primary: oklch(0.586 0.253 17.585);
-    --sidebar-primary-foreground: oklch(0.969 0.015 12.422);
-    --sidebar-accent: oklch(0.97 0 0);
-    --sidebar-accent-foreground: oklch(0.205 0 0);
-    --sidebar-border: oklch(0.922 0 0);
-    --sidebar-ring: oklch(0.708 0 0);
+    /* Ekata: rain-light paper, monsoon-slate ink, river blue actions,
+       lifebuoy orange reserved for the next call / people at risk. */
+    --background: #F5F7F8;
+    --foreground: #14212B;
+    --card: #FFFFFF;
+    --card-foreground: #14212B;
+    --popover: #FFFFFF;
+    --popover-foreground: #14212B;
+    --primary: #1F5F7A;
+    --primary-foreground: #FFFFFF;
+    --secondary: #E8EEF1;
+    --secondary-foreground: #14212B;
+    --muted: #EDF1F3;
+    --muted-foreground: #52636F;
+    --accent: #E3EDF2;
+    --accent-foreground: #14212B;
+    --destructive: #B42318;
+    --border: #DCE4E8;
+    --input: #C9D4DA;
+    --ring: #1F5F7A;
+    --alert: #E8590C;
+    --alert-soft: #FFF1E8;
+    --ok: #2F7D4F;
+    --ok-soft: #E9F4EC;
+    --blocked: #B42318;
+    --blocked-soft: #FDECEA;
+    --chart-1: #1F5F7A;
+    --chart-2: #4E8FA8;
+    --chart-3: #E8590C;
+    --chart-4: #2F7D4F;
+    --chart-5: #8BA3B0;
+    --radius: 0.5rem;
+    --sidebar: #EDF1F3;
+    --sidebar-foreground: #14212B;
+    --sidebar-primary: #1F5F7A;
+    --sidebar-primary-foreground: #FFFFFF;
+    --sidebar-accent: #E3EDF2;
+    --sidebar-accent-foreground: #14212B;
+    --sidebar-border: #DCE4E8;
+    --sidebar-ring: #1F5F7A;
 }
 
 .dark {
@@ -171,7 +183,13 @@
 }
 
 @theme inline {
-    --font-sans: 'Inter Variable', sans-serif;
+    --font-sans: 'Atkinson Hyperlegible Next Variable', 'Noto Sans Sinhala', 'Noto Sans Tamil', system-ui, sans-serif;
+    --color-alert: var(--alert);
+    --color-alert-soft: var(--alert-soft);
+    --color-ok: var(--ok);
+    --color-ok-soft: var(--ok-soft);
+    --color-blocked: var(--blocked);
+    --color-blocked-soft: var(--blocked-soft);
     --color-sidebar-ring: var(--sidebar-ring);
     --color-sidebar-border: var(--sidebar-border);
     --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -218,6 +236,8 @@
     }
     body {
         @apply font-sans bg-background text-foreground;
+        font-variant-numeric: tabular-nums;
+        -webkit-font-smoothing: antialiased;
     }
     html {
         @apply font-sans;
