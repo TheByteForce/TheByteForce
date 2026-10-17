@@ -8,6 +8,9 @@ import from .metrics { MetricsPage }
 import from .trace { AgentActivity }
 import from .district_registry { RegistryTab }
 import from .shell { AppShell, WorkspaceSelect }
+import from .map { EkataMap, MapLegend, RouteSummary }
+import from ekata.geo_api { map_layers, division_route }
+import type from ekata.geo { MapLayers, RoutePlan }
 
 def:pub Figure(label: str, value: int, hot: bool = False) -> JsxElement {
     <div className="min-w-0 rounded-xl border border-border bg-card px-5 py-4">
@@ -192,7 +195,77 @@ def:pub OverviewTab -> JsxElement {
     </section>
 }
 
+def:pub SituationTab -> JsxElement {
+    has layers: MapLayers | None = None;
+    has route: RoutePlan | None = None;
+    has ds: str = "";
+    has busy: bool = False;
+    has error: str = "";
+
+    async def load -> None {
+        try {
+            layers = await map_layers("all", int(Date.now()));
+            error = "";
+        } except Exception as e {
+            error = "Could not load the map. It will retry.";
+        }
+    }
+    async def plan(name: str) -> None {
+        ds = name;
+        if name == "" {
+            route = None;
+            return;
+        }
+        busy = True;
+        try {
+            route = await division_route(name, 5);
+        } except Exception as e {
+            error = "Could not plan a route for " + name + ".";
+        }
+        busy = False;
+    }
+    async can with entry {
+        await load();
+    }
+    useEffect(
+        lambda {
+            timer = setInterval(lambda { load(); }, 8000);
+            return lambda { clearInterval(timer); };
+        },
+        []
+    );
+
+    names = ["Mawanella", "Kegalle", "Aranayaka", "Rambukkana", "Warakapola", "Yatiyantota", "Dehiowita", "Ratnapura", "Kuruwita", "Eheliyagoda"];
+    <section className="space-y-5">
+        {if error != "" {
+            <p role="alert" className="text-[13px] text-blocked">{error}</p>
+        }}
+        <div className="flex flex-wrap items-center gap-2">
+            <span className="text-[15px] font-semibold">Plan a rescue run for</span>
+            <select
+                value={ds}
+                className="rounded-md border border-border bg-card px-3 py-2 text-[15px]"
+                onChange={lambda (e: ChangeEvent) { plan(e.target.value); }}
+            >
+                <option value="">Choose a division</option>
+                {for n in names {
+                    <option key={n} value={n}>{n}</option>
+                }}
+            </select>
+            {if busy {
+                <span className="text-[13px] text-muted-foreground">Planning the route...</span>
+            }}
+        </div>
+        <EkataMap layers={layers} route={route} height="h-[560px]"/>
+        <MapLegend withRoute={route is not None}/>
+        {if route is not None {
+            <RouteSummary route={route}/>
+        }}
+    </section>
+}
+
 glob DISTRICT_PAGES: dict[str, list[str]] = {
+    "map": ["Situation map", "Every household, warning area, shelter and relief group tonight."],
     "overview": ["Overview", "Every division at a glance, and the households waiting too long."],
     "cases": ["Appeals and rumours", "Donation appeals and forwarded claims, checked against the registry and bulletins."],
     "registry": ["Registry and bulletins", "Offices and relief groups on record, and official bulletins."],
@@ -205,6 +278,7 @@ def:pub DistrictPortal -> JsxElement {
     has district: str = "Kegalle and Ratnapura";
     nav = [
         ["overview", "Overview", "overview"],
+        ["map", "Situation map", "pin"],
         ["cases", "Appeals and rumours", "appeal"],
         ["registry", "Registry and bulletins", "registry"],
         ["agents", "Agent activity", "activity"],
@@ -225,6 +299,9 @@ def:pub DistrictPortal -> JsxElement {
     >
         {if tab == "overview" {
             <OverviewTab/>
+        }}
+        {if tab == "map" {
+            <SituationTab/>
         }}
         {if tab == "cases" {
             <Cases/>

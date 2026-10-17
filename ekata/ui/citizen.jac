@@ -7,6 +7,9 @@ message before sharing or donating, and read official bulletins.
 import from "react" { useEffect }
 import from ekata.portal_api { citizen_send, track_request, bulletins }
 import type from ekata.portal { CitizenStatus, BulletinView }
+import from ekata.geo_api { map_layers, report_at, shelters_near }
+import type from ekata.geo { MapLayers, NearbyPlace }
+import from .map { EkataMap, MapLegend }
 import from .atoms { Empty, VerdictBadge }
 import from .shell { AppShell, WorkspaceSelect, Surface }
 
@@ -114,12 +117,68 @@ def:pub Receipt(s: CitizenStatus) -> JsxElement {
 
 # ---------- Page 1: send an SOS ----------
 
-def:pub SosPage(onSaved: Callable[[str], None], onTrack: Callable[[str], None]) -> JsxElement {
+def scope_of(area: str) -> str {
+    return "area:" + area if area != "" else "all";
+}
+
+def:pub SosPage(area: str, onSaved: Callable[[str], None], onTrack: Callable[[str], None]) -> JsxElement {
     has text: str = "";
     has busy: bool = False;
     has err: str = "";
     has receipt: CitizenStatus | None = None;
     has last_ref: str = "";
+    has layers: MapLayers | None = None;
+    has lat: float = 0.0;
+    has lon: float = 0.0;
+    has locating: bool = False;
+    has geo_note: str = "";
+    has near: list[NearbyPlace] = [];
+    has sent_pin: bool = False;
+
+    async def load_layers -> None {
+        try {
+            layers = await map_layers(scope_of(area), int(Date.now()));
+        } except Exception as ex {
+            geo_note = "The map could not load. You can still send your message.";
+        }
+    }
+
+    async can with [area] entry {
+        await load_layers();
+    }
+
+    def on_pick(la: float, lo: float) -> None {
+        lat = la;
+        lon = lo;
+        geo_note = "";
+    }
+
+    def clear_pin -> None {
+        lat = 0.0;
+        lon = 0.0;
+    }
+
+    def locate -> None {
+        try {
+            locating = True;
+            geo_note = "";
+            geo: any = navigator.geolocation;
+            geo.getCurrentPosition(
+                lambda (p: any) {
+                    lat = p.coords.latitude;
+                    lon = p.coords.longitude;
+                    locating = False;
+                },
+                lambda (e: any) {
+                    locating = False;
+                    geo_note = "We could not get your location. Tap the map to mark where you are.";
+                }
+            );
+        } except Exception as ex {
+            locating = False;
+            geo_note = "Location is not available here. Tap the map to mark where you are.";
+        }
+    }
 
     async def send -> None {
         if text.strip() == "" {
@@ -129,11 +188,26 @@ def:pub SosPage(onSaved: Callable[[str], None], onTrack: Callable[[str], None]) 
         busy = True;
         err = "";
         try {
-            r = await citizen_send(text, "SMS");
+            has_pin = lat != 0.0;
+            r: CitizenStatus | None = None;
+            if has_pin {
+                r = await report_at(text, lat, lon);
+            } else {
+                r = await citizen_send(text, "SMS");
+            }
             receipt = r;
             last_ref = r.msg_id;
             if r.msg_id != "" {
                 onSaved(r.msg_id);
+            }
+            sent_pin = has_pin;
+            near = [];
+            if has_pin {
+                try {
+                    near = await shelters_near(lat, lon, int(Date.now()));
+                } except Exception as ex2 {
+                    near = [];
+                }
             }
             text = "";
         } except Exception as ex {
@@ -143,6 +217,44 @@ def:pub SosPage(onSaved: Callable[[str], None], onTrack: Callable[[str], None]) 
     }
 
     <div className="mx-auto max-w-[680px] space-y-5">
+        <Surface>
+            <p className="text-[16px] font-medium">Mark where you are</p>
+            <p className="mt-1 mb-3 text-[14px] text-muted-foreground">
+                Tap the map to drop a pin, or use your location. This helps the desk find you. It is optional.
+            </p>
+            <EkataMap
+                layers={layers}
+                height="h-[320px]"
+                pickable={True}
+                onPick={on_pick}
+                pickedLat={lat}
+                pickedLon={lon}
+                showBases={False}
+            />
+            <div className="mt-3 flex flex-wrap items-center gap-3">
+                <BigButton
+                    label={"Finding you..." if locating else "Use my location"}
+                    quiet={True}
+                    busy={locating}
+                    onPress={lambda { locate(); }}
+                />
+                {if lat != 0.0 {
+                    <div className="flex items-center gap-3">
+                        <span className="text-[15px] text-ok">Pin dropped</span>
+                        <button
+                            type="button"
+                            className={"min-h-12 px-2 text-[15px] underline " + FOCUS}
+                            onClick={lambda (e: MouseEvent) { clear_pin(); }}
+                        >
+                            Remove pin
+                        </button>
+                    </div>
+                }}
+            </div>
+            {if geo_note != "" {
+                <p className="mt-3 text-[15px] text-muted-foreground" role="status">{geo_note}</p>
+            }}
+        </Surface>
         <Surface>
             <label htmlFor="sos-text" className="text-[16px] font-medium">
                 Where are you, how many people, who cannot move?
@@ -178,6 +290,21 @@ def:pub SosPage(onSaved: Callable[[str], None], onTrack: Callable[[str], None]) 
                         onPress={lambda { onTrack(last_ref); }}
                     />
                 </div>
+                {if sent_pin and len(near) > 0 {
+                    <div className="mt-5">
+                        <p className="text-[16px] font-semibold">Nearest shelters</p>
+                        <ul className="mt-2 space-y-2">
+                            {for n in near {
+                                <li
+                                    key={n.label}
+                                    className="rounded-lg border border-border bg-muted px-3.5 py-2.5 text-[15px]"
+                                >
+                                    {n.label + ", " + str(n.km) + " km, " + n.detail.lower()}
+                                </li>
+                            }}
+                        </ul>
+                    </div>
+                }}
             </Surface>
         }}
         <p className="rounded-xl border border-alert/30 bg-alert-soft px-5 py-4 text-[15px]">
@@ -506,6 +633,48 @@ def:pub BulletinPage(area: str) -> JsxElement {
     </div>
 }
 
+# ---------- Page 5: situation map ----------
+
+def:pub SituationMapPage(area: str) -> JsxElement {
+    has layers: MapLayers | None = None;
+    has err: str = "";
+
+    async def load -> None {
+        try {
+            layers = await map_layers(scope_of(area), int(Date.now()));
+            err = "";
+        } except Exception as ex {
+            err = "The map could not load. It will try again.";
+        }
+    }
+
+    async can with [area] entry {
+        await load();
+    }
+
+    useEffect(
+        lambda {
+            timer = setInterval(lambda { load(); }, 10000);
+            return lambda { clearInterval(timer); };
+        },
+        [area]
+    );
+
+    <div className="mx-auto max-w-[920px] space-y-3">
+        <p className="text-[15px] text-muted-foreground">
+            Orange circles are official warning areas. Green rings are shelters.
+        </p>
+        {if err != "" {
+            <p className="text-[16px] text-blocked" role="alert">{err}</p>
+        }}
+        <EkataMap layers={layers} height="h-[420px] md:h-[520px]" showBases={False}/>
+        <MapLegend/>
+        {if layers is not None and layers.note != "" {
+            <p className="text-[14px] text-muted-foreground">{layers.note}</p>
+        }}
+    </div>
+}
+
 # ---------- The portal ----------
 
 def:pub CitizenPortal -> JsxElement {
@@ -539,12 +708,14 @@ def:pub CitizenPortal -> JsxElement {
         ["sos", "Send an SOS", "sos"],
         ["track", "Track my request", "track"],
         ["check", "Check a message", "check"],
+        ["map", "Situation map", "pin"],
         ["bulletins", "Official bulletins", "bulletin"]
     ];
     titles = {
         "sos": ["Send an SOS", "Tell us where you are and who needs help. A division officer will call you."],
         "track": ["Track my request", "Enter your reference number to see where your request is."],
         "check": ["Check a message", "Paste an appeal or forwarded message before you share it or send money."],
+        "map": ["Situation map", "Warning areas, shelters and where households have asked for help."],
         "bulletins": ["Official bulletins", "Warnings and notices from the authorities for your area."]
     };
     head = titles[page];
@@ -561,7 +732,10 @@ def:pub CitizenPortal -> JsxElement {
         workspace={<WorkspaceSelect value={area} options={AREAS} onPick={pick_area} placeholder="Choose your area"/>}
     >
         {if page == "sos" {
-            <SosPage onSaved={saved} onTrack={track}/>
+            <SosPage area={area} onSaved={saved} onTrack={track}/>
+        }}
+        {if page == "map" {
+            <SituationMapPage area={area}/>
         }}
         {if page == "track" {
             <TrackPage refs={refs} preset={preset} presetNonce={nonce}/>
