@@ -78,11 +78,12 @@ test "verified incident finds confirmed with call log and skips unconfirmed" {
 test "lookup official hit and miss" {
     hub = fresh_hub("t-at-lo");
     seed_registry(hub);
-    hit = lookup_official_in(hub, "A. Silva", "Relief Coordinator, Kegalle Relief Unit");
-    assert "07X-555-0190" in hit;
+    # seed_registry loads ekata/fixtures/registry.json (the registry the storm-night appeals use)
+    hit = lookup_official_in(hub, "A. Silva", "Kegalle District Relief Unit");
+    assert "07X-555-0900" in hit;
     miss = lookup_official_in(hub, "A. Silva", "Flood Heroes Foundation");
     assert "not in registry" in miss;
-    assert "Hill Country" in lookup_ngo_in(hub, "hill country aid circle");
+    assert "Hill Country" in lookup_ngo_in(hub, "hill country relief trust");
 }
 
 test "appeals sharing counts a shared account" {
