@@ -102,3 +102,11 @@ test "R14 only the single writer applies, and only after the referee allows it" 
     assert r14_apply_allowed("writer", RefereeOutcome.APPLIED).outcome == RefereeOutcome.APPLIED;
     assert r14_apply_allowed("writer", RefereeOutcome.NEW_INCIDENT).outcome == RefereeOutcome.APPLIED;
 }
+
+test "R12 a real office title is blocked, an invented issuer passes" {
+    assert r12_no_real_names("Notice from the DMC: move to higher ground").outcome == RefereeOutcome.BLOCKED;
+    assert r12_no_real_names("NBRO landslide alert for tonight").outcome == RefereeOutcome.BLOCKED;
+    assert r12_no_real_names("Disaster Management Centre says").outcome == RefereeOutcome.BLOCKED;
+    assert r12_no_real_names("District Flood Desk: shelters are open").outcome == RefereeOutcome.APPLIED;
+    assert r12_no_real_names("Ministry Flood Relief Desk (invented scam office)").outcome == RefereeOutcome.APPLIED;
+}

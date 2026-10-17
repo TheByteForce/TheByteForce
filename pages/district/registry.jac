@@ -15,14 +15,14 @@ import from ...components.app.tags { Tag }
 import from ...components.app.labels { plural, pretty }
 import from ...components.app.page_parts { PageHero, SelectField, IconChip }
 
-glob ISSUERS: list[str] = ["DMC", "NBRO", "Irrigation", "District Secretariat"];
+glob ISSUERS: list[str] = ["District Flood Desk", "Landslide Watch", "Reservoir Office", "District Secretariat"];
 
 def:pub RegistryPage -> JsxPage {
     ctx: any = use_desk();
     has offices: list[NgoView] = [];
     has notes: list[BulletinView] = [];
     has division_rows: list[DivisionView] = [];
-    has issuer: str = "DMC";
+    has issuer: str = "District Flood Desk";
     has area: str = "Kegalle";
     has text: str = "";
     has publishing: bool = False;

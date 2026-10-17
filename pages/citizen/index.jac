@@ -79,7 +79,7 @@ def:pub SosPage -> JsxPage {
             text = "";
             ctx.bump();
         } except Exception as ex {
-            err = "Your message did not go through. Please try again, or call 117. (" + str(ex) + ")";
+            err = "Your message did not go through. Please try again, or call your local emergency number. (" + str(ex) + ")";
         }
         sending = False;
     }
@@ -91,7 +91,7 @@ def:pub SosPage -> JsxPage {
             description="Say where you are, how many people are with you and who cannot move. Write in Sinhala, Tamil or English."
             image="/static/assets/images/helicopter-response.jpg"
             imageAlt="A rescue helicopter flying low during a flood response"
-            capsules={[["Sinhala, Tamil or English", "blue"], ["Track it with your reference", "green"], ["In danger now? Call 117", "red"]]}
+            capsules={[["Sinhala, Tamil or English", "blue"], ["Track it with your reference", "green"], ["In danger now? Call emergency services", "red"]]}
         />
 
         {if receipt is not None {
@@ -190,7 +190,7 @@ def:pub SosPage -> JsxPage {
                                 <AlertDescription>{err}</AlertDescription>
                             </Alert>
                         }}
-                        <p className="text-sm text-muted-foreground">In danger right now? Call 117 (Disaster Management Centre) or 119 (Police).</p>
+                        <p className="text-sm text-muted-foreground">In danger right now? Call your local emergency number first.</p>
                     </form>
                 </CardContent>
             </Card>

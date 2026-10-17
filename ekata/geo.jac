@@ -280,8 +280,8 @@ def zone_points(hub: EkataHub) -> list[MapZone] {
         if c is None {
             continue;
         }
-        tone = "alert" if b.issuer in ["NBRO", "Irrigation"] else "info";
-        out.append(MapZone(label=f"{b.issuer} {b.area}", issuer=b.issuer, text=b.text, lat=c[0], lon=c[1], radius_m=7000 if b.issuer == "NBRO" else 9000, tone=tone));
+        tone = "alert" if b.issuer in ["Landslide Watch", "Reservoir Office"] else "info";
+        out.append(MapZone(label=f"{b.issuer} {b.area}", issuer=b.issuer, text=b.text, lat=c[0], lon=c[1], radius_m=7000 if b.issuer == "Landslide Watch" else 9000, tone=tone));
     }
     return out;
 }
