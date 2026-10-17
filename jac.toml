@@ -44,3 +44,14 @@ icon = "/static/assets/crisisconnect-mark.svg"
 [client.vite]
 plugins = ["tailwindcss()"]
 lib_imports = ["import tailwindcss from '@tailwindcss/vite'"]
+
+# Admin metrics, distributed traces and aggregated deployment logs.
+[scale.monitoring]
+enabled = true
+walker_metrics = true
+
+[scale.gateway.tracing]
+enabled = true
+
+[scale.gateway.logs]
+enabled = true
