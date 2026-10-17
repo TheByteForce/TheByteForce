@@ -7,6 +7,7 @@ import from .cases { Cases }
 import from .metrics { MetricsPage }
 import from .trace { AgentActivity }
 import from .district_registry { RegistryTab }
+import from .shell { AppShell, WorkspaceSelect }
 
 def:pub Figure(label: str, value: int, hot: bool = False) -> JsxElement {
     <div className="min-w-0">
@@ -191,49 +192,51 @@ def:pub OverviewTab -> JsxElement {
     </section>
 }
 
+glob DISTRICT_PAGES: dict[str, list[str]] = {
+    "overview": ["Overview", "Every division at a glance, and the households waiting too long."],
+    "cases": ["Appeals and rumours", "Donation appeals and forwarded claims, checked against the registry and bulletins."],
+    "registry": ["Registry and bulletins", "Offices and relief groups on record, and official bulletins."],
+    "agents": ["Agent activity", "Every agent decision tonight, with its reason and the safety check."],
+    "results": ["Results", "How many calls Ekata saved and how accurate its merges were."]
+};
+
 def:pub DistrictPortal -> JsxElement {
     has tab: str = "overview";
-    tabs = [
-        ["overview", "Overview"],
-        ["cases", "Appeals and rumours"],
-        ["registry", "Registry and bulletins"],
-        ["agents", "Agent activity"],
-        ["results", "Results"]
+    has district: str = "Kegalle and Ratnapura";
+    nav = [
+        ["overview", "Overview", "overview"],
+        ["cases", "Appeals and rumours", "appeal"],
+        ["registry", "Registry and bulletins", "registry"],
+        ["agents", "Agent activity", "activity"],
+        ["results", "Results", "results"],
+        ["graph", "Graph explorer", "graph"]
     ];
-    <div className="min-h-screen bg-background text-foreground">
-        <PortalHeader portal="District coordination" who="Kegalle and Ratnapura districts"/>
-        <nav aria-label="District sections" className="border-b border-border bg-card">
-            <div className="mx-auto flex max-w-[1500px] gap-1 overflow-x-auto px-4 lg:px-6">
-                {for t in tabs {
-                    <button
-                        key={t[0]}
-                        type="button"
-                        aria-current={"page" if tab == t[0] else None}
-                        className={"whitespace-nowrap border-b-2 px-3 py-3 text-[15px] font-semibold focus-visible:outline-2 focus-visible:outline-primary "
-                            + ("border-primary text-primary" if tab == t[0] else "border-transparent text-muted-foreground hover:text-foreground")}
-                        onClick={lambda (e: MouseEvent) { tab = t[0]; }}
-                    >
-                        {t[1]}
-                    </button>
-                }}
-            </div>
-        </nav>
-        <main className="mx-auto max-w-[1500px] px-4 py-6 lg:px-6">
-            {if tab == "overview" {
-                <OverviewTab/>
-            }}
-            {if tab == "cases" {
-                <Cases/>
-            }}
-            {if tab == "registry" {
-                <RegistryTab/>
-            }}
-            {if tab == "agents" {
-                <AgentActivity/>
-            }}
-            {if tab == "results" {
-                <MetricsPage/>
-            }}
-        </main>
-    </div>
+    page = DISTRICT_PAGES.get(tab, ["", ""]);
+    <AppShell
+        tone="district"
+        tagline="District coordination"
+        nav={nav}
+        active={tab}
+        onNav={lambda (k: str) { if k == "graph" { window.open("/graph", "_blank"); } else { tab = k; } }}
+        title={page[0]}
+        subtitle={page[1]}
+        workspaceLabel="Coordinating"
+        workspace={<WorkspaceSelect value={district} options={["Kegalle and Ratnapura", "Kegalle", "Ratnapura"]} onPick={lambda (v: str) { district = v; }}/>}
+    >
+        {if tab == "overview" {
+            <OverviewTab/>
+        }}
+        {if tab == "cases" {
+            <Cases/>
+        }}
+        {if tab == "registry" {
+            <RegistryTab/>
+        }}
+        {if tab == "agents" {
+            <AgentActivity/>
+        }}
+        {if tab == "results" {
+            <MetricsPage/>
+        }}
+    </AppShell>
 }
