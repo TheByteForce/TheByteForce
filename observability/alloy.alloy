@@ -1,0 +1,19 @@
+logging { level = "info" }
+otelcol.receiver.otlp "local" {
+  http { endpoint = "0.0.0.0:4318" }
+  grpc { endpoint = "0.0.0.0:4317" }
+  output { traces = [otelcol.exporter.otlphttp.tempo.input] }
+}
+otelcol.exporter.otlphttp "tempo" {
+  client { endpoint = "http://tempo:4318" }
+}
+local.file_match "app" {
+  path_targets = [{ "__path__" = "/logs/*.log", "namespace" = "default", "pod" = "crisisconnect-local", "service_name" = "crisisconnect" }]
+}
+loki.source.file "app" {
+  targets = local.file_match.app.targets
+  forward_to = [loki.write.local.receiver]
+}
+loki.write "local" {
+  endpoint { url = "http://loki:3100/loki/api/v1/push" }
+}

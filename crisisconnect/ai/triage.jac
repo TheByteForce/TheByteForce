@@ -1,5 +1,6 @@
 """A bounded top-five explainer; deterministic vulnerability floors always win."""
 import os;
+import from crisisconnect.instrumentation { NativeSpan }
 import from crisisconnect.schema { CrisisConnectHub, Incident, Holds }
 import from crisisconnect.views { QueueRow }
 import from crisisconnect.store { find_incident, log_decision }
@@ -25,19 +26,25 @@ obj Ranker {
     has rows: list[QueueRow];
     has hub: CrisisConnectHub | None = None;
     def incident_summary(inc_id: str) -> str {
-        if self.hub is not None { return incident_summary_in(self.hub, inc_id); }
-        for r in self.rows { if r.inc_id == inc_id { return r.headline + ": " + r.place + "; " + r.reason; } }
-        return "Not in the current top five";
+        with NativeSpan(name="incident_summary", args={"inc_id": inc_id}, kind="tool") as span {
+            if self.hub is not None { return span.finish(incident_summary_in(self.hub, inc_id)); }
+            for r in self.rows { if r.inc_id == inc_id { return span.finish(r.headline + ": " + r.place + "; " + r.reason); } }
+            return span.finish("Not in the current top five");
+        }
     }
     def vulnerable_flags(inc_id: str) -> str {
-        if self.hub is not None { return vulnerable_flags_in(self.hub, inc_id); }
-        for r in self.rows { if r.inc_id == inc_id { return ", ".join(r.vulnerable) or "none"; } }
-        return "none";
+        with NativeSpan(name="vulnerable_flags", args={"inc_id": inc_id}, kind="tool") as span {
+            if self.hub is not None { return span.finish(vulnerable_flags_in(self.hub, inc_id)); }
+            for r in self.rows { if r.inc_id == inc_id { return span.finish(", ".join(r.vulnerable) or "none"); } }
+            return span.finish("none");
+        }
     }
     def waiting_time(inc_id: str) -> str {
-        if self.hub is not None { return waiting_time_in(self.hub, inc_id); }
-        for r in self.rows { if r.inc_id == inc_id { return r.waiting; } }
-        return "unknown";
+        with NativeSpan(name="waiting_time", args={"inc_id": inc_id}, kind="tool") as span {
+            if self.hub is not None { return span.finish(waiting_time_in(self.hub, inc_id)); }
+            for r in self.rows { if r.inc_id == inc_id { return span.finish(r.waiting); } }
+            return span.finish("unknown");
+        }
     }
     def explain() -> list[RankExplanation] by rank_model(
         tools=[self.incident_summary, self.vulnerable_flags, self.waiting_time],
