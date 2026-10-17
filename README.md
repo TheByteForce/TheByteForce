@@ -4,7 +4,7 @@
 
 Built by TheByteForce during AI Hackathon 2026 at the University of Moratuwa. All demonstration households, contacts, organisations and bulletins are fictional.
 
-- **Live app:** https://preview-jac-sbx-e4cfaadb8da1492db89a01fdc902a284.jachammer.app (Jac Hammer sandbox of the 14:00 build, synthetic data; the first visit takes in the opening backlog of reports, so allow about 30 seconds). The final build runs locally with the steps below; the sandbox platform failed to start newer builds before the deadline.
+- **Live app:** https://preview-jac-sbx-cd4e1dc040734b5c8ad09986a0e011cc.jachammer.app (Jac Hammer sandbox, synthetic data; the first visit takes in the opening backlog of reports, so allow about 30 seconds)
 - **Demo video:** _link added at submission_
 
 ## The problem
