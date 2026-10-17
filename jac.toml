@@ -12,6 +12,9 @@ font = "inter"
 radius = "default"
 menuAccent = "subtle"
 menuColor = "default"
+[byllm.model]
+default_model = "${BYLLM_DEFAULT_MODEL:-gemini/gemini-2.5-flash}"
+
 [dependencies]
 [dependencies.npm]
 radix-ui = "*"
