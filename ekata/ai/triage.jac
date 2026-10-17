@@ -5,6 +5,7 @@ import from ekata.views { QueueRow }
 import from ekata.store { find_incident, log_decision }
 import from ekata.priority { enforce_floor }
 import from ekata.ai.models { strong, budget_hook, drain_agent_steps, last_model }
+import from ekata.agent_tools { incident_summary_in, vulnerable_flags_in, waiting_time_in }
 
 glob rank_model: any = strong;
 obj RankExplanation {
@@ -18,17 +19,23 @@ node RankNote {
     has reason: str;
     has epoch: int;
 }
+# The ranker's tools are the shared read-only tools in agent_tools.jac, bound
+# to the hub being ranked; without a hub they answer from the queue rows.
 obj Ranker {
     has rows: list[QueueRow];
+    has hub: EkataHub | None = None;
     def incident_summary(inc_id: str) -> str {
+        if self.hub is not None { return incident_summary_in(self.hub, inc_id); }
         for r in self.rows { if r.inc_id == inc_id { return r.headline + ": " + r.place + "; " + r.reason; } }
         return "Not in the current top five";
     }
-    def vulnerable_flags(inc_id: str) -> list[str] {
-        for r in self.rows { if r.inc_id == inc_id { return r.vulnerable; } }
-        return [];
+    def vulnerable_flags(inc_id: str) -> str {
+        if self.hub is not None { return vulnerable_flags_in(self.hub, inc_id); }
+        for r in self.rows { if r.inc_id == inc_id { return ", ".join(r.vulnerable) or "none"; } }
+        return "none";
     }
     def waiting_time(inc_id: str) -> str {
+        if self.hub is not None { return waiting_time_in(self.hub, inc_id); }
         for r in self.rows { if r.inc_id == inc_id { return r.waiting; } }
         return "unknown";
     }
@@ -43,7 +50,7 @@ def explain_top(hub: EkataHub, rows: list[QueueRow]) -> list[QueueRow] {
     top = rows[:5];
     notes = [RankExplanation(inc_id=r.inc_id, score=r.priority, reason=r.reason) for r in top];
     if os.environ.get("EKATA_AI", "on") != "off" {
-        try { notes = Ranker(rows=top).explain(); } except Exception { return overlay_rank(hub, rows); }
+        try { notes = Ranker(rows=top, hub=hub).explain(); } except Exception { return overlay_rank(hub, rows); }
     }
     allowed = [r.inc_id for r in top];
     for old in [hub ->:Holds:->[?:RankNote]] { del old; }
