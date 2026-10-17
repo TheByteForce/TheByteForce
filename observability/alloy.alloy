@@ -8,7 +8,7 @@ otelcol.exporter.otlphttp "tempo" {
   client { endpoint = "http://tempo:4318" }
 }
 local.file_match "app" {
-  path_targets = [{ "__path__" = "/logs/*.log", "namespace" = "crisisconnect-local", "pod" = "crisisconnect-local", "service_name" = "crisisconnect" }]
+  path_targets = [{ "__path__" = "/logs/*.log", "namespace" = "default", "pod" = "crisisconnect-local", "service_name" = "crisisconnect" }]
 }
 loki.source.file "app" {
   targets = local.file_match.app.targets

@@ -36,7 +36,7 @@ leaflet = "latest"
 react-leaflet = "5.0.0"
 
 [client.app_meta_data]
-title = "CrisisConnect · Flood response desk"
+title = "CrisisConnect Â· Flood response desk"
 description = "CrisisConnect: one trusted inbox for a flood duty desk. Merges SOS messages into incidents, ranks who to call first, and checks appeals."
 theme_color = "#ffffff"
 icon = "/static/assets/crisisconnect-mark.svg"

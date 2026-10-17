@@ -29,7 +29,8 @@ Use a Linux checkout with Jac 0.37.25, Docker Compose, and the app dependencies:
 jac install
 mkdir -p .jac/observability-logs
 docker compose -p crisisconnect-observability -f observability/compose.yaml up -d
-# Put ADMIN_DEFAULT_PASSWORD and JAC_SERVE_AUTH_SECRET in ignored .env.local.
+# Put the existing local admin password in ADMIN_DEFAULT_PASSWORD in ignored .env.local.
+# Also set JAC_SERVE_AUTH_SECRET. These values are never committed.
 # EKATA_AI=off runs rules; real model calls require GEMINI_API_KEY and AI enabled.
 bash observability/run-local.sh
 ```
@@ -40,6 +41,8 @@ The runner sends spans to Alloy on 14318; Jac queries Tempo on 13200, Loki on
 networking to scrape this app's loopback API port 8051; update its scrape target
 if changing the API port. Alloy tails only this checkout's `.jac/observability-logs/*.log` files.
 It does not mount the Docker socket or collect unrelated applications' logs.
+Local labels use namespace `default`, matching Jac's standalone admin filter.
+If overriding `[scale.kubernetes].namespace`, update these local labels to match.
 The Compose stack is a local ephemeral diagnostic environment, not production
 storage. Stop it using the same Compose command with `down`.
 
@@ -79,3 +82,14 @@ jac run --faux
 
 From Windows, `observability/verify-local.ps1` reads the ignored local admin
 password and checks the admin endpoints without printing tokens or trace content.
+Use `-TokenFile` to write an admin bearer token to the Linux checkout's
+`.jac/observability-secrets/metrics-token` (for example through a WSL UNC path).
+The Prometheus container reads this file to authenticate `/metrics`; anonymous
+scrapes are forbidden. Grant read access only to the collector user (UID/GID
+65534 in this local image), keep the file ignored, and refresh it when the token
+expires. This token grants admin access, so do not share it or mount it elsewhere.
+
+`ADMIN_DEFAULT_PASSWORD` is a local script convention, not an automatic Jac
+bootstrap override. On a fresh database Jac reads `[scale.admin].default_password`;
+configure that through environment interpolation if needed and complete the
+initial password-change flow. The verification script never changes passwords.
