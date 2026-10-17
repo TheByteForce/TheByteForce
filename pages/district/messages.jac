@@ -3,17 +3,17 @@
 import from "@hugeicons/react" { HugeiconsIcon }
 import from "@hugeicons/core-free-icons" { InboxIcon, SentIcon }
 import type from ekata.views { MsgView }
-import from ekata.api { inbox_messages, submit_message }
-import from ..components.ui.card { Card, CardHeader, CardTitle, CardDescription, CardContent }
-import from ..components.ui.button { Button }
-import from ..components.ui.textarea { Textarea }
-import from ..components.ui.native_select { NativeSelectOption }
-import from ..components.ui.tabs { Tabs, TabsList, TabsTrigger }
-import from ..components.ui.alert { Alert, AlertDescription }
-import from ..components.app.desk_state { use_desk }
-import from ..components.app.items { MessageItem }
-import from ..components.app.labels { plural }
-import from ..components.app.page_parts { PageHero, EmptyNote, LoadingRows, SelectField }
+import from ekata.api { recent_messages, submit_message }
+import from ...components.ui.card { Card, CardHeader, CardTitle, CardDescription, CardContent }
+import from ...components.ui.button { Button }
+import from ...components.ui.textarea { Textarea }
+import from ...components.ui.native_select { NativeSelectOption }
+import from ...components.ui.tabs { Tabs, TabsList, TabsTrigger }
+import from ...components.ui.alert { Alert, AlertDescription }
+import from ...components.app.desk_state { use_desk }
+import from ...components.app.items { MessageItem }
+import from ...components.app.labels { plural }
+import from ...components.app.page_parts { PageHero, EmptyNote, LoadingRows, SelectField }
 
 glob KIND_FILTERS: list[list[str]] = [
     ["ALL", "All"], ["SOS", "SOS"], ["UPDATE", "Updates"], ["OFFER", "Offers"],
@@ -33,7 +33,7 @@ def:pub InboxPage -> JsxPage {
 
     async def load(t: int) -> None {
         try {
-            messages = await inbox_messages(t);
+            messages = await recent_messages(t);
         } except Exception as ex {
             err = "Could not load the inbox: " + str(ex);
         }
@@ -70,9 +70,9 @@ def:pub InboxPage -> JsxPage {
 
     <div className="flex flex-col gap-6">
         <PageHero
-            eyebrow="Duty desk · Inbox"
+            eyebrow="District · Incoming messages"
             title="Every message, in one place."
-            description="SMS, WhatsApp, hotline and web reports arrive here newest first. Paste a message to run it through the same pipeline."
+            description="SMS, WhatsApp, hotline and web reports as they arrive, newest first. A report taken by phone can be entered here and goes through the same checks."
             image="/static/assets/images/operations-center.jpg"
             imageAlt="Operators at their desks in an emergency operations centre"
             capsules={[
@@ -85,8 +85,8 @@ def:pub InboxPage -> JsxPage {
 
         <Card>
             <CardHeader>
-                <CardTitle>Paste a message</CardTitle>
-                <CardDescription>An SOS, update, offer or appeal in any language.</CardDescription>
+                <CardTitle>Enter a report</CardTitle>
+                <CardDescription>A report taken by phone or passed on by a field team, in any language.</CardDescription>
             </CardHeader>
             <CardContent>
                 <form
@@ -146,7 +146,7 @@ def:pub InboxPage -> JsxPage {
             } elif len(shown) == 0 {
                 <EmptyNote
                     title="No messages here yet"
-                    description="Start the demo night from the header, or paste a message above."
+                    description="Reports appear here the moment they arrive."
                     icon={InboxIcon}
                 />
             } else {

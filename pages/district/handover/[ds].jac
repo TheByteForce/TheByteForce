@@ -5,16 +5,16 @@ import from "@hugeicons/react" { HugeiconsIcon }
 import from "@hugeicons/core-free-icons" { PrinterIcon, CallIcon }
 import type from ekata.ds_sheet { DsSheet }
 import from ekata.coordination_api { ds_handover }
-import from ...components.ui.card { Card, CardHeader, CardTitle, CardDescription, CardContent }
-import from ...components.ui.button { Button }
-import from ...components.ui.table { Table, TableHeader, TableBody, TableRow, TableHead, TableCell }
-import from ...components.ui.breadcrumb {
+import from ....components.ui.card { Card, CardHeader, CardTitle, CardDescription, CardContent }
+import from ....components.ui.button { Button }
+import from ....components.ui.table { Table, TableHeader, TableBody, TableRow, TableHead, TableCell }
+import from ....components.ui.breadcrumb {
     Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbPage, BreadcrumbSeparator
 }
-import from ...components.app.desk_state { use_desk }
-import from ...components.app.tags { StatusTag, VulnerableTag }
-import from ...components.app.labels { people_label, plural }
-import from ...components.app.page_parts { PageHero, EmptyNote, LoadingRows }
+import from ....components.app.desk_state { use_desk }
+import from ....components.app.tags { StatusTag, VulnerableTag }
+import from ....components.app.labels { people_label, plural }
+import from ....components.app.page_parts { PageHero, EmptyNote, LoadingRows }
 
 def:pub print_page -> None {
     win: any = window;
@@ -46,7 +46,7 @@ def:pub HandoverSheet -> JsxPage {
             <BreadcrumbList>
                 <BreadcrumbItem>
                     <BreadcrumbLink asChild={True}>
-                        <Link to="/handover">DS hand-over</Link>
+                        <Link to="/district/handover">DS hand-over</Link>
                     </BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator />
@@ -64,7 +64,7 @@ def:pub HandoverSheet -> JsxPage {
             <PageHero
                 eyebrow="DS hand-over sheet"
                 title={sheet.ds + " DS division"}
-                description={f"{sheet.district} district, as of {sheet.storm_time} on the storm clock."}
+                description={f"{sheet.district} district, as of {sheet.storm_time}."}
                 image="/static/assets/images/officials-meeting.jpg"
                 imageAlt="Officials around a table at an emergency operations centre"
                 capsules={[
@@ -106,7 +106,7 @@ def:pub HandoverSheet -> JsxPage {
                                 {for r in sheet.rows {
                                     <TableRow key={r.inc_id}>
                                         <TableCell>
-                                            <Link to={"/incidents/" + r.inc_id} className="font-mono text-sm text-primary underline-offset-4 hover:underline">
+                                            <Link to={"/officer/cases/" + r.inc_id} className="font-mono text-sm text-primary underline-offset-4 hover:underline">
                                                 {r.inc_id}
                                             </Link>
                                         </TableCell>

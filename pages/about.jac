@@ -16,7 +16,7 @@ glob PRINCIPLES: list[str] = [
     "People make the calls and the dispatch decisions; the app only lists, ranks and explains.",
     "Every status is written as a word. Colour is only a visual aid.",
     "A missing confirmed incident is never treated as evidence that an appeal is a scam.",
-    "This build runs on synthetic data. Names and numbers are invented."
+    "Citizens see their own request and the public map only; household details stay with the officers who need them."
 ];
 
 glob CREDITS: list[list[str]] = [
@@ -42,7 +42,7 @@ def:pub AboutPage -> JsxPage {
             description="CrisisConnect turns a night of scattered SOS messages into one ranked, explained call queue, so duty officers spend their calls on the people who need them most."
             image="/static/assets/images/helicopter-response.jpg"
             imageAlt="A rescue helicopter flying low over trees during a flood response"
-            capsules={[["People decide", "blue"], ["Every rank explained", "violet"], ["Synthetic demo data", "amber"]]}
+            capsules={[["People decide", "blue"], ["Every rank explained", "violet"], ["Four portals, one picture", "green"]]}
         />
 
         <Card>

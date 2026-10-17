@@ -1,0 +1,22 @@
+/* App additions that `jac retheme` must not overwrite (global.css is generated). */
+@import "leaflet/dist/leaflet.css";
+@import "@fontsource/noto-sans-sinhala/400.css";
+@import "@fontsource/noto-sans-sinhala/600.css";
+@import "@fontsource/noto-sans-tamil/400.css";
+@import "@fontsource/noto-sans-tamil/600.css";
+
+/* Messages arrive in Sinhala and Tamil too: fall back to Noto for those scripts. */
+html,
+body {
+    font-family: "Inter Variable", "Noto Sans Sinhala", "Noto Sans Tamil", ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Leaflet sits under the sticky app header. */
+.leaflet-container {
+    z-index: 0;
+    background: var(--muted);
+    font-family: inherit;
+}
+.leaflet-control-attribution {
+    font-size: 10px;
+}

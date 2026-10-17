@@ -5,9 +5,9 @@ import from "@hugeicons/react" { HugeiconsIcon }
 import from "@hugeicons/core-free-icons" { File01Icon, ArrowRight01Icon }
 import type from ekata.ds_sheet { DsCount }
 import from ekata.coordination_api { ds_divisions }
-import from ...components.app.desk_state { use_desk }
-import from ...components.app.labels { plural }
-import from ...components.app.page_parts { PageHero, EmptyNote, LoadingRows, IconChip }
+import from ....components.app.desk_state { use_desk }
+import from ....components.app.labels { plural }
+import from ....components.app.page_parts { PageHero, EmptyNote, LoadingRows, IconChip }
 
 def:pub HandoverIndex -> JsxPage {
     ctx: any = use_desk();
@@ -32,7 +32,7 @@ def:pub HandoverIndex -> JsxPage {
 
     <div className="flex flex-col gap-6">
         <PageHero
-            eyebrow="Coordination · DS hand-over"
+            eyebrow="District · DS hand-over"
             title="Clean sheets for DS officers."
             description="Phone-verified incidents for each Divisional Secretariat division, ready to hand to DS and GN officers. Pick a division to open its sheet."
             image="/static/assets/images/officials-meeting.jpg"
@@ -56,7 +56,7 @@ def:pub HandoverIndex -> JsxPage {
                 {for d in rows {
                     <Link
                         key={d.ds}
-                        to={"/handover/" + d.ds}
+                        to={"/district/handover/" + d.ds}
                         className="group flex items-center gap-4 rounded-xl border bg-card pt-6 pb-6 pl-6 pr-6 transition-colors hover:bg-muted/50"
                     >
                         <IconChip icon={File01Icon} tone="blue" />

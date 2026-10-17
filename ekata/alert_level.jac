@@ -4,7 +4,7 @@ Level 5 life at risk, 4 rescue needed, 3 vulnerable first, 2 verify or
 confirm, 1 closed. Deterministic: no model is involved.
 """
 
-import from ekata.schema { EkataHub, Incident }
+import from ekata.schema { EkataHub, Incident, Holds }
 import from ekata.store { all_incidents, storm_diff, fmt_minutes }
 import from ekata.referee { OPEN_STATUSES }
 
@@ -64,13 +64,58 @@ def alert_for(inc: Incident, storm_now: str) -> AlertInfo {
         reason="No rescue need or vulnerable flag reported");
 }
 
+# An admin's override of one incident's level (latest by seq wins). It is kept
+# beside the incident and never edits the incident itself.
+node AlertOverride {
+    has inc_id: str;
+    has level: int;
+    has reason: str = "";
+    has desk: str = "";
+    has storm_time: str = "";
+    has seq: int = 0;
+}
+
+glob OVERRIDE_ACTIONS: dict[int, str] = {
+    5: "Call immediately", 4: "Call next", 3: "Call before others",
+    2: "Verify by call when free", 1: "No call needed"
+};
+
+def latest_override(hub: EkataHub, target: str) -> AlertOverride | None {
+    found: AlertOverride | None = None;
+    for o in [hub ->:Holds:->[?:AlertOverride, inc_id == target]] {
+        if found is None or o.seq > found.seq {
+            found = o;
+        }
+    }
+    return found;
+}
+
+def add_override(hub: EkataHub, inc_id: str, level: int, reason: str, desk: str) -> AlertOverride {
+    n = len([hub ->:Holds:->[?:AlertOverride]]) + 1;
+    o = AlertOverride(
+        inc_id=inc_id, level=max(1, min(5, level)), reason=reason, desk=desk,
+        storm_time=hub.storm_time, seq=n
+    );
+    hub +>:Holds:+> o;
+    return o;
+}
+
+def override_info(o: AlertOverride) -> AlertInfo {
+    return AlertInfo(
+        level=o.level, label=f"Level {o.level} · Admin override",
+        action=OVERRIDE_ACTIONS.get(o.level, "Verify by call when free"),
+        reason=(o.desk + ": " + o.reason) if o.desk != "" else o.reason
+    );
+}
+
 def alert_board(hub: EkataHub) -> list[AlertRow] {
     rows: list[AlertRow] = [];
     for inc in all_incidents(hub) {
         if inc.status not in OPEN_STATUSES {
             continue;
         }
-        a = alert_for(inc, hub.storm_time);
+        o = latest_override(hub, inc.inc_id);
+        a = override_info(o) if o is not None else alert_for(inc, hub.storm_time);
         rows.append(AlertRow(inc_id=inc.inc_id, level=a.level, label=a.label,
             action=a.action, reason=a.reason, priority=inc.priority));
     }

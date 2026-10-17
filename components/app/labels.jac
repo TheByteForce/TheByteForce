@@ -70,3 +70,47 @@ def:pub channel_label(channel: str) -> str {
     }
     return channel;
 }
+
+# Agent families for filtering the activity log.
+def:pub agent_group(agent: str) -> str {
+    if agent in ["ranker", "priority", "call_brief"] {
+        return "ranker";
+    }
+    if agent in ["referee", "referee_merge", "referee_merge_retry", "appeal_referee"] {
+        return "referee";
+    }
+    if agent == "blocking" {
+        return "resolver";
+    }
+    if agent in ["intake", "resolver", "matcher", "officer", "ngo"] {
+        return agent;
+    }
+    return "other";
+}
+
+glob AGENT_NAMES: dict[str, str] = {
+    "intake": "Intake agent",
+    "blocking": "Candidate finder",
+    "resolver": "Resolver agent",
+    "ranker": "Ranking agent",
+    "priority": "Ranking agent",
+    "call_brief": "Call brief agent",
+    "matcher": "Matching agent",
+    "router": "Route agent",
+    "referee": "Referee",
+    "referee_merge": "Referee",
+    "referee_merge_retry": "Referee",
+    "appeal_referee": "Appeal referee",
+    "appeal_investigator": "Appeal investigator",
+    "officer": "Divisional officer",
+    "ngo": "Relief group",
+    "desk": "Call desk",
+    "analyst": "Analyst",
+    "district": "District office",
+    "citizen": "Citizen",
+    "freshness": "Freshness check"
+};
+
+def:pub agent_name(agent: str) -> str {
+    return AGENT_NAMES[agent] or pretty(agent);
+}

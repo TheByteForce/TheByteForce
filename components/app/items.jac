@@ -8,7 +8,7 @@ import from "@hugeicons/core-free-icons" {
 import type from ekata.views { MsgView, QueueRow, TraceRow }
 import from ekata.api { trace_since }
 import from .tags { Tag, KindTag, StatusTag, RefereeTag, VulnerableTag }
-import from .labels { people_label, place_label, plural, channel_label, pretty }
+import from .labels { people_label, place_label, plural, channel_label, pretty, agent_name }
 import from ...lib.utils { cn }
 
 def:pub MessageItem(m: MsgView) -> JsxElement {
@@ -33,7 +33,7 @@ def:pub MessageItem(m: MsgView) -> JsxElement {
 def:pub QueueItem(row: QueueRow, compact: bool = False) -> JsxElement {
     <li>
         <Link
-            to={"/incidents/" + row.inc_id}
+            to={"/officer/cases/" + row.inc_id}
             className="group flex gap-4 rounded-lg border bg-card pt-4 pb-4 pl-4 pr-4 transition-colors hover:bg-muted/50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
         >
             <div className="flex w-10 shrink-0 flex-col items-center">
@@ -109,10 +109,10 @@ def:pub TraceItem(r: TraceRow, stacked: bool = False) -> JsxElement {
         </span>
         <div className="min-w-0 flex-1 text-sm">
             <div className="flex flex-wrap items-center gap-2">
-                <Tag label={pretty(r.agent)} tone="slate" />
+                <Tag label={agent_name(r.agent)} tone="slate" />
                 <span className="font-medium">{pretty(r.action)}</span>
                 {if is_incident {
-                    <Link to={"/incidents/" + r.target} className="font-mono text-xs text-primary underline-offset-4 hover:underline">
+                    <Link to={"/officer/cases/" + r.target} className="font-mono text-xs text-primary underline-offset-4 hover:underline">
                         {r.target}
                     </Link>
                 } elif r.target != "" {

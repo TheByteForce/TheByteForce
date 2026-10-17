@@ -106,7 +106,7 @@ def build_ds_sheet(hub: EkataHub, ds_name: str) -> DsSheet {
     return DsSheet(
         ds=ds_name, district=district, storm_time=hub.storm_time,
         confirmed=len(rows), open_count=open_n, rows=rows,
-        note="Only phone-verified incidents are listed. Synthetic data."
+        note="Only phone-verified incidents are listed."
     );
 }
 

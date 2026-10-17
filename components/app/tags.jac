@@ -93,16 +93,58 @@ def:pub level_tone(level: int) -> str {
 }
 
 def:pub verdict_tone(verdict: str) -> str {
-    if verdict == "LIKELY_SCAM" {
+    if verdict == "LIKELY_SCAM" or verdict == "CONTRADICTED" {
         return "red";
     }
     if verdict == "SUSPICIOUS" {
         return "orange";
     }
-    if verdict == "MATCHED" {
+    if verdict == "MATCHED" or verdict == "CONFIRMED" {
+        return "green";
+    }
+    if verdict == "CHECKING" {
+        return "blue";
+    }
+    return "slate";
+}
+
+def:pub request_tone(status: str) -> str {
+    if status == "UNCOVERED" {
+        return "red";
+    }
+    if status == "REQUESTED" {
+        return "amber";
+    }
+    if status == "ACCEPTED" or status == "DISPATCHED" {
+        return "blue";
+    }
+    if status == "DELIVERED" {
         return "green";
     }
     return "slate";
+}
+
+def:pub request_label(status: str) -> str {
+    if status == "REQUESTED" {
+        return "Waiting for a group";
+    }
+    if status == "ACCEPTED" {
+        return "Accepted";
+    }
+    if status == "DISPATCHED" {
+        return "On the way";
+    }
+    if status == "DELIVERED" {
+        return "Delivered";
+    }
+    if status == "UNCOVERED" {
+        return "No group can cover";
+    }
+    return pretty(status);
+}
+
+def:pub RequestTag(status: str) -> JsxElement {
+    <Tag label={request_label(status)} tone={request_tone(status)} />
 }
 
 def:pub KindTag(kind: str) -> JsxElement {

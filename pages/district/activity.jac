@@ -2,16 +2,16 @@
 
 import from "@hugeicons/core-free-icons" { Activity01Icon }
 import type from ekata.views { TraceRow }
-import from ..components.ui.card { Card, CardHeader, CardTitle, CardDescription, CardContent }
-import from ..components.ui.tabs { Tabs, TabsList, TabsTrigger }
-import from ..components.app.desk_state { use_desk }
-import from ..components.app.items { TraceItem, fetch_trace }
-import from ..components.app.labels { plural }
-import from ..components.app.page_parts { PageHero, EmptyNote, LoadingRows }
+import from ...components.ui.card { Card, CardHeader, CardTitle, CardDescription, CardContent }
+import from ...components.ui.tabs { Tabs, TabsList, TabsTrigger }
+import from ...components.app.desk_state { use_desk }
+import from ...components.app.items { TraceItem, fetch_trace }
+import from ...components.app.labels { plural, agent_group }
+import from ...components.app.page_parts { PageHero, EmptyNote, LoadingRows }
 
 glob AGENT_FILTERS: list[list[str]] = [
-    ["all", "All"], ["intake", "Intake"], ["blocking", "Blocking"], ["referee", "Referee"],
-    ["freshness", "Freshness"], ["priority", "Priority"]
+    ["all", "All"], ["intake", "Intake"], ["resolver", "Resolver"], ["ranker", "Ranking"],
+    ["matcher", "Matching"], ["referee", "Referee"], ["officer", "Officer"], ["ngo", "Relief groups"]
 ];
 
 def:pub count_outcome(rows: list[TraceRow], outcome: str) -> int {
@@ -38,11 +38,11 @@ def:pub ActivityPage -> JsxPage {
     }
 
     newest: list[TraceRow] = list(reversed(rows));
-    shown: list[TraceRow] = newest if agent == "all" else [r for r in newest if r.agent == agent];
+    shown: list[TraceRow] = newest if agent == "all" else [r for r in newest if agent_group(r.agent) == agent];
 
     <div className="flex flex-col gap-6">
         <PageHero
-            eyebrow="Duty desk · Agent activity"
+            eyebrow="District · Agent activity"
             title="Every decision, explained."
             description="Each step the pipeline took, newest first: which agent acted, why, and whether the referee applied it, blocked it or sent it to a person."
             image="/static/assets/images/desk-operators.jpg"

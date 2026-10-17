@@ -7,11 +7,11 @@ import from "@hugeicons/core-free-icons" {
 }
 import type from ekata.volunteer_centre { OfferMatch }
 import from ekata.coordination_api { volunteer_offers }
-import from ..components.ui.card { Card, CardHeader, CardTitle, CardDescription, CardContent }
-import from ..components.app.desk_state { use_desk }
-import from ..components.app.tags { Tag }
-import from ..components.app.labels { plural, place_label, pretty }
-import from ..components.app.page_parts { PageHero, EmptyNote, LoadingRows, IconChip }
+import from ...components.ui.card { Card, CardHeader, CardTitle, CardDescription, CardContent }
+import from ...components.app.desk_state { use_desk }
+import from ...components.app.tags { Tag }
+import from ...components.app.labels { plural, place_label, pretty }
+import from ...components.app.page_parts { PageHero, EmptyNote, LoadingRows, IconChip }
 
 def:pub resource_icon(resource: str) -> any {
     if resource == "boat" {
@@ -63,7 +63,7 @@ def:pub VolunteersPage -> JsxPage {
 
     <div className="flex flex-col gap-6">
         <PageHero
-            eyebrow="Coordination · Volunteer offers"
+            eyebrow="District · Volunteer offers"
             title="Offers of help, matched to needs."
             description="Boats, vehicles, food, water, shelter and medical help, listed against the open incidents they could serve. This page only lists matches; a person decides who to dispatch."
             image="/static/assets/images/volunteers-desk.jpg"
@@ -97,7 +97,7 @@ def:pub VolunteersPage -> JsxPage {
                             <p className="text-sm leading-relaxed">{o.offer_text}</p>
                             <div className="flex flex-wrap items-center gap-2 text-sm">
                                 <span className="text-muted-foreground">Could serve</span>
-                                <Link to={"/incidents/" + o.inc_id} className="font-mono font-medium text-primary underline-offset-4 hover:underline">
+                                <Link to={"/officer/cases/" + o.inc_id} className="font-mono font-medium text-primary underline-offset-4 hover:underline">
                                     {o.inc_id}
                                 </Link>
                                 <span className="text-muted-foreground">{"at " + place_label(o.inc_place)}</span>

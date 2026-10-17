@@ -126,6 +126,8 @@ node Incident {
     has first_seen: str = "";
     has last_seen: str = "";
     has claimed_by: str = "";
+    has lat: float = 0.0;
+    has lon: float = 0.0;
 }
 
 node CallLog {
@@ -150,6 +152,12 @@ node GNDivision {
 node Appeal {
     has appeal_id: str;
     has text: str;
+    has source_msg_id: str = "";
+    has beneficiary_names: list[str] = [];
+    has place_text: str = "";
+    has credential_requests: list[str] = [];
+    has approved_by: str = "";
+    has model: str = "rules";
     has channel: str = "WHATSAPP";
     has verdict: str = "CHECKING";
     has reason: str = "";
@@ -184,8 +192,21 @@ node Bulletin {
 
 node RumourClaim {
     has claim: str;
+    has source_msg_id: str = "";
     has stance: str = "UNCONFIRMED";
     has storm_time: str = "";
+}
+
+# An officer's ask for a resource; the matcher agent sends it to one NGO.
+node ResourceRequest {
+    has req_id: str;
+    has need: str;
+    has status: str = "REQUESTED";
+    has ngo: str = "";
+    has reason: str = "";
+    has requested_by: str = "";
+    has storm_time: str = "";
+    has declined_by: list[str] = [];
 }
 
 node Decision {
@@ -255,3 +276,7 @@ edge Checks: RumourClaim --> Bulletin {
 }
 
 edge About: Decision --> any {}
+
+edge RequestFor: ResourceRequest --> Incident {}
+
+edge SentTo: ResourceRequest --> RegistryEntry {}

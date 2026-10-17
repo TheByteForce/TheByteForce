@@ -3,10 +3,10 @@
 import from "@hugeicons/core-free-icons" { Call02Icon }
 import type from ekata.views { QueueRow }
 import from ekata.api { call_queue }
-import from ..components.app.desk_state { use_desk }
-import from ..components.app.items { QueueItem }
-import from ..components.app.labels { plural }
-import from ..components.app.page_parts { PageHero, EmptyNote, LoadingRows }
+import from ...components.app.desk_state { use_desk }
+import from ...components.app.items { QueueItem }
+import from ...components.app.labels { plural }
+import from ...components.app.page_parts { PageHero, EmptyNote, LoadingRows }
 
 def:pub QueuePage -> JsxPage {
     ctx: any = use_desk();
@@ -32,8 +32,8 @@ def:pub QueuePage -> JsxPage {
 
     <div className="flex flex-col gap-6">
         <PageHero
-            eyebrow="Duty desk · Call queue"
-            title="Who needs a call first."
+            eyebrow="District · All open cases"
+            title="Every open case, across all divisions."
             description="Open incidents ranked by risk, vulnerable people and waiting time. Every rank says why. Open an incident to see its evidence and log a call."
             image="/static/assets/images/boat-crossing.jpg"
             imageAlt="Rescue workers crossing flood water by boat"
@@ -49,7 +49,7 @@ def:pub QueuePage -> JsxPage {
         } elif len(rows) == 0 {
             <EmptyNote
                 title="The queue is empty"
-                description="Incidents appear here as messages arrive. Start the demo night from the header to see it fill."
+                description="Cases appear here as reports arrive."
                 icon={Call02Icon}
             />
         } else {

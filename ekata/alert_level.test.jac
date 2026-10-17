@@ -56,3 +56,24 @@ test "alert board orders by level then priority and hides closed" {
     ids = [r.inc_id for r in alert_board(hub)];
     assert ids == ["M5", "R4hi", "R4lo", "P2"];
 }
+
+test "an admin override sets the level and the latest one wins" {
+    hub = fresh_hub("t-al-override");
+    a = Incident(inc_id="INC-801", status="NEW", needs=["food"], priority=10.0);
+    b = Incident(inc_id="INC-802", status="NEW", needs=["rescue"], priority=40.0);
+    hub +>:Holds:+> a;
+    hub +>:Holds:+> b;
+    add_override(hub, "INC-801", 4, "road cut, family isolated", "District desk");
+    rows = alert_board(hub);
+    row = [r for r in rows if r.inc_id == "INC-801"][0];
+    assert row.level == 4;
+    assert "Admin override" in row.label;
+    assert "road cut" in row.reason;
+    other = [r for r in rows if r.inc_id == "INC-802"][0];
+    assert other.level == 4;
+    assert "override" not in other.label.lower();
+    add_override(hub, "INC-801", 9, "life at risk", "District desk");
+    again = [r for r in alert_board(hub) if r.inc_id == "INC-801"][0];
+    assert again.level == 5;
+    assert again.reason.endswith("life at risk");
+}
