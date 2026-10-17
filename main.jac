@@ -68,27 +68,26 @@ import from ekata.ui.ngo { NgoPortal }
 import from ekata.ui.district { DistrictPortal }
 import from ekata.ui.ops { OpsPanel }
 
-def:pub route_of(hash: str) -> str {
-    h = hash.replace("#", "").replace("/", "").lower();
-    if h in ["citizen", "officer", "ngo", "district"] {
-        return h;
-    }
-    return "";
-}
-
 def:pub app() -> JsxElement {
     has route: str = "";
     has ops: bool = False;
 
+    # Kept inline: a def:pub helper becomes a server endpoint, and a plain
+    # helper here is not placed on the client.
+    def read_route -> None {
+        h = window.location.hash.replace("#", "").replace("/", "").lower();
+        route = h if h in ["citizen", "officer", "ngo", "district"] else "";
+    }
+
     can with entry {
-        route = route_of(window.location.hash);
+        read_route();
         ops = "ops" in window.location.search;
         document.title = "Ekata";
     }
 
     useEffect(
         lambda {
-            handler = lambda { route = route_of(window.location.hash); window.scrollTo(0, 0); };
+            handler = lambda { read_route(); window.scrollTo(0, 0); };
             window.addEventListener("hashchange", handler);
             return lambda { window.removeEventListener("hashchange", handler); };
         },
