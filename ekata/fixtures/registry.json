@@ -1,0 +1,33 @@
+{
+  "_note": "Synthetic seed data. All offices, NGOs, contacts and bulletins are invented for the demo.",
+  "offices": [
+    {"office": "Kegalle District Relief Unit", "contact": "07X-555-0900", "kind": "OFFICE"},
+    {"office": "Mawanella Divisional Relief Desk", "contact": "07X-555-0901", "kind": "OFFICE"},
+    {"office": "Aranayake Divisional Relief Desk", "contact": "07X-555-0902", "kind": "OFFICE"},
+    {"office": "Deraniyagala Estate Welfare Office", "contact": "07X-555-0903", "kind": "OFFICE"},
+    {"office": "Kegalle Volunteer Kitchen", "contact": "07X-555-0910", "kind": "NGO"},
+    {"office": "Hill Country Relief Trust", "contact": "07X-555-0911", "kind": "NGO"}
+  ],
+  "bulletins": [
+    {"issuer": "DMC", "area": "Kegalle", "issued_at": "18:30", "text": "Kotmale and other reservoirs are under observation. No dam breach has been reported. Do not share unverified dam messages."},
+    {"issuer": "DMC", "area": "Mawanella", "issued_at": "19:30", "text": "Rescue operations are continuing in Mawanella with navy and army boats."},
+    {"issuer": "Irrigation", "area": "Kegalle", "issued_at": "20:00", "text": "Kelani river levels are below major flood level; a minor flood warning only is in force."},
+    {"issuer": "NBRO", "area": "Aranayake", "issued_at": "18:00", "text": "Level 2 landslide warning for Aranayake and Kolonna divisions. Residents on slopes should move to safe locations."}
+  ],
+  "districts": [
+    {"district": "Kegalle", "divisions": [
+      {"ds": "Kegalle", "gn": ["Hettimulla", "Kegalle Town", "Bulugahamula"]},
+      {"ds": "Mawanella", "gn": ["Udagama", "Mawanella Town", "Hingula"]},
+      {"ds": "Aranayake", "gn": ["Pahala Kotuwa", "Samasarakanda", "Ussapitiya"]},
+      {"ds": "Rambukkana", "gn": ["Rambukkana Town", "Station Road"]},
+      {"ds": "Warakapola", "gn": ["Warakapola Town", "Temple Road"]},
+      {"ds": "Galigamuwa", "gn": ["Galigamuwa Town", "Church Lane"]},
+      {"ds": "Yatiyantota", "gn": ["Yatiyantota Town", "Kitulgala Junction"]},
+      {"ds": "Deraniyagala", "gn": ["Deraniyagala Estate", "Deraniyagala Town"]}
+    ]},
+    {"district": "Ratnapura", "divisions": [
+      {"ds": "Kolonna", "gn": ["Pallegama", "Hospital Road"]},
+      {"ds": "Balangoda", "gn": ["Balangoda Town", "Rest House Road"]}
+    ]}
+  ]
+}
