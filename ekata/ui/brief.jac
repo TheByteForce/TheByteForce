@@ -19,45 +19,59 @@ def:pub BriefPanel(incId: str) -> JsxElement {
         }
         busy = False;
     }
-    <section className="mt-4 rounded border bg-muted/30 p-3" aria-label="Call brief">
+    <section aria-label="Call brief">
         <div className="flex items-center justify-between gap-2">
-            <h3 className="font-semibold">One-call brief</h3>
+            <p className="text-[13px] text-muted-foreground">Questions drafted from what we know so far.</p>
             <Button
                 variant="outline"
+                size="sm"
                 disabled={busy}
                 onClick={lambda (e: MouseEvent) { generate(); }}
             >
-                {"Preparing..." if busy else "Prepare with AI"}
+                {"Preparing..." if busy else "Prepare questions"}
             </Button>
         </div>
         {if error != "" {
-            <p role="alert">{error}</p>
+            <p role="alert" className="mt-2 text-[13px] text-blocked">{error}</p>
         }}
         {if brief is not None {
-            <div>
-                <p className="mt-2 text-xs text-muted-foreground">{brief.model}</p>
-                <ul className="mt-2 text-sm">
-                    {for x in brief.known {
-                        <li key={x}>{x}</li>
-                    }}
-                </ul>
+            <div className="mt-2 rounded-lg bg-muted p-4 text-[15px]">
+                {if len(brief.known) > 0 {
+                    <div>
+                        <p className="text-[13px] text-muted-foreground">
+                            What we know
+                        </p>
+                        <ul className="mt-1 list-disc space-y-0.5 pl-5">
+                            {for x in brief.known {
+                                <li key={x}>{x}</li>
+                            }}
+                        </ul>
+                    </div>
+                }}
                 {for x in brief.missing {
-                    <p key={x} className="mt-1 text-sm">
-                        <strong>Missing: </strong>
+                    <p key={x} className="mt-2">
+                        <span className="font-semibold">Still missing: </span>
                         {x}
                     </p>
                 }}
                 {for x in brief.contradictions {
-                    <p key={x} className="mt-1 text-sm text-amber-800">
-                        <strong>Verify: </strong>
+                    <p key={x} className="mt-2">
+                        <span className="font-semibold">Check this: </span>
                         {x}
                     </p>
                 }}
-                <ol className="mt-3 list-decimal space-y-2 pl-5">
-                    {for q in brief.questions {
-                        <li key={q}>{q}</li>
-                    }}
-                </ol>
+                {if len(brief.questions) > 0 {
+                    <div className="mt-3">
+                        <p className="text-[13px] text-muted-foreground">
+                            Questions
+                        </p>
+                        <ol className="mt-1 list-decimal space-y-1.5 pl-5">
+                            {for q in brief.questions {
+                                <li key={q}>{q}</li>
+                            }}
+                        </ol>
+                    </div>
+                }}
             </div>
         }}
     </section>

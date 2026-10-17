@@ -1,3 +1,15 @@
+"""Ekata entry point: serves every endpoint and routes each person to their portal.
+
+Each person uses one portal, reached by its own address:
+  #/citizen   people in the flood and their families
+  #/officer   division officers (Grama Niladhari / divisional desks)
+  #/ngo       registered relief groups
+  #/district  district coordination
+There are no links between portals. ?ops adds the hidden operator panel used
+to replay the synthetic storm night for the demo.
+"""
+
+import from "react" { useEffect }
 import from ekata.api {
     load_demo,
     demo_state,
@@ -16,9 +28,6 @@ import from ekata.api {
 import from ekata.coordination_api {
     alert_levels, volunteer_offers, appeal_verdicts, run_appeal_checks, ds_handover, ds_divisions
 }
-
-import from ekata.ui.desk { Desk }
-import from ekata.ui.cases { Cases }
 import from ekata.case_api {
     appeals,
     appeal_detail,
@@ -30,67 +39,75 @@ import from ekata.case_api {
     explain_queue,
     published_appeals
 }
+import from ekata.evaluation_api { evaluation_results, model_usage }
+import from ekata.portal_api {
+    divisions,
+    officer_queue,
+    set_gn,
+    resource_kinds,
+    request_resource,
+    incident_requests,
+    ngos,
+    registry,
+    ngo_requests,
+    all_requests,
+    respond_request,
+    citizen_send,
+    track_request,
+    bulletins,
+    publish_bulletin,
+    escalations,
+    district_board
+}
 import ".styles.global.css";
 
-import from ekata.ui.metrics { MetricsPage }
-import from ekata.evaluation_api { evaluation_results, model_usage }
+import from ekata.ui.home { Home }
+import from ekata.ui.citizen { CitizenPortal }
+import from ekata.ui.officer { OfficerPortal }
+import from ekata.ui.ngo { NgoPortal }
+import from ekata.ui.district { DistrictPortal }
+import from ekata.ui.ops { OpsPanel }
 
 def:pub app() -> JsxElement {
-    has page: str = "desk";
-    can with entry {
-        document.title = "Ekata · Flood response desk";
+    has route: str = "";
+    has ops: bool = False;
+
+    # Kept inline: a def:pub helper becomes a server endpoint, and a plain
+    # helper here is not placed on the client.
+    def read_route -> None {
+        h = window.location.hash.replace("#", "").replace("/", "").lower();
+        route = h if h in ["citizen", "officer", "ngo", "district"] else "";
     }
+
+    can with entry {
+        read_route();
+        ops = "ops" in window.location.search;
+        document.title = "Ekata";
+    }
+
+    useEffect(
+        lambda {
+            handler = lambda { read_route(); window.scrollTo(0, 0); };
+            window.addEventListener("hashchange", handler);
+            return lambda { window.removeEventListener("hashchange", handler); };
+        },
+        []
+    );
+
     <div className="min-h-screen bg-background text-foreground">
-        <nav
-            aria-label="Workspace"
-            className="flex min-h-16 flex-wrap items-center gap-3 border-b bg-card px-4 py-2 lg:px-6"
-        >
-            <div className="mr-3 flex items-center gap-2.5">
-                <span
-                    className="flex size-9 items-center justify-center rounded-xl bg-primary text-lg font-bold text-primary-foreground"
-                >
-                    E
-                </span>
-                <div>
-                    <strong className="block text-base leading-tight">Ekata</strong>
-                    <span className="hidden text-xs text-muted-foreground sm:block">
-                        Flood response workspace
-                    </span>
-                </div>
-            </div>
-            <div className="flex gap-1 rounded-lg bg-muted p-1">
-                <button
-                    className={"rounded-md px-3 py-2 text-sm font-semibold transition-colors "
-                        + (
-                            "bg-background text-foreground shadow-sm"
-                                if page == "desk"
-                                else "text-muted-foreground hover:text-foreground"
-                        )}
-                    aria-current={"page" if page == "desk" else "false"}
-                    onClick={lambda (e: MouseEvent) { page = "desk"; }}
-                >
-                    Rescue desk
-                </button>
-                <button
-                    className={"rounded-md px-3 py-2 text-sm font-semibold transition-colors "
-                        + (
-                            "bg-background text-foreground shadow-sm"
-                                if page == "cases"
-                                else "text-muted-foreground hover:text-foreground"
-                        )}
-                    aria-current={"page" if page == "cases" else "false"}
-                    onClick={lambda (e: MouseEvent) { page = "cases"; }}
-                >
-                    Appeals & rumours
-                </button>
-            </div>
-            <span
-                className="ml-auto rounded-full border border-amber-300 bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-900"
-            >
-                Synthetic data
-            </span>
-            <button className={"rounded-md border px-3 py-2 text-sm font-semibold " + ("bg-primary text-primary-foreground" if page == "metrics" else "text-muted-foreground")} onClick={lambda (e: MouseEvent) { page = "metrics"; }}>Impact & evaluation</button>
-        </nav>
-        {if page == "desk" { <Desk />; } elif page == "cases" { <Cases />; } else { <MetricsPage />; }}
+        {if route == "citizen" {
+            <CitizenPortal/>;
+        } elif route == "officer" {
+            <OfficerPortal/>;
+        } elif route == "ngo" {
+            <NgoPortal/>;
+        } elif route == "district" {
+            <DistrictPortal/>;
+        } else {
+            <Home/>;
+        }}
+        {if ops {
+            <OpsPanel/>
+        }}
     </div>
 }

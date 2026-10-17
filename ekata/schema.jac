@@ -195,6 +195,18 @@ node RumourClaim {
     has storm_time: str = "";
 }
 
+# An officer's ask for a resource; the matcher agent sends it to one NGO.
+node ResourceRequest {
+    has req_id: str;
+    has need: str;
+    has status: str = "REQUESTED";
+    has ngo: str = "";
+    has reason: str = "";
+    has requested_by: str = "";
+    has storm_time: str = "";
+    has declined_by: list[str] = [];
+}
+
 node Decision {
     has seq: int;
     has agent: str;
@@ -262,3 +274,7 @@ edge Checks: RumourClaim --> Bulletin {
 }
 
 edge About: Decision --> any {}
+
+edge RequestFor: ResourceRequest --> Incident {}
+
+edge SentTo: ResourceRequest --> RegistryEntry {}
