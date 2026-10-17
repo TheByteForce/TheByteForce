@@ -1,0 +1,3290 @@
+{
+  "recorded_at": "2026-10-17T10:01:09Z",
+  "entries": {
+    "04a6137264ecbad978d4d2ec9c23fb5fef2546fb566aa8216da5afd3cb63e11e": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:01:09Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "SOS",
+        "people_count": 3,
+        "vulnerable": [
+          "child",
+          "medical"
+        ],
+        "needs": [
+          "rescue",
+          "medical"
+        ],
+        "place_text": "near Rambukkana town",
+        "place_level": "VILLAGE",
+        "house_ref": "",
+        "phones": [
+          "07X5550107"
+        ],
+        "names": [
+          {
+            "display": "Kumari Jayasinghe",
+            "canonical": "kumari jayasinghe"
+          }
+        ],
+        "language": "en",
+        "rescued": false,
+        "summary": "Kumari Jayasinghe and 2 others, including a child with fever and asthma, need rescue and medical supplies near Rambukkana town.",
+        "confidence": 0.9,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "7722d8863497df962e2e2f8142e8f9fab83f86052ee2df80583bb738a52ec561": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:01:15Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "SOS",
+        "people_count": 2,
+        "vulnerable": [
+          "elderly",
+          "disability"
+        ],
+        "needs": [
+          "rescue",
+          "boat"
+        ],
+        "place_text": "No. 14 Hettimulla Road, Kegalle",
+        "place_level": "HOUSEHOLD",
+        "house_ref": "No. 14 Hettimulla Road",
+        "phones": [
+          "07X5550101"
+        ],
+        "names": [
+          {
+            "display": "Seelawathie Perera",
+            "canonical": "seelawathie perera"
+          },
+          {
+            "display": "Kasun",
+            "canonical": "kasun"
+          }
+        ],
+        "language": "en",
+        "rescued": false,
+        "summary": "Kasun reports his elderly, disabled grandmother Seelawathie Perera and family need rescue from No. 14 Hettimulla Road, Kegalle, due to rising water.",
+        "confidence": 1.0,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "cb57e5e4be7c35e80e367270ab79f55479c7acab58760ed0595eab3e328dcab3": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:01:20Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "SOS",
+        "people_count": 6,
+        "vulnerable": [],
+        "needs": [
+          "rescue"
+        ],
+        "place_text": "Kolonna, house No. 3 Pallegama Road",
+        "place_level": "HOUSEHOLD",
+        "house_ref": "house No. 3 Pallegama Road",
+        "phones": [
+          "07X5550115"
+        ],
+        "names": [
+          {
+            "display": "Saman Pushpakumara",
+            "canonical": "saman pushpakumara"
+          }
+        ],
+        "language": "en",
+        "rescued": false,
+        "summary": "6 people at house No. 3 Pallegama Road, Kolonna need rescue due to cracks opening in the hill behind their house.",
+        "confidence": 0.9,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "eda337af79941894df1016a601693545a6764dc5443881791080848ae3d5b541": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:01:24Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "SOS",
+        "people_count": 4,
+        "vulnerable": [],
+        "needs": [
+          "rescue"
+        ],
+        "place_text": "No 7 Udagama Road, Mawanella",
+        "place_level": "HOUSEHOLD",
+        "house_ref": "No 7 Udagama Road",
+        "phones": [
+          "07X5550103"
+        ],
+        "names": [
+          {
+            "display": "Sunil Bandara",
+            "canonical": "sunil bandara"
+          }
+        ],
+        "language": "en",
+        "rescued": false,
+        "summary": "Sunil Bandara and 4 people need rescue from No 7 Udagama Road, Mawanella as water is rising fast.",
+        "confidence": 1.0,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "d04700fcbb430e742713fb36879630a394eb301e0b158aad628b3e68462722c1": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:01:29Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "SOS",
+        "people_count": 8,
+        "vulnerable": [],
+        "needs": [
+          "rescue",
+          "boat"
+        ],
+        "place_text": "Kegalle town Ward 4 flats",
+        "place_level": "HOUSEHOLD",
+        "house_ref": "Ward 4 flats",
+        "phones": [
+          "07X5550112"
+        ],
+        "names": [
+          {
+            "display": "Dilani Fernando",
+            "canonical": "dilani fernando"
+          }
+        ],
+        "language": "en",
+        "rescued": false,
+        "summary": "Dilani Fernando reports 8 people stuck on 2nd floor of Ward 4 flats, Kegalle town, needing rescue.",
+        "confidence": 0.9,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "73f23f21c3b624543499af4d5f8503060e520066826a9d5a9627ba2df3d131bd": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:01:33Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "RUMOUR",
+        "people_count": 0,
+        "vulnerable": [],
+        "needs": [],
+        "place_text": "Kotmale dam, Kegalle",
+        "place_level": "VILLAGE",
+        "house_ref": "",
+        "phones": [],
+        "names": [],
+        "language": "en",
+        "rescued": false,
+        "summary": "Rumour: Kotmale dam has breached, people in Kegalle advised to move to high ground.",
+        "confidence": 0.9,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "c256e64a256855b7daceeeb1ec68c5a90256d6dbc089c5b4c0d984cb838c7d92": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:01:39Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "SOS",
+        "people_count": 5,
+        "vulnerable": [
+          "pregnant"
+        ],
+        "needs": [
+          "rescue"
+        ],
+        "place_text": "Aranayake. house No 9 Pahala Kotuwa",
+        "place_level": "HOUSEHOLD",
+        "house_ref": "house No 9 Pahala Kotuwa",
+        "phones": [
+          "07X5550105"
+        ],
+        "names": [
+          {
+            "display": "Mohamed Rizwan",
+            "canonical": "mohamed rizwan"
+          }
+        ],
+        "language": "en",
+        "rescued": false,
+        "summary": "Mohamed Rizwan's family (5 people, including a pregnant woman) at house No 9 Pahala Kotuwa, Aranayake, needs rescue due to a cracked wall after a landslide warning.",
+        "confidence": 0.9,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "1259055652c23b863ca3776cf13145a18d81237c3157857ab2353a16084cf396": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:01:44Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "SOS",
+        "people_count": 5,
+        "vulnerable": [
+          "child"
+        ],
+        "needs": [
+          "rescue"
+        ],
+        "place_text": "டெரனியகல தோட்டம் லைன் வீடு 3",
+        "place_level": "HOUSEHOLD",
+        "house_ref": "லைன் வீடு 3 டெரனியகல தோட்டம்",
+        "phones": [
+          "07X5550108"
+        ],
+        "names": [
+          {
+            "display": "முருகன் ராஜா",
+            "canonical": "murugan raja"
+          }
+        ],
+        "language": "ta",
+        "rescued": false,
+        "summary": "Murugan Raja family (5 people, 1 child) needs rescue from flood at line house 3, Deraniyagala estate.",
+        "confidence": 1.0,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "0d318c03eac5ab662c49af034ae080ffcb3d58226ed0cf1334633e279d9b81ae": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:01:49Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "SOS",
+        "people_count": 2,
+        "vulnerable": [
+          "elderly"
+        ],
+        "needs": [
+          "rescue"
+        ],
+        "place_text": "Galigamuwa",
+        "place_level": "VILLAGE",
+        "house_ref": "",
+        "phones": [
+          "07X5550110"
+        ],
+        "names": [
+          {
+            "display": "Ranjith Silva",
+            "canonical": "ranjith silva"
+          }
+        ],
+        "language": "singlish",
+        "rescued": false,
+        "summary": "Two elderly people, including Ranjith Silva, need rescue in Galigamuwa due to flooding.",
+        "confidence": 1.0,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "9e9000a16582bc4c278bf1ea3b49a44830d7e3abe065837e4906b8115d41ce31": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:01:54Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "SOS",
+        "people_count": 2,
+        "vulnerable": [
+          "disability",
+          "child"
+        ],
+        "needs": [
+          "boat",
+          "rescue"
+        ],
+        "place_text": "No 14 Hettimulla Rd Kegalle",
+        "place_level": "HOUSEHOLD",
+        "house_ref": "No 14 Hettimulla Rd",
+        "phones": [
+          "07X5550102"
+        ],
+        "names": [
+          {
+            "display": "Seelawathie Perera",
+            "canonical": "seelawathie perera"
+          },
+          {
+            "display": "Kasun",
+            "canonical": "kasun"
+          },
+          {
+            "display": "Nadeeka",
+            "canonical": "nadeeka"
+          }
+        ],
+        "language": "en",
+        "rescued": false,
+        "summary": "Seelawathie Perera (wheelchair) and Kasun (child) need a boat rescue at No 14 Hettimulla Rd Kegalle.",
+        "confidence": 0.9,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "cac9e65e729054cd15b4a95402060b0480264ddba62830c5dde5616a3be88445": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:02:01Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "SOS",
+        "people_count": 6,
+        "vulnerable": [
+          "child"
+        ],
+        "needs": [
+          "rescue"
+        ],
+        "place_text": "Udagama Road Mawanella, house near the Bodhi temple",
+        "place_level": "HOUSEHOLD",
+        "house_ref": "house near the Bodhi temple",
+        "phones": [
+          "07X5550104"
+        ],
+        "names": [
+          {
+            "display": "Bandara family",
+            "canonical": "bandara family"
+          },
+          {
+            "display": "Kamala",
+            "canonical": "kamala"
+          }
+        ],
+        "language": "en",
+        "rescued": false,
+        "summary": "Bandara family with 6 people including a baby needs rescue from flooded house near Bodhi temple on Udagama Road, Mawanella.",
+        "confidence": 0.9,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "3fbf2300b54b9dc9341c9b336c504062af46aa762c62cba399fefc9eadb1fe68": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:02:05Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "SOS",
+        "people_count": 3,
+        "vulnerable": [
+          "disability"
+        ],
+        "needs": [
+          "rescue"
+        ],
+        "place_text": "Warakapola, 22 Temple Road",
+        "place_level": "HOUSEHOLD",
+        "house_ref": "22 Temple Road",
+        "phones": [
+          "07X5550111"
+        ],
+        "names": [
+          {
+            "display": "Nimal Wickramasinghe",
+            "canonical": "nimal wickramasinghe"
+          }
+        ],
+        "language": "en",
+        "rescued": false,
+        "summary": "Nimal Wickramasinghe and 2 others, including a disabled person, need rescue from knee-deep water at 22 Temple Road, Warakapola.",
+        "confidence": 1.0,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "cdaae060ed2097fc950f4442bd4ad619f5f94da48e108d360dbe9b4c1f67df66": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:02:10Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "SOS",
+        "people_count": 2,
+        "vulnerable": [
+          "elderly",
+          "medical"
+        ],
+        "needs": [
+          "medical",
+          "rescue"
+        ],
+        "place_text": "31 Mosque Road Mawanella",
+        "place_level": "HOUSEHOLD",
+        "house_ref": "31 Mosque Road Mawanella",
+        "phones": [
+          "07X5550114"
+        ],
+        "names": [
+          {
+            "display": "Fathima Nazeer",
+            "canonical": "fathima nazeer"
+          },
+          {
+            "display": "Father",
+            "canonical": "father"
+          }
+        ],
+        "language": "en",
+        "rescued": false,
+        "summary": "Fathima Nazeer's elderly father (72) at 31 Mosque Road Mawanella needs dialysis due to flooded roads.",
+        "confidence": 1.0,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "a6698dda189d79e6f6b85dfdeff674b0a977bdb71097ac8a2ace314c753af7bd": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:02:15Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "APPEAL",
+        "people_count": 5,
+        "vulnerable": [],
+        "needs": [
+          "food",
+          "shelter",
+          "supplies"
+        ],
+        "place_text": "Rambukkana",
+        "place_level": "VILLAGE",
+        "house_ref": "",
+        "phones": [
+          "07X5550170"
+        ],
+        "names": [
+          {
+            "display": "Chathura",
+            "canonical": "chathura"
+          }
+        ],
+        "language": "en",
+        "rescued": false,
+        "summary": "Appeal for 5 relatives in Rambukkana who lost everything; deposit to Chathura's account or call 07X-555-0170.",
+        "confidence": 1.0,
+        "payee_accounts": [
+          "SYN-2231-0007"
+        ],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "380257e66614b06bb82bd327de984035ad618e6610de5f700d7dd9a3846b6fdf": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:02:22Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "SOS",
+        "people_count": 4,
+        "vulnerable": [
+          "child"
+        ],
+        "needs": [
+          "rescue",
+          "shelter"
+        ],
+        "place_text": "බලංගොඩ",
+        "place_level": "VILLAGE",
+        "house_ref": "",
+        "phones": [
+          "07X5550116"
+        ],
+        "names": [
+          {
+            "display": "රුවනි හේරත්",
+            "canonical": "ruwani herath"
+          }
+        ],
+        "language": "si",
+        "rescued": false,
+        "summary": "Ruwani Herath and 3 others, including 2 children, need rescue/shelter in Balangoda due to floodwater in house.",
+        "confidence": 0.9,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "605427a5983cd8c146e083d6d2a163d08eccf832e3cbf6bc4e345a82844a364b": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:02:26Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "SOS",
+        "people_count": 1,
+        "vulnerable": [
+          "elderly",
+          "disability"
+        ],
+        "needs": [
+          "rescue"
+        ],
+        "place_text": "14 Hettimulla Road",
+        "place_level": "HOUSEHOLD",
+        "house_ref": "14 Hettimulla Road",
+        "phones": [
+          "07X5550101"
+        ],
+        "names": [
+          {
+            "display": "Seelawathie amma",
+            "canonical": "seelawathie"
+          }
+        ],
+        "language": "singlish",
+        "rescued": false,
+        "summary": "Seelawathie, an elderly woman in a wheelchair, needs rescue at 14 Hettimulla Road.",
+        "confidence": 0.9,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "fe83ea952dd1998e8646716ccc4c3e607bbfc57eba275879e16f989e4bd26733": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:02:34Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "UPDATE",
+        "people_count": 2,
+        "vulnerable": [],
+        "needs": [],
+        "place_text": "Yatiyantota",
+        "place_level": "VILLAGE",
+        "house_ref": "",
+        "phones": [
+          "07X5550113"
+        ],
+        "names": [
+          {
+            "display": "Sisira Kumara",
+            "canonical": "sisira kumara"
+          }
+        ],
+        "language": "en",
+        "rescued": true,
+        "summary": "Sisira Kumara and one other person are safe on an upper floor in Yatiyantota; their cattle shed was washed away.",
+        "confidence": 0.9,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "bbe40c77bce309c0e9cce4f37662b7e88e6011b74ae5acd3da89833ce06f91d8": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:02:39Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "SOS",
+        "people_count": 3,
+        "vulnerable": [],
+        "needs": [
+          "evacuate",
+          "rescue"
+        ],
+        "place_text": "Aranayake, near the Samasarakanda junction",
+        "place_level": "HOUSEHOLD",
+        "house_ref": "near the Samasarakanda junction",
+        "phones": [
+          "07X5550117"
+        ],
+        "names": [
+          {
+            "display": "Asanka Rathnayake",
+            "canonical": "asanka rathnayake"
+          }
+        ],
+        "language": "en",
+        "rescued": false,
+        "summary": "Asanka Rathnayake and 2 others need rescue/evacuation from Aranayake near Samasarakanda junction due to landslide warning and blocked road.",
+        "confidence": 1.0,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "23f564e9f139ca9308bbf405b083000a82d309a05e3656dbc98f957cf255d148": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:02:43Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "SOS",
+        "people_count": 4,
+        "vulnerable": [],
+        "needs": [
+          "rescue",
+          "shelter"
+        ],
+        "place_text": "டெரனியகல லைன் வீடு 7",
+        "place_level": "HOUSEHOLD",
+        "house_ref": "லைன் வீடு 7, டெரனியகல",
+        "phones": [
+          "07X5550118"
+        ],
+        "names": [
+          {
+            "display": "செல்வி கிருஷ்ணன்",
+            "canonical": "selvi krishnan"
+          }
+        ],
+        "language": "ta",
+        "rescued": false,
+        "summary": "Selvi Krishnan and 3 others need rescue from water in line house 7, Deraniyagala.",
+        "confidence": 1.0,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "dc4afa8033d810a9e04f79dd374adf38c2d5ee28d930ecc3fddff4829afb9448": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:02:53Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "APPEAL",
+        "people_count": 200,
+        "vulnerable": [],
+        "needs": [
+          "food",
+          "water",
+          "shelter",
+          "medical"
+        ],
+        "place_text": "Kegalle",
+        "place_level": "VILLAGE",
+        "house_ref": "",
+        "phones": [
+          "07X5550185"
+        ],
+        "names": [],
+        "language": "en",
+        "rescued": false,
+        "summary": "Appeal for funds to help 200 families affected by floods in Kegalle. Contact 07X-555-0185.",
+        "confidence": 0.9,
+        "payee_accounts": [
+          "SYN-7781-0042"
+        ],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "7f01c13330c2a151d439a2fd367e818e0bbe4591b26ef84bda91df95e1ea0abd": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:03:00Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "SOS",
+        "people_count": 5,
+        "vulnerable": [
+          "child"
+        ],
+        "needs": [
+          "rescue"
+        ],
+        "place_text": "line house 3 at Deraniyagala estate",
+        "place_level": "HOUSEHOLD",
+        "house_ref": "line house 3 at Deraniyagala estate",
+        "phones": [
+          "07X5550109"
+        ],
+        "names": [
+          {
+            "display": "Murugan Raja",
+            "canonical": "murugan raja"
+          }
+        ],
+        "language": "en",
+        "rescued": false,
+        "summary": "Murugan Raja's family (5 people, 1 child) needs rescue from line house 3 at Deraniyagala estate due to water inside.",
+        "confidence": 0.9,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "7678bab7376f95bb9cb2ec3582338aca188f8defa0cbcf5b3ec7fde42da3599c": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:03:27Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "UPDATE",
+        "people_count": 2,
+        "vulnerable": [],
+        "needs": [],
+        "place_text": "Kegalle, Bulugahamula road",
+        "place_level": "ROAD",
+        "house_ref": "",
+        "phones": [
+          "07X5550119"
+        ],
+        "names": [
+          {
+            "display": "Pradeep Gunasekara",
+            "canonical": "pradeep gunasekara"
+          }
+        ],
+        "language": "en",
+        "rescued": false,
+        "summary": "Pradeep Gunasekara reports Bulugahamula road in Kegalle blocked by a fallen tree; 2 people are safe for now.",
+        "confidence": 0.9,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "3c712dae38b7e267b5bacddb3599cb9bc3fd11490a91ad1803dc6e3bd1395c88": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:03:32Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "SOS",
+        "people_count": 2,
+        "vulnerable": [
+          "pregnant"
+        ],
+        "needs": [
+          "rescue"
+        ],
+        "place_text": "Rambukkana, No 9 Station Road",
+        "place_level": "HOUSEHOLD",
+        "house_ref": "No 9 Station Road",
+        "phones": [
+          "07X5550120"
+        ],
+        "names": [
+          {
+            "display": "Chamari Wijesinghe",
+            "canonical": "chamari wijesinghe"
+          }
+        ],
+        "language": "en",
+        "rescued": false,
+        "summary": "Chamari Wijesinghe (pregnant) and 1 other need rescue from rising water at No 9 Station Road, Rambukkana.",
+        "confidence": 1.0,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "865756d09700b7915265f34fa047859ec393490ef07a0a05e8893b6d3a8564b6": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:03:37Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "RUMOUR",
+        "people_count": 0,
+        "vulnerable": [],
+        "needs": [],
+        "place_text": "Mawanella",
+        "place_level": "VILLAGE",
+        "house_ref": "",
+        "phones": [],
+        "names": [],
+        "language": "en",
+        "rescued": false,
+        "summary": "Rumour: Caller heard on Facebook that the army stopped all rescues in Mawanella.",
+        "confidence": 0.9,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "ecb7214628fb977774443c01f2b899b02df51e46bc814a33ad549fc0cb6bec5d": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:03:41Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "SOS",
+        "people_count": 5,
+        "vulnerable": [],
+        "needs": [
+          "rescue"
+        ],
+        "place_text": "Mawanella, house No 40 Kandy Road",
+        "place_level": "HOUSEHOLD",
+        "house_ref": "house No 40 Kandy Road",
+        "phones": [
+          "07X5550121"
+        ],
+        "names": [
+          {
+            "display": "Lalith Ekanayake",
+            "canonical": "lalith ekanayake"
+          }
+        ],
+        "language": "en",
+        "rescued": false,
+        "summary": "Lalith Ekanayake and 4 others need rescue from house No 40 Kandy Road, Mawanella, due to high water.",
+        "confidence": 1.0,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "1f898d7d4b9cd16b98acde569b19169ca0dc5da767200b4f6c2e8fe53340980a": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:03:47Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "SOS",
+        "people_count": 3,
+        "vulnerable": [],
+        "needs": [
+          "rescue"
+        ],
+        "place_text": "Warakapola",
+        "place_level": "VILLAGE",
+        "house_ref": "",
+        "phones": [
+          "07X5550122"
+        ],
+        "names": [
+          {
+            "display": "Thushara Jayawardena",
+            "canonical": "thushara jayawardena"
+          }
+        ],
+        "language": "singlish",
+        "rescued": false,
+        "summary": "Thushara Jayawardena and 2 others need rescue from floodwaters in Warakapola.",
+        "confidence": 1.0,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "d8feb4c410f4c89ebd0170947ddd065b483f1f7abe6523f081a9a8f51ca15da0": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:03:52Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "SOS",
+        "people_count": 2,
+        "vulnerable": [
+          "elderly",
+          "medical"
+        ],
+        "needs": [
+          "rescue"
+        ],
+        "place_text": "Galigamuwa, No 5 Church Lane",
+        "place_level": "HOUSEHOLD",
+        "house_ref": "No 5 Church Lane",
+        "phones": [
+          "07X5550123"
+        ],
+        "names": [
+          {
+            "display": "Kamal Peiris",
+            "canonical": "kamal peiris"
+          }
+        ],
+        "language": "en",
+        "rescued": false,
+        "summary": "Kamal Peiris and bedridden mother need rescue at No 5 Church Lane, Galigamuwa.",
+        "confidence": 1.0,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "cf7513d3da8b09a32cdbe9227d19bfd89638ab7e72629636f5701332a8770a82": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:03:57Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "APPEAL",
+        "people_count": 0,
+        "vulnerable": [],
+        "needs": [],
+        "place_text": "Kegalle Flood Authority",
+        "place_level": "VILLAGE",
+        "house_ref": "",
+        "phones": [],
+        "names": [],
+        "language": "en",
+        "rescued": false,
+        "summary": "Appeal for donations to the official flood fund SYN-6610-0099 for victims, from the Relief Commissioner, Kegalle Flood Authority.",
+        "confidence": 1.0,
+        "payee_accounts": [
+          "SYN-6610-0099"
+        ],
+        "urls": [],
+        "claimed_office": "Relief Commissioner, Kegalle Flood Authority",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "826ad6e5c7d40728dc413e687867ead5c51749ec458b081f621a490ec3488512": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:04:06Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "SOS",
+        "people_count": 5,
+        "vulnerable": [],
+        "needs": [
+          "rescue"
+        ],
+        "place_text": "7 Udagama Rd",
+        "place_level": "HOUSEHOLD",
+        "house_ref": "7 Udagama Rd",
+        "phones": [
+          "07X5550103"
+        ],
+        "names": [
+          {
+            "display": "Sunil Bandara",
+            "canonical": "sunil bandara"
+          }
+        ],
+        "language": "en",
+        "rescued": false,
+        "summary": "Sunil Bandara and family of 4 need rescue at 7 Udagama Rd.",
+        "confidence": 0.9,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "69474c18d263d7a85a8658e72cb5ad80712dee73e280b87a254503f332c57419": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:04:15Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "SOS",
+        "people_count": 4,
+        "vulnerable": [],
+        "needs": [
+          "rescue",
+          "shelter"
+        ],
+        "place_text": "Kegalle, house behind the Kegalle clock tower",
+        "place_level": "HOUSEHOLD",
+        "house_ref": "house behind the Kegalle clock tower",
+        "phones": [
+          "07X5550124"
+        ],
+        "names": [
+          {
+            "display": "Nilmini Senanayake",
+            "canonical": "nilmini senanayake"
+          }
+        ],
+        "language": "en",
+        "rescued": false,
+        "summary": "Nilmini Senanayake and 4 people need rescue/shelter from flood in house behind Kegalle clock tower, Kegalle.",
+        "confidence": 0.9,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "dc26d45a5db40134d2e9df2d4d312823a15a2f984fbf8704f55ac630d32a8a6b": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:04:27Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "SOS",
+        "people_count": 6,
+        "vulnerable": [],
+        "needs": [
+          "rescue"
+        ],
+        "place_text": "behind the Yatiyantota bus stand",
+        "place_level": "HOUSEHOLD",
+        "house_ref": "behind the Yatiyantota bus stand",
+        "phones": [
+          "07X5550125"
+        ],
+        "names": [
+          {
+            "display": "Hemantha Karunaratne",
+            "canonical": "hemantha karunaratne"
+          }
+        ],
+        "language": "en",
+        "rescued": false,
+        "summary": "Hemantha Karunaratne and 5 others need rescue from behind the Yatiyantota bus stand due to chest-deep water.",
+        "confidence": 0.9,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "360e77e3cebf72d077faf79a4654456a6658d3095c808246df4bcef214989c29": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:04:33Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "OFFER",
+        "people_count": 0,
+        "vulnerable": [],
+        "needs": [
+          "boat",
+          "rescue"
+        ],
+        "place_text": "Mawanella",
+        "place_level": "VILLAGE",
+        "house_ref": "",
+        "phones": [
+          "07X5550190"
+        ],
+        "names": [
+          {
+            "display": "Roshan",
+            "canonical": "roshan"
+          }
+        ],
+        "language": "en",
+        "rescued": false,
+        "summary": "Roshan offers a fibre boat and engine for rescues at Mawanella.",
+        "confidence": 0.9,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "d2d4de073ff6f99371de74fa8fa0ec8f459d71d309111286bbf396fa830c642f": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:04:39Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "SOS",
+        "people_count": 5,
+        "vulnerable": [
+          "pregnant"
+        ],
+        "needs": [
+          "rescue"
+        ],
+        "place_text": "Aranayake",
+        "place_level": "VILLAGE",
+        "house_ref": "",
+        "phones": [
+          "07X5550106"
+        ],
+        "names": [
+          {
+            "display": "Rizwan",
+            "canonical": "rizwan"
+          },
+          {
+            "display": "Mohamed Rizwan",
+            "canonical": "mohamed rizwan"
+          }
+        ],
+        "language": "en",
+        "rescued": false,
+        "summary": "Mohamed Rizwan's family of 5, including a pregnant woman, needs rescue in Aranayake due to a cracked wall.",
+        "confidence": 0.9,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "ea80f577cf80c18fa15f3d31b27494b46a8491707a0ee2b450c656521ec2de1f": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:05:03Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "SOS",
+        "people_count": 3,
+        "vulnerable": [],
+        "needs": [
+          "rescue"
+        ],
+        "place_text": "Aranayake, No 12 Pahala Kotuwa",
+        "place_level": "HOUSEHOLD",
+        "house_ref": "No 12 Pahala Kotuwa",
+        "phones": [
+          "07X5550126"
+        ],
+        "names": [
+          {
+            "display": "Sriyani Abeysekara",
+            "canonical": "sriyani abeysekara"
+          }
+        ],
+        "language": "en",
+        "rescued": false,
+        "summary": "Sriyani Abeysekara and 2 others need rescue at No 12 Pahala Kotuwa, Aranayake.",
+        "confidence": 0.9,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "75480fa8ee9cacb73a05cf9f2eff5ef775d79d4269487bfc082a535c2cfa7981": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:05:09Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "APPEAL",
+        "people_count": 0,
+        "vulnerable": [],
+        "needs": [],
+        "place_text": "",
+        "place_level": "UNKNOWN",
+        "house_ref": "",
+        "phones": [],
+        "names": [],
+        "language": "en",
+        "rescued": false,
+        "summary": "Ministry Flood Relief Desk offers Rs 25,000 to flood families, asking for NIC and OTP.",
+        "confidence": 1.0,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "Ministry Flood Relief Desk",
+        "asks_credentials": [
+          "NIC number",
+          "OTP code"
+        ],
+        "claims_for_names": []
+      }
+    },
+    "a6dbd86db890978566dc3dcd672d9dd069881e772cb97a908163f12f7b8c77f7": {
+      "kind": "appeal",
+      "recorded_at": "2026-10-17T10:05:15Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "reason": "The \"Ministry Flood Relief Desk\" is not in the official registry, indicating impersonation. The message attempts to solicit sensitive information (NIC number and OTP) under false pretenses, which is a common tactic for phishing or scam attempts.",
+        "confidence": 0.9,
+        "evidence_ids": [
+          "office:Ministry Flood Relief Desk"
+        ]
+      }
+    },
+    "3ac729b1e232e694afc46439eebd1d6ed6eb7602317fe636d3870c524e1865f6": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:05:21Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "SOS",
+        "people_count": 4,
+        "vulnerable": [],
+        "needs": [
+          "rescue"
+        ],
+        "place_text": "Kolonna, No 18 Hospital Road",
+        "place_level": "HOUSEHOLD",
+        "house_ref": "No 18 Hospital Road",
+        "phones": [
+          "07X5550127"
+        ],
+        "names": [
+          {
+            "display": "Rohan de Silva",
+            "canonical": "rohan de silva"
+          }
+        ],
+        "language": "en",
+        "rescued": false,
+        "summary": "Rohan de Silva and 3 others need rescue at No 18 Hospital Road, Kolonna.",
+        "confidence": 0.9,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "f9d669f6c2bca896c2af55f45653df3ce389750c5ff5e5a7e28e17c8fbff3b3c": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:05:27Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "UPDATE",
+        "people_count": 2,
+        "vulnerable": [
+          "medical"
+        ],
+        "needs": [
+          "medical"
+        ],
+        "place_text": "Rambukkana",
+        "place_level": "VILLAGE",
+        "house_ref": "",
+        "phones": [
+          "07X5550107"
+        ],
+        "names": [
+          {
+            "display": "Kumari Jayasinghe",
+            "canonical": "kumari jayasinghe"
+          }
+        ],
+        "language": "en",
+        "rescued": false,
+        "summary": "Kumari Jayasinghe reports her daughter's breathing is worse in Rambukkana, needs medical help.",
+        "confidence": 1.0,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "87a3b5af97b0190bd294d943db906b42d8f351612c89fb9496848d56dde301e7": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:05:36Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "SOS",
+        "people_count": 2,
+        "vulnerable": [
+          "elderly"
+        ],
+        "needs": [
+          "rescue"
+        ],
+        "place_text": "Balangoda, No 3 Rest House Road",
+        "place_level": "HOUSEHOLD",
+        "house_ref": "No 3 Rest House Road",
+        "phones": [
+          "07X5550128"
+        ],
+        "names": [
+          {
+            "display": "Mala Gunawardena",
+            "canonical": "mala gunawardena"
+          }
+        ],
+        "language": "en",
+        "rescued": false,
+        "summary": "Mala Gunawardena and 2 elderly people need rescue at No 3 Rest House Road, Balangoda.",
+        "confidence": 0.9,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "9724067031bd6d1b7c195666fc82f63d1096dc7ec82c0489a133a8656bb8668f": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:05:41Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "APPEAL",
+        "people_count": 0,
+        "vulnerable": [
+          "child"
+        ],
+        "needs": [
+          "school books",
+          "food"
+        ],
+        "place_text": "Kegalle",
+        "place_level": "VILLAGE",
+        "house_ref": "",
+        "phones": [
+          "07X5550185"
+        ],
+        "names": [],
+        "language": "en",
+        "rescued": false,
+        "summary": "Appeal for school books and food for flood children in Kegalle.",
+        "confidence": 0.9,
+        "payee_accounts": [
+          "SYN-7781-0042"
+        ],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "2263a4aa0278f50a149210488843925764eeea3db77c1436212dbaf488ae789f": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:05:51Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "SOS",
+        "people_count": 5,
+        "vulnerable": [
+          "child"
+        ],
+        "needs": [
+          "rescue"
+        ],
+        "place_text": "Kegalle, house next to the Kegalle clock tower",
+        "place_level": "HOUSEHOLD",
+        "house_ref": "house next to the Kegalle clock tower",
+        "phones": [
+          "07X5550129"
+        ],
+        "names": [
+          {
+            "display": "Ajith Weerasinghe",
+            "canonical": "ajith weerasinghe"
+          }
+        ],
+        "language": "en",
+        "rescued": false,
+        "summary": "Ajith Weerasinghe and 4 others, including a child, need rescue from a house next to the Kegalle clock tower in Kegalle.",
+        "confidence": 0.9,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "1370de26ff61267346f2752f871aeed66073fe02f4f532d7df8343e0bb66e421": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:05:58Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "SOS",
+        "people_count": 6,
+        "vulnerable": [],
+        "needs": [
+          "rescue"
+        ],
+        "place_text": "லைன் வீடு 12, டெரனியகல",
+        "place_level": "HOUSEHOLD",
+        "house_ref": "லைன் வீடு 12, டெரனியகல",
+        "phones": [
+          "07X5550130"
+        ],
+        "names": [
+          {
+            "display": "சாந்தி ராமசாமி",
+            "canonical": "shanthi ramasamy"
+          }
+        ],
+        "language": "ta",
+        "rescued": false,
+        "summary": "Shanthi Ramasamy and 5 others need rescue at Line house 12, Deraniyagala.",
+        "confidence": 0.9,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "bc75a58a1d88922458e05fd29e57a670fbfb89f5b2626adf18029a7c6973594d": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:06:04Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "SOS",
+        "people_count": 2,
+        "vulnerable": [],
+        "needs": [
+          "rescue"
+        ],
+        "place_text": "No 2 Temple Road, Warakapola",
+        "place_level": "HOUSEHOLD",
+        "house_ref": "No 2 Temple Road",
+        "phones": [
+          "07X5550131"
+        ],
+        "names": [
+          {
+            "display": "Upul Bandara",
+            "canonical": "upul bandara"
+          }
+        ],
+        "language": "en",
+        "rescued": false,
+        "summary": "Upul Bandara and one other person need rescue from water in their kitchen at No 2 Temple Road, Warakapola.",
+        "confidence": 0.9,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "a769902bc44a85eb48bc0c5d44bf72620efb302acae90dff56759ca5e5782003": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:06:10Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "RUMOUR",
+        "people_count": 0,
+        "vulnerable": [],
+        "needs": [],
+        "place_text": "Kelani river",
+        "place_level": "UNKNOWN",
+        "house_ref": "",
+        "phones": [],
+        "names": [],
+        "language": "en",
+        "rescued": false,
+        "summary": "Rumour: Kelani river expected to rise 10 feet in the next hour, Irrigation dept says. Advise to evacuate.",
+        "confidence": 0.9,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "Irrigation dept",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "12cb16155964c13bbfe227f236fecd1c543291c6dd828c9603edfd0776af8967": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:06:16Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "SOS",
+        "people_count": 3,
+        "vulnerable": [],
+        "needs": [
+          "rescue"
+        ],
+        "place_text": "Rambukkana, house No 6 Mill Road",
+        "place_level": "HOUSEHOLD",
+        "house_ref": "house No 6 Mill Road",
+        "phones": [
+          "07X5550132"
+        ],
+        "names": [
+          {
+            "display": "Gayani Liyanage",
+            "canonical": "gayani liyanage"
+          }
+        ],
+        "language": "en",
+        "rescued": false,
+        "summary": "Gayani Liyanage and 2 others need rescue at house No 6 Mill Road, Rambukkana.",
+        "confidence": 0.9,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "fd4fd689177177839c7d1aa2ccfa623794eea84e9d4c875605324fe2a87c242c": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:06:23Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "UPDATE",
+        "people_count": 9,
+        "vulnerable": [],
+        "needs": [],
+        "place_text": "Kegalle Ward 4 flats",
+        "place_level": "HOUSEHOLD",
+        "house_ref": "Ward 4 flats, 2nd floor",
+        "phones": [
+          "07X5550112"
+        ],
+        "names": [
+          {
+            "display": "Dilani Fernando",
+            "canonical": "dilani fernando"
+          }
+        ],
+        "language": "en",
+        "rescued": false,
+        "summary": "Update: 9 people including Dilani Fernando are on the 2nd floor of Kegalle Ward 4 flats.",
+        "confidence": 0.9,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "e589d67542c7a873a44da662c86d307f6552e38c2353caa80a5a55a7c9b0d0a0": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:06:34Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "SOS",
+        "people_count": 4,
+        "vulnerable": [],
+        "needs": [
+          "rescue"
+        ],
+        "place_text": "Mawanella, No 15 Hingula Road",
+        "place_level": "HOUSEHOLD",
+        "house_ref": "No 15 Hingula Road",
+        "phones": [
+          "07X5550133"
+        ],
+        "names": [
+          {
+            "display": "Indika Samarasinghe",
+            "canonical": "indika samarasinghe"
+          }
+        ],
+        "language": "en",
+        "rescued": false,
+        "summary": "Indika Samarasinghe and 3 others need rescue at No 15 Hingula Road, Mawanella.",
+        "confidence": 0.9,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "a30a109a354be5c870eca79aac9023fd98d119e3872ca25437adfdeadc0b73ce": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:06:45Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "APPEAL",
+        "people_count": 4,
+        "vulnerable": [],
+        "needs": [],
+        "place_text": "Aranayake",
+        "place_level": "VILLAGE",
+        "house_ref": "",
+        "phones": [
+          "07X5550171"
+        ],
+        "names": [
+          {
+            "display": "Dinesh",
+            "canonical": "dinesh"
+          }
+        ],
+        "language": "en",
+        "rescued": true,
+        "summary": "Appeal for help for 4 people whose house collapsed in Aranayake, now at a relative's. Contact Dinesh, account SYN-4410-0018.",
+        "confidence": 0.9,
+        "payee_accounts": [
+          "SYN-4410-0018"
+        ],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "cef9240b9f421603c72ab7fdcc3c5c722c33816af2b4947fa660aa0b4e522ed2": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:06:57Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "SOS",
+        "people_count": 2,
+        "vulnerable": [
+          "elderly"
+        ],
+        "needs": [
+          "rescue"
+        ],
+        "place_text": "Galigamuwa, No 8 Kandy Road",
+        "place_level": "HOUSEHOLD",
+        "house_ref": "No 8 Kandy Road",
+        "phones": [
+          "07X5550134"
+        ],
+        "names": [
+          {
+            "display": "Sunethra Kodituwakku",
+            "canonical": "sunethra kodituwakku"
+          }
+        ],
+        "language": "en",
+        "rescued": false,
+        "summary": "Sunethra Kodituwakku and 2 elderly people need rescue at No 8 Kandy Road, Galigamuwa.",
+        "confidence": 0.9,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "525684f75e200af86ea883aaf6b2ace492903c9926d0f78a45892230d6975e1c": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:07:04Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "SOS",
+        "people_count": 5,
+        "vulnerable": [],
+        "needs": [
+          "rescue"
+        ],
+        "place_text": "Aranayake, No 27 Ussapitiya Road",
+        "place_level": "HOUSEHOLD",
+        "house_ref": "No 27 Ussapitiya Road",
+        "phones": [
+          "07X5550135"
+        ],
+        "names": [
+          {
+            "display": "Buddhika Herath",
+            "canonical": "buddhika herath"
+          }
+        ],
+        "language": "en",
+        "rescued": false,
+        "summary": "Buddhika Herath needs rescue for 5 people at No 27 Ussapitiya Road, Aranayake.",
+        "confidence": 0.9,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "a8fb118bbbf32bc63045b2b7910f4437f811c58db928dc9549e0d5bae5802034": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:07:10Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "APPEAL",
+        "people_count": 0,
+        "vulnerable": [],
+        "needs": [],
+        "place_text": "Mawanella mosque",
+        "place_level": "HOUSEHOLD",
+        "house_ref": "Mawanella mosque",
+        "phones": [
+          "07X5550185"
+        ],
+        "names": [],
+        "language": "en",
+        "rescued": false,
+        "summary": "Appeal for flood relief donations to Mawanella mosque, deposit to SYN-7781-0042, contact 07X-555-0185.",
+        "confidence": 1.0,
+        "payee_accounts": [
+          "SYN-7781-0042"
+        ],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "9727fa23acfa1990f8f0a8462ed852e3a42b138d0b35f51941dd387f22d3c803": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:07:20Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "SOS",
+        "people_count": 3,
+        "vulnerable": [],
+        "needs": [
+          "rescue"
+        ],
+        "place_text": "Deraniyagala town, near the hospital",
+        "place_level": "HOUSEHOLD",
+        "house_ref": "near the hospital",
+        "phones": [
+          "07X5550136"
+        ],
+        "names": [
+          {
+            "display": "Ramesh Kanagaratnam",
+            "canonical": "ramesh kanagaratnam"
+          }
+        ],
+        "language": "en",
+        "rescued": false,
+        "summary": "Ramesh Kanagaratnam and 3 people need rescue near the hospital in Deraniyagala town.",
+        "confidence": 0.9,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "8e2940b04f8b29baddf5e640d5d6752622e5e4c156db8de2c52467176f4ff2a8": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:07:28Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "SOS",
+        "people_count": 4,
+        "vulnerable": [],
+        "needs": [
+          "rescue"
+        ],
+        "place_text": "Kegalle, No 11 Hettimulla Road (not 14)",
+        "place_level": "HOUSEHOLD",
+        "house_ref": "No 11 Hettimulla Road",
+        "phones": [
+          "07X5550137"
+        ],
+        "names": [
+          {
+            "display": "Piyumi Dassanayake",
+            "canonical": "piyumi dassanayake"
+          }
+        ],
+        "language": "en",
+        "rescued": false,
+        "summary": "Piyumi Dassanayake and 3 others need rescue at No 11 Hettimulla Road, Kegalle.",
+        "confidence": 0.9,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "cafd1312fa6512722ad6bd82804f6282a871fb135d6d983bd998bb491d5d9d77": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:07:36Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "SOS",
+        "people_count": 2,
+        "vulnerable": [],
+        "needs": [
+          "rescue"
+        ],
+        "place_text": "Yatiyantota, near the Kitulgala road junction",
+        "place_level": "HOUSEHOLD",
+        "house_ref": "near the Kitulgala road junction",
+        "phones": [
+          "07X5550138"
+        ],
+        "names": [
+          {
+            "display": "Tharindu Madushanka",
+            "canonical": "tharindu madushanka"
+          }
+        ],
+        "language": "en",
+        "rescued": false,
+        "summary": "Tharindu Madushanka and one other person need rescue near the Kitulgala road junction in Yatiyantota.",
+        "confidence": 0.9,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "1a8fd1b94b586f9bd819243147f7167266bcb715ff46160eb3e55b0f16c0a15d": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:07:45Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "OFFER",
+        "people_count": 0,
+        "vulnerable": [],
+        "needs": [],
+        "place_text": "Rambukkana temple hall",
+        "place_level": "HOUSEHOLD",
+        "house_ref": "Rambukkana temple hall",
+        "phones": [
+          "07X5550191"
+        ],
+        "names": [],
+        "language": "en",
+        "rescued": false,
+        "summary": "Dry rations available for 50 families at Rambukkana temple hall. Contact 07X-555-0191.",
+        "confidence": 1.0,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "425b98530187445e0a8f608eb326cafa5e935692e1767a62eeff075f77f75b9d": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:07:54Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "UPDATE",
+        "people_count": 2,
+        "vulnerable": [
+          "elderly"
+        ],
+        "needs": [
+          "rescue"
+        ],
+        "place_text": "",
+        "place_level": "UNKNOWN",
+        "house_ref": "",
+        "phones": [
+          "07X5550101"
+        ],
+        "names": [
+          {
+            "display": "Kasun",
+            "canonical": "kasun"
+          },
+          {
+            "display": "grandmother",
+            "canonical": "grandmother"
+          }
+        ],
+        "language": "en",
+        "rescued": false,
+        "summary": "Kasun and grandmother are in waist-deep water and need rescue.",
+        "confidence": 0.9,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "713b22c7fdd7426683c57e918a37cb821293283d4f96c5f33191d8d4dfa08c3f": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:08:05Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "RUMOUR",
+        "people_count": 0,
+        "vulnerable": [],
+        "needs": [],
+        "place_text": "Kegalle",
+        "place_level": "VILLAGE",
+        "house_ref": "",
+        "phones": [],
+        "names": [],
+        "language": "en",
+        "rescued": false,
+        "summary": "Unverified message claims government flood compensation is available at a URL, asking for bank login details to receive Rs 50,000.",
+        "confidence": 1.0,
+        "payee_accounts": [],
+        "urls": [
+          "kegalle-flood-relief.example"
+        ],
+        "claimed_office": "government",
+        "asks_credentials": [
+          "bank login"
+        ],
+        "claims_for_names": []
+      }
+    },
+    "f77ccba941f356d02a46de0409aa1d9e723282ad94289fbd73d4505989d41d02": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:08:13Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "SOS",
+        "people_count": 3,
+        "vulnerable": [
+          "pregnant"
+        ],
+        "needs": [
+          "rescue",
+          "shelter"
+        ],
+        "place_text": "Station Road Rambukkana",
+        "place_level": "ROAD",
+        "house_ref": "",
+        "phones": [
+          "07X5550120"
+        ],
+        "names": [
+          {
+            "display": "Chamari Wijesinghe",
+            "canonical": "chamari wijesinghe"
+          }
+        ],
+        "language": "en",
+        "rescued": false,
+        "summary": "Chamari Wijesinghe and 2 others, one pregnant, need rescue from rising water on Station Road, Rambukkana.",
+        "confidence": 0.9,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "98f9ad34fb40cf6a673fa70e8e5d3db46125fb7eaec8e9d9cd5a9d42500c8c95": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:08:23Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "SOS",
+        "people_count": 2,
+        "vulnerable": [
+          "medical"
+        ],
+        "needs": [
+          "medical",
+          "boat"
+        ],
+        "place_text": "31 Mosque Road Mawanella",
+        "place_level": "HOUSEHOLD",
+        "house_ref": "31 Mosque Road Mawanella",
+        "phones": [
+          "07X5550114"
+        ],
+        "names": [
+          {
+            "display": "Fathima Nazeer",
+            "canonical": "fathima nazeer"
+          }
+        ],
+        "language": "en",
+        "rescued": false,
+        "summary": "Fathima Nazeer and her father need an ambulance or boat at 31 Mosque Road Mawanella for urgent dialysis.",
+        "confidence": 0.9,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "b0cf78409a62c0ae8b50201315ae09d298e27cdbb06e0d423bdfddb2a31c4610": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:08:33Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "APPEAL",
+        "people_count": 0,
+        "vulnerable": [],
+        "needs": [],
+        "place_text": "Udagama Road",
+        "place_level": "ROAD",
+        "house_ref": "",
+        "phones": [
+          "07X5550950"
+        ],
+        "names": [],
+        "language": "en",
+        "rescued": false,
+        "summary": "Appeal for donations for families on Udagama Road, Mawanella.",
+        "confidence": 0.9,
+        "payee_accounts": [
+          "SYN-5512-0063"
+        ],
+        "urls": [],
+        "claimed_office": "Mawanella Divisional Relief Desk",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "6349049afedb29ee94e51fb75c666cc5d266ce399f633f3c67ad8e585b16bb96": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:08:44Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "SOS",
+        "people_count": 6,
+        "vulnerable": [
+          "elderly",
+          "medical"
+        ],
+        "needs": [
+          "medical",
+          "rescue"
+        ],
+        "place_text": "behind the Yatiyantota bus stand",
+        "place_level": "HOUSEHOLD",
+        "house_ref": "behind the Yatiyantota bus stand",
+        "phones": [
+          "07X5550125"
+        ],
+        "names": [
+          {
+            "display": "Hemantha Karunaratne",
+            "canonical": "hemantha karunaratne"
+          }
+        ],
+        "language": "en",
+        "rescued": false,
+        "summary": "Hemantha Karunaratne and 5 others, including an elderly man who fainted, need medical help and rescue behind the Yatiyantota bus stand.",
+        "confidence": 0.9,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "81d7c9b5912641504f966e16fcfe47a5baa8eb8ef374c8379c032d23975ce3fc": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:08:53Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "RUMOUR",
+        "people_count": 0,
+        "vulnerable": [],
+        "needs": [],
+        "place_text": "Kegalle town",
+        "place_level": "VILLAGE",
+        "house_ref": "",
+        "phones": [],
+        "names": [],
+        "language": "en",
+        "rescued": false,
+        "summary": "Rumour: A photo falsely claimed to be Kegalle town now is actually from 2016 floods.",
+        "confidence": 0.9,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "e002ed0cadf7576dc6db9e2a909300caca1a3b8dc621697385184e4bdd6e4b26": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:09:03Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "UPDATE",
+        "people_count": 6,
+        "vulnerable": [],
+        "needs": [],
+        "place_text": "house No 3 Pallegama Road, Kolonna",
+        "place_level": "HOUSEHOLD",
+        "house_ref": "house No 3 Pallegama Road",
+        "phones": [
+          "07X5550115"
+        ],
+        "names": [
+          {
+            "display": "Saman Pushpakumara",
+            "canonical": "saman pushpakumara"
+          }
+        ],
+        "language": "en",
+        "rescued": false,
+        "summary": "Saman Pushpakumara reports a widening crack behind house No 3 Pallegama Road, Kolonna, affecting 6 people.",
+        "confidence": 0.9,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "c4fcc714ac0b2808e60dc920dfa9cc33504b41409967954ef22974c6f5ded620": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:09:13Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "SOS",
+        "people_count": 2,
+        "vulnerable": [
+          "disability"
+        ],
+        "needs": [
+          "rescue"
+        ],
+        "place_text": "22 Temple Road Warakapola",
+        "place_level": "HOUSEHOLD",
+        "house_ref": "22 Temple Road Warakapola",
+        "phones": [
+          "07X5550111"
+        ],
+        "names": [
+          {
+            "display": "Nimal Wickramasinghe",
+            "canonical": "nimal wickramasinghe"
+          }
+        ],
+        "language": "en",
+        "rescued": false,
+        "summary": "Nimal Wickramasinghe and his disabled son need rescue from waist-deep water at 22 Temple Road Warakapola.",
+        "confidence": 1.0,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "2d988f4e2170de0908dedc6be012045df955001f2304cc6383da0243feee2bd5": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:09:24Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "APPEAL",
+        "people_count": 0,
+        "vulnerable": [],
+        "needs": [
+          "financial aid"
+        ],
+        "place_text": "Kegalle",
+        "place_level": "VILLAGE",
+        "house_ref": "",
+        "phones": [
+          "07X5550185"
+        ],
+        "names": [
+          {
+            "display": "Saman",
+            "canonical": "saman"
+          }
+        ],
+        "language": "en",
+        "rescued": false,
+        "summary": "Appeal for donations to help flood families in Kegalle, contact Saman.",
+        "confidence": 0.9,
+        "payee_accounts": [
+          "SYN-7781-0042"
+        ],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "1afe755211d77f0ebad563d40fa63b8781c74cf6cf7e8dc48d449b626fa74641": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:09:43Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "SOS",
+        "people_count": 1,
+        "vulnerable": [
+          "medical"
+        ],
+        "needs": [
+          "medical"
+        ],
+        "place_text": "5 Church Lane Galigamuwa",
+        "place_level": "HOUSEHOLD",
+        "house_ref": "5 Church Lane Galigamuwa",
+        "phones": [
+          "07X5550123"
+        ],
+        "names": [
+          {
+            "display": "Kamal Peiris",
+            "canonical": "kamal peiris"
+          }
+        ],
+        "language": "en",
+        "rescued": false,
+        "summary": "Kamal Peiris reports his mother is weak at 5 Church Lane Galigamuwa, needs medical help.",
+        "confidence": 1.0,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "4753e10a8f034e1d9b3c515fdd13b5118e4b3bccbf3a9f69c24fd8a64e309560": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:09:55Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "SOS",
+        "people_count": 2,
+        "vulnerable": [
+          "child",
+          "medical"
+        ],
+        "needs": [
+          "medical"
+        ],
+        "place_text": "Rambukkana",
+        "place_level": "VILLAGE",
+        "house_ref": "",
+        "phones": [
+          "07X5550107"
+        ],
+        "names": [
+          {
+            "display": "Kumari",
+            "canonical": "kumari"
+          }
+        ],
+        "language": "singlish",
+        "rescued": false,
+        "summary": "Kumari's daughter in Rambukkana has severe asthma and needs an inhaler.",
+        "confidence": 0.9,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "992801ed75a10beafaada8ff644364fbbf861ac29d316f77196371d7dc417eef": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:10:03Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "OFFER",
+        "people_count": 0,
+        "vulnerable": [],
+        "needs": [
+          "transport"
+        ],
+        "place_text": "Aranayake",
+        "place_level": "VILLAGE",
+        "house_ref": "",
+        "phones": [
+          "07X5550192"
+        ],
+        "names": [],
+        "language": "en",
+        "rescued": false,
+        "summary": "Tractor and trailer available at Aranayake for moving people.",
+        "confidence": 1.0,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "64bc264c221f8e4a29aef8a4b7eb522ee4382e0387811d74ba2b36afd52d02b8": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:10:11Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "SOS",
+        "people_count": 5,
+        "vulnerable": [],
+        "needs": [
+          "rescue",
+          "boat"
+        ],
+        "place_text": "40 Kandy Road Mawanella",
+        "place_level": "HOUSEHOLD",
+        "house_ref": "40 Kandy Road Mawanella",
+        "phones": [
+          "07X5550121"
+        ],
+        "names": [
+          {
+            "display": "Lalith Ekanayake",
+            "canonical": "lalith ekanayake"
+          }
+        ],
+        "language": "en",
+        "rescued": false,
+        "summary": "Lalith Ekanayake and 4 others need rescue from 40 Kandy Road Mawanella, water at roof level.",
+        "confidence": 0.9,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "c609517ca7a41ca5e2413d0052d2d313e6a228632b4a2fccdb5d5e6e299bc2a0": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:10:24Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "APPEAL",
+        "people_count": 0,
+        "vulnerable": [],
+        "needs": [],
+        "place_text": "Deraniyagala estate",
+        "place_level": "VILLAGE",
+        "house_ref": "",
+        "phones": [
+          "07X5550172"
+        ],
+        "names": [
+          {
+            "display": "Priya",
+            "canonical": "priya"
+          }
+        ],
+        "language": "en",
+        "rescued": false,
+        "summary": "Fundraising appeal for flood victims at Deraniyagala estate, via Priya's account.",
+        "confidence": 1.0,
+        "payee_accounts": [
+          "SYN-3307-0025"
+        ],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "982ad2a0ff8dac2f1482a5f2ef6c292ef6223e49c74fb9f9437e82c31c446b44": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:10:36Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "RUMOUR",
+        "people_count": 0,
+        "vulnerable": [],
+        "needs": [],
+        "place_text": "Kegalle",
+        "place_level": "VILLAGE",
+        "house_ref": "",
+        "phones": [],
+        "names": [],
+        "language": "en",
+        "rescued": false,
+        "summary": "Caller asks if Victoria dam gates opened and Kegalle will flood by midnight.",
+        "confidence": 1.0,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "8a7c9d96af40a0a144b1b2cf22d769447debfc2d141fa7feea8fc6b532db9b06": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:10:44Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "UPDATE",
+        "people_count": 3,
+        "vulnerable": [],
+        "needs": [],
+        "place_text": "Aranayake Samasarakanda junction",
+        "place_level": "HOUSEHOLD",
+        "house_ref": "Aranayake Samasarakanda junction",
+        "phones": [
+          "07X5550117"
+        ],
+        "names": [
+          {
+            "display": "Asanka Rathnayake",
+            "canonical": "asanka rathnayake"
+          }
+        ],
+        "language": "en",
+        "rescued": true,
+        "summary": "Asanka Rathnayake and 2 others are safe at a school after evacuating from Aranayake Samasarakanda junction.",
+        "confidence": 1.0,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "3cfc030dd46c26276f754dde8f3ba6603a59fb555eead4e46ecacb8868bf9c90": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:10:56Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "APPEAL",
+        "people_count": 0,
+        "vulnerable": [],
+        "needs": [
+          "boat"
+        ],
+        "place_text": "Kegalle",
+        "place_level": "VILLAGE",
+        "house_ref": "",
+        "phones": [
+          "07X5550186"
+        ],
+        "names": [],
+        "language": "en",
+        "rescued": false,
+        "summary": "Kegalle Relief Commissioner appeals for donations for rescue boats to account SYN-6610-0099. Call 07X-555-0186.",
+        "confidence": 0.9,
+        "payee_accounts": [
+          "SYN-6610-0099"
+        ],
+        "urls": [],
+        "claimed_office": "Kegalle Relief Commissioner",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "73a966efb0d0d1c377d7f22141cdaf4934642facd5187d7f891eb55b4abb0a61": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:11:10Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "SOS",
+        "people_count": 4,
+        "vulnerable": [],
+        "needs": [
+          "shelter"
+        ],
+        "place_text": "line house 7 Deraniyagala estate",
+        "place_level": "HOUSEHOLD",
+        "house_ref": "line house 7 Deraniyagala estate",
+        "phones": [
+          "07X5550145"
+        ],
+        "names": [
+          {
+            "display": "Selvi Krishnan",
+            "canonical": "selvi krishnan"
+          }
+        ],
+        "language": "en",
+        "rescued": false,
+        "summary": "Selvi Krishnan and family (4 people) need shelter due to a leaking roof at line house 7 Deraniyagala estate.",
+        "confidence": 1.0,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "1fd1afd0875a94df644a65326296a02af1f2fec718aca24b8e6a8bb529bd1167": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:11:28Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "SOS",
+        "people_count": 1,
+        "vulnerable": [
+          "child",
+          "medical"
+        ],
+        "needs": [
+          "medical",
+          "rescue"
+        ],
+        "place_text": "බලංගොඩ",
+        "place_level": "VILLAGE",
+        "house_ref": "",
+        "phones": [
+          "07X5550116"
+        ],
+        "names": [
+          {
+            "display": "රුවනි හේරත්",
+            "canonical": "ruwani herath"
+          }
+        ],
+        "language": "si",
+        "rescued": false,
+        "summary": "Ruwani Herath in Balangoda needs medical help for a child with fever.",
+        "confidence": 1.0,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "9d0ababc0b07b2ee4480ffed67b40a6d5921636dbfcb363c09568e011712dc25": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:11:42Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "SOS",
+        "people_count": 9,
+        "vulnerable": [],
+        "needs": [
+          "food",
+          "rescue"
+        ],
+        "place_text": "Kegalle Ward 4 flats",
+        "place_level": "HOUSEHOLD",
+        "house_ref": "Ward 4 flats",
+        "phones": [
+          "07X5550112"
+        ],
+        "names": [
+          {
+            "display": "Dilani Fernando",
+            "canonical": "dilani fernando"
+          }
+        ],
+        "language": "en",
+        "rescued": false,
+        "summary": "Dilani Fernando and 9 people need rescue and food at Kegalle Ward 4 flats.",
+        "confidence": 1.0,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "bb42fbfb7e0390ba10c62149ecd18e99d1ad1c170cb7c647a8666a90867d41af": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:11:55Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "APPEAL",
+        "people_count": 9,
+        "vulnerable": [],
+        "needs": [
+          "food",
+          "rescue"
+        ],
+        "place_text": "Ward 4 flats (Dilani Fernando)",
+        "place_level": "HOUSEHOLD",
+        "house_ref": "Ward 4 flats (Dilani Fernando)",
+        "phones": [
+          "07X5550910"
+        ],
+        "names": [
+          {
+            "display": "Dilani Fernando",
+            "canonical": "dilani fernando"
+          }
+        ],
+        "language": "en",
+        "rescued": false,
+        "summary": "9 people are stranded at Ward 4 flats (Dilani Fernando) in Kegalle and need food and rescue. Kegalle Volunteer Kitchen is sending food and appealing for donations.",
+        "confidence": 0.9,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "462bb0f96451476322729f6ed9127b143bda59a4ed0990bce6496bbeaf3e0b11": {
+      "kind": "appeal",
+      "recorded_at": "2026-10-17T10:12:06Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "reason": "No fraud detected. The \"Kegalle Volunteer Kitchen\" is a registered NGO.",
+        "confidence": 0.9,
+        "evidence_ids": [
+          "registry:Kegalle Volunteer Kitchen"
+        ]
+      }
+    },
+    "b9f62c9c107d51254fd29169580df05e80deeae7b39972f9e7a9fea1042f52a9": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:12:15Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "UPDATE",
+        "people_count": 0,
+        "vulnerable": [],
+        "needs": [],
+        "place_text": "6 Mill Road Rambukkana",
+        "place_level": "HOUSEHOLD",
+        "house_ref": "6 Mill Road Rambukkana",
+        "phones": [
+          "07X5550132"
+        ],
+        "names": [
+          {
+            "display": "Gayani Liyanage",
+            "canonical": "gayani liyanage"
+          }
+        ],
+        "language": "en",
+        "rescued": true,
+        "summary": "Gayani Liyanage at 6 Mill Road Rambukkana reports they are safe and water is receding.",
+        "confidence": 1.0,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "1c3f112b3093dfe22ec88450ea833a97f6a31d812c0904efc0b2522dd2a3f6ed": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:12:28Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "RUMOUR",
+        "people_count": 0,
+        "vulnerable": [],
+        "needs": [],
+        "place_text": "",
+        "place_level": "UNKNOWN",
+        "house_ref": "",
+        "phones": [],
+        "names": [],
+        "language": "en",
+        "rescued": false,
+        "summary": "Unverified claim asking for NIC photo and bank login for flood insurance compensation.",
+        "confidence": 1.0,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [
+          "NIC photo",
+          "bank login"
+        ],
+        "claims_for_names": []
+      }
+    },
+    "07c02a4c9abdc2b46ab169fd13489f38182b723c36d44bddad84bb095154c3f9": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:12:39Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "SOS",
+        "people_count": 5,
+        "vulnerable": [
+          "child"
+        ],
+        "needs": [
+          "rescue"
+        ],
+        "place_text": "line house 3 Deraniyagala",
+        "place_level": "HOUSEHOLD",
+        "house_ref": "line house 3 Deraniyagala",
+        "phones": [
+          "07X5550108"
+        ],
+        "names": [
+          {
+            "display": "Murugan Raja",
+            "canonical": "murugan raja"
+          }
+        ],
+        "language": "en",
+        "rescued": false,
+        "summary": "Murugan Raja and 4 others including a child need rescue from rising water at line house 3 Deraniyagala.",
+        "confidence": 1.0,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "2c4afeca366907570329f69ef4fc8c801706ea078c1f335036dc9bb1a7a9138d": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:12:50Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "OFFER",
+        "people_count": 0,
+        "vulnerable": [],
+        "needs": [
+          "medical"
+        ],
+        "place_text": "Rambukkana",
+        "place_level": "VILLAGE",
+        "house_ref": "",
+        "phones": [
+          "07X5550193"
+        ],
+        "names": [],
+        "language": "en",
+        "rescued": false,
+        "summary": "A doctors' team offers to visit Rambukkana in the morning.",
+        "confidence": 1.0,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "ac85ae716709599cbb264eaeb26712508c58f26680fc4e1c6121fb23f4ca4a5c": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:12:58Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "SOS",
+        "people_count": 1,
+        "vulnerable": [],
+        "needs": [
+          "rescue"
+        ],
+        "place_text": "Temple Road Warakapola",
+        "place_level": "ROAD",
+        "house_ref": "",
+        "phones": [
+          "07X5550131"
+        ],
+        "names": [
+          {
+            "display": "Upul Bandara",
+            "canonical": "upul bandara"
+          }
+        ],
+        "language": "en",
+        "rescued": false,
+        "summary": "Upul Bandara needs rescue from floodwater in Temple Road Warakapola.",
+        "confidence": 1.0,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "7c32b6f727ad846b957698bc5156c085cabd30df50fe1f5e17cc99c71aff8398": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:13:10Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "APPEAL",
+        "people_count": 0,
+        "vulnerable": [],
+        "needs": [
+          "food"
+        ],
+        "place_text": "Aranayake",
+        "place_level": "VILLAGE",
+        "house_ref": "",
+        "phones": [
+          "07X5550902"
+        ],
+        "names": [
+          {
+            "display": "Mohamed Rizwan",
+            "canonical": "mohamed rizwan"
+          }
+        ],
+        "language": "en",
+        "rescued": false,
+        "summary": "Aranayake Divisional Relief Desk is collecting dry rations for Mohamed Rizwan family and others in Aranayake.",
+        "confidence": 0.9,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "Aranayake Divisional Relief Desk",
+        "asks_credentials": [],
+        "claims_for_names": [
+          "mohamed rizwan"
+        ]
+      }
+    },
+    "3807be1e88f5f560b59a8679b6b1a005e29484fd81a8b9c35fda78f9e3aa0a7e": {
+      "kind": "appeal",
+      "recorded_at": "2026-10-17T10:13:25Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "reason": "No evidence of fraud. The 'Aranayake Divisional Relief Desk' is listed in the official registry, and the provided phone number is not associated with any other appeals.",
+        "confidence": 0.9,
+        "evidence_ids": [
+          "registry:Aranayake Divisional Relief Desk"
+        ]
+      }
+    },
+    "18e477110176c98804a1bd21245bcc7bf21417eb511cbc6270b078aae4036802": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:13:36Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "SOS",
+        "people_count": 4,
+        "vulnerable": [
+          "child",
+          "medical"
+        ],
+        "needs": [
+          "rescue",
+          "medical"
+        ],
+        "place_text": "Balangoda",
+        "place_level": "VILLAGE",
+        "house_ref": "",
+        "phones": [
+          "07X5550146"
+        ],
+        "names": [
+          {
+            "display": "Ruwani's husband",
+            "canonical": "ruwani s husband"
+          },
+          {
+            "display": "Ruwani Herath",
+            "canonical": "ruwani herath"
+          }
+        ],
+        "language": "en",
+        "rescued": false,
+        "summary": "Ruwani Herath's family of 4, including 2 children with one having a fever, needs help in Balangoda.",
+        "confidence": 0.9,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "d70c174d41428fde4c7b14e6754b8eeba86a34e5ab39bad5708c3030fea56189": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:13:57Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "RUMOUR",
+        "people_count": 0,
+        "vulnerable": [],
+        "needs": [],
+        "place_text": "Kotmale dam, Kegalle",
+        "place_level": "VILLAGE",
+        "house_ref": "",
+        "phones": [],
+        "names": [],
+        "language": "en",
+        "rescued": false,
+        "summary": "Rumour: Kotmale dam is broken and water will reach Kegalle in 30 minutes.",
+        "confidence": 1.0,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "4223e66806bab4efcb43e14f58382a2ce2f5c041f2d43b43ef7a81c8f2c7c995": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:14:09Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "APPEAL",
+        "people_count": 0,
+        "vulnerable": [],
+        "needs": [],
+        "place_text": "line house 3 Deraniyagala Estate",
+        "place_level": "HOUSEHOLD",
+        "house_ref": "line house 3 Deraniyagala Estate",
+        "phones": [
+          "07X5550903"
+        ],
+        "names": [
+          {
+            "display": "Murugan Raja",
+            "canonical": "murugan raja"
+          }
+        ],
+        "language": "en",
+        "rescued": false,
+        "summary": "Appeal for donations for Murugan Raja's family in line house 3, Deraniyagala Estate, through the Welfare Office.",
+        "confidence": 1.0,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "Deraniyagala Estate Welfare Office",
+        "asks_credentials": [],
+        "claims_for_names": [
+          "murugan raja"
+        ]
+      }
+    },
+    "e9effa3b5ef6c6900864a7932b61093ac15a4f11d4b7992e65e9bbd4947398b0": {
+      "kind": "appeal",
+      "recorded_at": "2026-10-17T10:14:25Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "reason": "The Deraniyagala Estate Welfare Office and its contact number 07X-555-0903 are legitimate and verified through official records. There is no indication of fraud.",
+        "confidence": 0.9,
+        "evidence_ids": [
+          "registry:Deraniyagala Estate Welfare Office"
+        ]
+      }
+    },
+    "4cbb31847746a2ffe38161da4a4f676407cf4da21306ffe1dd47ce7ea20459bc": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:14:34Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "SOS",
+        "people_count": 4,
+        "vulnerable": [],
+        "needs": [
+          "rescue"
+        ],
+        "place_text": "15 Hingula Road Mawanella",
+        "place_level": "HOUSEHOLD",
+        "house_ref": "15 Hingula Road Mawanella",
+        "phones": [
+          "07X5550133"
+        ],
+        "names": [
+          {
+            "display": "Indika Samarasinghe",
+            "canonical": "indika samarasinghe"
+          }
+        ],
+        "language": "en",
+        "rescued": false,
+        "summary": "Indika Samarasinghe and 4 people need rescue at 15 Hingula Road Mawanella.",
+        "confidence": 0.9,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "041b7797b09f1db1e249620582305d9b83f80fa8435aa4a26959599acd2fc658": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:14:47Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "APPEAL",
+        "people_count": 3,
+        "vulnerable": [],
+        "needs": [],
+        "place_text": "Galigamuwa",
+        "place_level": "VILLAGE",
+        "house_ref": "",
+        "phones": [
+          "07X5550173"
+        ],
+        "names": [
+          {
+            "display": "Ruwan",
+            "canonical": "ruwan"
+          }
+        ],
+        "language": "en",
+        "rescued": false,
+        "summary": "Appeal for financial help for a friend's family of 3 in Galigamuwa with a damaged house.",
+        "confidence": 0.9,
+        "payee_accounts": [
+          "SYN-8820-0031"
+        ],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "e983c4d4d8b6ec62a9eb7347b487fbe6c32a9a0d3dadc97600afc97927e4fe8e": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:15:09Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "UPDATE",
+        "people_count": 6,
+        "vulnerable": [],
+        "needs": [],
+        "place_text": "Kolonna: the temple",
+        "place_level": "HOUSEHOLD",
+        "house_ref": "the temple",
+        "phones": [
+          "07X5550115"
+        ],
+        "names": [
+          {
+            "display": "Saman Pushpakumara",
+            "canonical": "saman pushpakumara"
+          }
+        ],
+        "language": "en",
+        "rescued": true,
+        "summary": "Saman Pushpakumara and 6 people are safe at the temple in Kolonna.",
+        "confidence": 1.0,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "96a05bc0ffee06eeea5035d3d3ce94eecd37fcbb87d99ba2a46188ee7381a75c": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:15:28Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "APPEAL",
+        "people_count": 0,
+        "vulnerable": [],
+        "needs": [],
+        "place_text": "Pallegama Road, Kolonna",
+        "place_level": "ROAD",
+        "house_ref": "",
+        "phones": [
+          "07X5550911"
+        ],
+        "names": [
+          {
+            "display": "Saman Pushpakumara",
+            "canonical": "saman pushpakumara"
+          }
+        ],
+        "language": "en",
+        "rescued": false,
+        "summary": "Hill Country Relief Trust is appealing for donations to support the Saman Pushpakumara family from Pallegama Road, Kolonna.",
+        "confidence": 1.0,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": [
+          "saman pushpakumara"
+        ]
+      }
+    },
+    "ca59ecb6c82bbde2c4cd2542df69b592af6194aab2b82c336eb31997c884ae97": {
+      "kind": "appeal",
+      "recorded_at": "2026-10-17T10:15:45Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "reason": "Hill Country Relief Trust is a registered NGO, and its contact information matches official records. There are no other signals to suggest fraud.",
+        "confidence": 0.9,
+        "evidence_ids": [
+          "registry:Hill Country Relief Trust"
+        ]
+      }
+    },
+    "0bf3f9981ad9c0ff8fa21d3a20ab9aedf5d8e8148105032c5b3c701cc2f66b5c": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:15:58Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "SOS",
+        "people_count": 1,
+        "vulnerable": [],
+        "needs": [
+          "rescue"
+        ],
+        "place_text": "14 Hettimulla Road",
+        "place_level": "HOUSEHOLD",
+        "house_ref": "14 Hettimulla Road",
+        "phones": [
+          "07X5550102"
+        ],
+        "names": [
+          {
+            "display": "Nadeeka",
+            "canonical": "nadeeka"
+          },
+          {
+            "display": "Seelawathie Perera",
+            "canonical": "seelawathie perera"
+          }
+        ],
+        "language": "en",
+        "rescued": false,
+        "summary": "Nadeeka's mother Seelawathie Perera needs rescue at 14 Hettimulla Road.",
+        "confidence": 1.0,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "e66c772a032828ff4640e7236827548c31535a1052acc9df196ad76613a126fe": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:16:14Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "UPDATE",
+        "people_count": 1,
+        "vulnerable": [],
+        "needs": [],
+        "place_text": "14 Hettimulla Road",
+        "place_level": "HOUSEHOLD",
+        "house_ref": "14 Hettimulla Road",
+        "phones": [
+          "07X5550102"
+        ],
+        "names": [
+          {
+            "display": "Seelawathie Perera",
+            "canonical": "seelawathie perera"
+          },
+          {
+            "display": "Nadeeka",
+            "canonical": "nadeeka"
+          }
+        ],
+        "language": "en",
+        "rescued": true,
+        "summary": "Seelawathie Perera at 14 Hettimulla Road was rescued by a navy boat.",
+        "confidence": 0.9,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    },
+    "65827502ebe80e135dd25e7c8b129c7b0698a8d1e2373862c754a15a4ee00705": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:16:36Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "APPEAL",
+        "people_count": 0,
+        "vulnerable": [],
+        "needs": [
+          "shelter"
+        ],
+        "place_text": "14 Hettimulla Road",
+        "place_level": "HOUSEHOLD",
+        "house_ref": "14 Hettimulla Road",
+        "phones": [
+          "07X5550900"
+        ],
+        "names": [
+          {
+            "display": "Seelawathie Perera",
+            "canonical": "seelawathie perera"
+          }
+        ],
+        "language": "en",
+        "rescued": true,
+        "summary": "Appeal for donations for Seelawathie Perera family at 14 Hettimulla Road, Kegalle District, whose house is damaged after being rescued.",
+        "confidence": 1.0,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "Kegalle District Relief Unit",
+        "asks_credentials": [],
+        "claims_for_names": [
+          "seelawathie perera"
+        ]
+      }
+    },
+    "db297ff79d83fd2f15bfae136c6ba7b4b559fab6d40a14b5ff0e0a2de3430ca7": {
+      "kind": "appeal",
+      "recorded_at": "2026-10-17T10:16:50Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "reason": "The Kegalle District Relief Unit and the contact number 07X-555-0900 are officially registered. There is no evidence of fraud.",
+        "confidence": 0.9,
+        "evidence_ids": [
+          "registry:Kegalle District Relief Unit"
+        ]
+      }
+    },
+    "c6f1ab5a687020a4d02945e600ae3c539464e67703a5f083f956372f913d8374": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:17:06Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "APPEAL",
+        "people_count": 0,
+        "vulnerable": [],
+        "needs": [],
+        "place_text": "Kegalle, Hettimulla Road",
+        "place_level": "ROAD",
+        "house_ref": "",
+        "phones": [],
+        "names": [],
+        "language": "en",
+        "rescued": false,
+        "summary": "Kegalle Relief Commissioner asks families on Hettimulla Road to send NIC and bank OTP to receive Rs 30,000.",
+        "confidence": 0.9,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "Kegalle Relief Commissioner",
+        "asks_credentials": [
+          "NIC number",
+          "bank OTP"
+        ],
+        "claims_for_names": []
+      }
+    },
+    "1da19ca0ee5301f4d9771cbfe0fca816ddadb2cb71ea1382577afd3b048feb7f": {
+      "kind": "appeal",
+      "recorded_at": "2026-10-17T10:17:22Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "reason": "The message is a fraudulent attempt. The claimed office \"Kegalle Relief Commissioner\" is not in the official registry, indicating impersonation. Additionally, the message requests sensitive personal and banking information (NIC number and bank OTP), which is a common tactic used in phishing and fraud.",
+        "confidence": 0.9,
+        "evidence_ids": [
+          "office:Kegalle Relief Commissioner"
+        ]
+      }
+    },
+    "3696cbf2647338fccb4071c3f2e87d0ef2745c4142cfbc67f8d953142a820641": {
+      "kind": "intake",
+      "recorded_at": "2026-10-17T10:17:37Z",
+      "model": "gemini-2.5-flash",
+      "value": {
+        "kind": "UPDATE",
+        "people_count": 0,
+        "vulnerable": [],
+        "needs": [],
+        "place_text": "Warakapola",
+        "place_level": "VILLAGE",
+        "house_ref": "",
+        "phones": [
+          "07X5550122"
+        ],
+        "names": [
+          {
+            "display": "Thushara Jayawardena",
+            "canonical": "thushara jayawardena"
+          }
+        ],
+        "language": "singlish",
+        "rescued": true,
+        "summary": "Thushara Jayawardena reports water receding and they are safe in Warakapola.",
+        "confidence": 0.9,
+        "payee_accounts": [],
+        "urls": [],
+        "claimed_office": "",
+        "asks_credentials": [],
+        "claims_for_names": []
+      }
+    }
+  },
+  "note": "Real model outputs for synthetic demo inputs only."
+}

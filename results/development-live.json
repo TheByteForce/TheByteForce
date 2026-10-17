@@ -1,0 +1,187 @@
+{
+  "dataset": "storm_night.json",
+  "dataset_role": "development fixture",
+  "mode": "live",
+  "generated_at": "2026-10-17T10:17:48Z",
+  "messages": 94,
+  "rescue_messages": 64,
+  "incidents": 39,
+  "calls_saved": 25,
+  "correct_pairs": 38,
+  "predicted_pairs": 38,
+  "true_pairs": 44,
+  "merge_precision": 1.0,
+  "merge_recall": 0.8636363636363636,
+  "kind_accuracy": 0.925531914893617,
+  "appeal_accuracy": 0.0,
+  "appeal_labels": 0,
+  "median_latency_ms": 9066.033585500008,
+  "agent_calls": 189,
+  "tokens": 260406,
+  "cost_usd": 0.34803546,
+  "cost_available": true,
+  "interventions": 24,
+  "retries": 8,
+  "failed_messages": 0,
+  "languages": [
+    {
+      "language": "en",
+      "messages": 54,
+      "correct_pairs": 28,
+      "predicted_pairs": 28,
+      "true_pairs": 30,
+      "precision": 1.0,
+      "recall": 0.9333333333333333
+    },
+    {
+      "language": "si",
+      "messages": 2,
+      "correct_pairs": 1,
+      "predicted_pairs": 1,
+      "true_pairs": 1,
+      "precision": 1.0,
+      "recall": 1.0
+    },
+    {
+      "language": "singlish",
+      "messages": 5,
+      "correct_pairs": 1,
+      "predicted_pairs": 1,
+      "true_pairs": 1,
+      "precision": 1.0,
+      "recall": 1.0
+    },
+    {
+      "language": "ta",
+      "messages": 3,
+      "correct_pairs": 0,
+      "predicted_pairs": 0,
+      "true_pairs": 0,
+      "precision": 0.0,
+      "recall": 0.0
+    }
+  ],
+  "critical": [
+    {
+      "inc_id": "INC-023",
+      "rank": 1,
+      "flags": [
+        "elderly",
+        "medical"
+      ]
+    },
+    {
+      "inc_id": "INC-012",
+      "rank": 2,
+      "flags": [
+        "child",
+        "medical"
+      ]
+    },
+    {
+      "inc_id": "INC-039",
+      "rank": 3,
+      "flags": [
+        "child",
+        "medical"
+      ]
+    },
+    {
+      "inc_id": "INC-001",
+      "rank": 4,
+      "flags": [
+        "child",
+        "medical"
+      ]
+    },
+    {
+      "inc_id": "INC-011",
+      "rank": 5,
+      "flags": [
+        "elderly",
+        "medical"
+      ]
+    },
+    {
+      "inc_id": "INC-021",
+      "rank": 6,
+      "flags": [
+        "elderly",
+        "medical"
+      ]
+    },
+    {
+      "inc_id": "INC-002",
+      "rank": 7,
+      "flags": [
+        "elderly",
+        "disability",
+        "child"
+      ]
+    },
+    {
+      "inc_id": "INC-009",
+      "rank": 8,
+      "flags": [
+        "child"
+      ]
+    },
+    {
+      "inc_id": "INC-007",
+      "rank": 9,
+      "flags": [
+        "child"
+      ]
+    },
+    {
+      "inc_id": "INC-016",
+      "rank": 10,
+      "flags": [
+        "child"
+      ]
+    },
+    {
+      "inc_id": "INC-028",
+      "rank": 11,
+      "flags": [
+        "child"
+      ]
+    },
+    {
+      "inc_id": "INC-008",
+      "rank": 12,
+      "flags": [
+        "elderly"
+      ]
+    },
+    {
+      "inc_id": "INC-010",
+      "rank": 13,
+      "flags": [
+        "disability"
+      ]
+    },
+    {
+      "inc_id": "INC-027",
+      "rank": 14,
+      "flags": [
+        "elderly"
+      ]
+    },
+    {
+      "inc_id": "INC-033",
+      "rank": 15,
+      "flags": [
+        "elderly"
+      ]
+    }
+  ],
+  "notes": [
+    "Results apply only to this labelled dataset.",
+    "Language groups use provided labels where available, otherwise intake-detected language.",
+    "Critical ranks refer to flagged incidents, not a measured clinical accuracy.",
+    "Language pair scores use within-language pairs; mixed-language pairs are included in overall scores.",
+    "Development fixture results; do not describe them as independent held-out performance.",
+    "No expected appeal verdict labels supplied; appeal accuracy is unavailable."
+  ]
+}
