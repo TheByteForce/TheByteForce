@@ -2,6 +2,7 @@
 import from ekata.replay_cache { read_cached, record_cached }
 import from ekata.schema { Message, Incident, Candidate }
 import from ekata.ai.models { strong, last_model }
+import from ekata.memory { desk_precedents, pattern_for }
 
 glob resolver_model: any = strong;
 
@@ -14,7 +15,7 @@ sem MatchAssessment.same_household = "True only if the message refers to this ex
 sem MatchAssessment.confidence = "Confidence between 0 and 1; uncertainty must reduce the score.";
 sem MatchAssessment.reason = "Explain the exact shared identifiers or the reason this is a different household.";
 
-def assess_match(message: str, incident: str, evidence: list[str], feedback: str) -> MatchAssessment by resolver_model(temperature=0.0, incl_info={"policy": "Return same_household=false if the household is different. An exact phone or a canonical full name PLUS a household-level location is strong evidence. A shared surname or road alone is insufficient. Confidence is 0..1. Explain and respect the referee feedback."});
+def assess_match(message: str, incident: str, evidence: list[str], feedback: str) -> MatchAssessment by resolver_model(temperature=0.0, incl_info={"policy": "Return same_household=false if the household is different. An exact phone or a canonical full name PLUS a household-level location is strong evidence. A shared surname or road alone is insufficient. Confidence is 0..1. Explain and respect the referee feedback. A 'desk precedent' line in the evidence says what people decided tonight for similar merges: follow it unless the evidence is stronger, and say so in the reason."});
 sem assess_match = "Independently assess whether a new emergency message belongs to an existing household. A shared surname or road is never enough. Respect referee feedback. Return false for a new household.";
 
 walker Resolver {
@@ -61,6 +62,12 @@ walker Resolver {
             for e in [edge self.source ->:Candidate:-> here] {
                 evidence = evidence + e.reasons;
             }
+        }
+        # Learning from the desk: counts and ids of tonight's decisions on this
+        # kind of merge, never old message text. The referee still decides.
+        pattern = pattern_for(evidence);
+        if pattern != "" {
+            evidence = evidence + ["desk precedent (" + pattern + "): " + desk_precedents(pattern)];
         }
         result = assess_match(self.message_text, here.inc_id + ": " + here.summary + "; " + here.place, evidence, self.block_reason);
         self.score = max(0.0, min(1.0, result.confidence));

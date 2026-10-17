@@ -14,8 +14,8 @@
 Readers take a tick argument because the client caches reads for 60 s.
 """
 
-import from ekata.store { get_hub }
-import from ekata.alert_level { alert_board, AlertRow }
+import from ekata.store { get_hub, find_incident, log_decision }
+import from ekata.alert_level { alert_board, add_override, AlertRow }
 import from ekata.volunteer_centre { match_offers, OfferMatch }
 import from ekata.casework { AppealView, refresh_appeals, appeal_view }
 import from ekata.schema { Appeal, Holds }
@@ -24,6 +24,26 @@ import from ekata.ds_sheet { build_ds_sheet, ds_summary, DsSheet, DsCount }
 
 def:pub alert_levels(tick: int = 0) -> list[AlertRow] {
     return alert_board(get_hub());
+}
+
+# District portal: an admin sets one incident's alert level (1-5) with a reason.
+def:pub set_alert_override(inc_id: str, level: int, reason: str, desk: str) -> list[AlertRow] {
+    rows: list[AlertRow] = [];
+    with graph_writer() {
+        hub = get_hub();
+        inc = find_incident(hub, inc_id);
+        if inc is not None {
+            o = add_override(hub, inc_id, level, reason, desk);
+            log_decision(
+                hub, "admin", "alert_override",
+                f"{desk} set {inc_id} to Level {o.level}: {reason}", "APPLIED",
+                hub.storm_time, [inc], confidence=1.0, model="human", target_label=inc_id
+            );
+            commit();
+        }
+        rows = alert_board(hub);
+    }
+    return rows;
 }
 
 def:pub volunteer_offers(tick: int = 0) -> list[OfferMatch] {
