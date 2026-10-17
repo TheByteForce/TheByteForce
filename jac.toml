@@ -55,3 +55,6 @@ enabled = true
 
 [scale.gateway.logs]
 enabled = true
+
+[jachammer]
+project_id = "prj_98595578786c4fbe9609cc03b15a91e4"
