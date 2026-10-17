@@ -126,6 +126,7 @@ sem ReportDraft.claims_for_names = "For an APPEAL, the canonical lowercase names
 
 def llm_extract_report(message_text: str, channel: str) -> ReportDraft by intake_model(
     temperature=0.0,
+    incl_info={"field_rules": "HOUSEHOLD requires a house number or a named household landmark; a road or village alone is insufficient. Lowercase romanised given and family names must be canonical across Sinhala, Tamil, Singlish and English. Credentials are requests FROM THE READER; never confuse a caller giving their phone with an OTP request. Never invent facts. Vulnerability tags are elderly, child, medical, disability, pregnant. Distinguish an offer from a request and a rumour from an SOS."},
     max_output_retries=2,
     system_prompt="You triage emergency messages from a flood in Sri Lanka for a disaster duty desk. Messages arrive in English, Sinhala script, Tamil script or Singlish. Extract only what the text says; never invent a name, number, place or account. Leave a field empty or 0 when the text does not give it."
 );

@@ -75,15 +75,6 @@ test "intake prompt carries the sem notes" {
     intake_model = MockLLM(outputs=[scripted_report("07X 555 0101")]);
     extract_report(SOS_TEXT, "WEB");
     sent = str(intake_model.sent("messages"));
-    extra = "";
-    try {
-        extra = str(intake_model.sent("response_format"));
-    } except Exception as e {
-        extra = "ERR " + str(e);
-    }
-    with open("/tmp/intake_prompt.txt", "w") as f {
-        f.write(extra);
-    }
     assert "house number" in sent;
     assert "Lowercase romanised" in sent;
     assert "FROM THE READER" in sent;

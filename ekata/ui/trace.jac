@@ -12,7 +12,7 @@ def:pub TraceItem(
         <span className="w-10 shrink-0 font-mono text-xs text-muted-foreground">{f"#{r.seq}"}</span>
         <span className="w-14 shrink-0 font-mono tabular-nums text-muted-foreground">{r.storm_time}</span>
         <Chip
-            label={r.agent}
+            label={r.agent + (" / " + r.model if r.model != "" else "")}
             tone="border-border bg-secondary text-secondary-foreground uppercase tracking-wide"
         />
         <span aria-hidden="true">{"→"}</span>

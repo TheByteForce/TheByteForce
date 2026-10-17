@@ -1,7 +1,7 @@
 """Right column: the selected incident, its evidence, merge proposals and call log."""
 
 import from ekata.views { IncidentView }
-import from ekata.api { decide_merge, log_call }
+import from ekata.api { decide_merge, log_call, claim_incident, resolve_change }
 import from ...components.ui.button { Button }
 import from .atoms {
     Panel, MessageItem, StatusBadge, VulnerableBadge, RefereeBadge, Chip,
@@ -57,6 +57,15 @@ def:pub IncidentCard(
             err = "Could not log the call: " + str(ex);
         }
         saving = False;
+    }
+
+    async def claim(iid: str, release: bool) -> None {
+        try { onChanged(await claim_incident(iid, desk, release)); err = ""; }
+        except Exception as ex { err = str(ex); }
+    }
+    async def review(iid: str, field: str, accept: bool) -> None {
+        try { onChanged(await resolve_change(iid, field, desk, accept)); err = ""; }
+        except Exception as ex { err = str(ex); }
     }
 
     if inc is None {
@@ -204,6 +213,18 @@ def:pub IncidentCard(
             }}
         </ul>
 
+        <div className="mt-4 flex gap-2">
+            <Button disabled={inc.claimed_by != "" and inc.claimed_by != desk} onClick={lambda (e: MouseEvent) { claim(iid, False); }}>Claim before calling</Button>
+            {if inc.claimed_by == desk { <Button variant="outline" onClick={lambda (e: MouseEvent) { claim(iid, True); }}>Release</Button> }}
+        </div>
+        {for p in inc.pending {
+            <div key={p.field + p.msg_id} className="mt-3 rounded border border-amber-600 p-3">
+                <p className="font-semibold">{p.field + ": " + p.old_value + " → " + p.new_value}</p>
+                <p className="text-sm">Verify by phone before accepting a correction.</p>
+                <Button onClick={lambda (e: MouseEvent) { review(iid, p.field, True); }}>Accept after call</Button>
+                <Button variant="outline" onClick={lambda (e: MouseEvent) { review(iid, p.field, False); }}>Keep previous value</Button>
+            </div>
+        }}
         <h3 className="mt-4 text-base font-semibold">Log a call</h3>
         <form
             className="mt-1 rounded-lg border bg-muted/40 p-3"

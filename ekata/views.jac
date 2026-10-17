@@ -43,10 +43,18 @@ obj CallView {
     has note: str = "";
 }
 
+obj ChangeView {
+    has field: str;
+    has old_value: str;
+    has new_value: str;
+    has msg_id: str;
+}
+
 obj TraceRow {
     has seq: int;
     has agent: str;
     has action: str;
+    has model: str = "";
     has reason: str = "";
     has outcome: str = "";
     has storm_time: str = "";
@@ -56,6 +64,7 @@ obj TraceRow {
 
 obj IncidentView {
     has inc_id: str;
+    has pending: list[ChangeView] = [];
     has status: str = "NEW";
     has priority: float = 0.0;
     has headcount: int = 0;

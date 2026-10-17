@@ -7,7 +7,7 @@ every writer call is followed by a full re-fetch.
 import from "react" { useEffect }
 import from ekata.views { DemoState, ReplayStep, MsgView, QueueRow, TraceRow, IncidentView }
 import from ekata.api {
-    load_demo, demo_state, replay_next, call_queue, incident_detail, trace_since
+    load_demo, demo_state, replay_next, call_queue, incident_detail, trace_since, recent_messages
 }
 import from .topbar { TopBar }
 import from .inbox { Inbox }
@@ -86,9 +86,7 @@ def:pub Desk -> JsxElement {
     def apply_step(r: ReplayStep) -> None {
         step = r;
         add_message(r.message);
-        if len(r.queue) > 0 {
-            queue = r.queue;
-        }
+        queue = r.queue;
         if len(r.new_trace) > 0 {
             trace = merge_trace(trace, r.new_trace);
         }
@@ -100,6 +98,7 @@ def:pub Desk -> JsxElement {
         try {
             d = await demo_state(t);
             demo = d;
+            inbox = await recent_messages(t);
             q = await call_queue(t);
             queue = q;
             fresh = await trace_since(trace_cursor(trace));
