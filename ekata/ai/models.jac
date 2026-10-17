@@ -17,13 +17,13 @@ import from jaclang.byllm.telemetry { register_agent_callback }
 
 # ---------- Model pools ----------
 
-glob FAST_MODELS: list[str] = ["gemini/gemini-2.5-flash", "gemini/gemini-2.5-flash-lite"],
+glob FAST_MODELS: list[str] = ["gemini/gemini-2.5-flash", "gemini/gemini-3.1-flash-lite"],
      STRONG_MODELS: list[str] = ["gemini/gemini-2.5-pro", "gemini/gemini-2.5-flash"];
 
 glob fast = ModelPool(
          models=[
              Model(model_name="gemini/gemini-2.5-flash"),
-             Model(model_name="gemini/gemini-2.5-flash-lite")
+             Model(model_name="gemini/gemini-3.1-flash-lite")
          ],
          strategy="fallback",
          num_retries=1,
