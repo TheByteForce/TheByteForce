@@ -5,8 +5,8 @@ import from "@hugeicons/react" { HugeiconsIcon }
 import from "@hugeicons/core-free-icons" {
     UserGroupIcon, BoatIcon, TruckIcon, Restaurant01Icon, DropletIcon, Home01Icon, HealthIcon
 }
-import type from ekata.volunteer_centre { OfferMatch }
-import from ekata.coordination_api { volunteer_offers }
+import type from crisisconnect.volunteer_centre { OfferMatch }
+import from crisisconnect.coordination_api { volunteer_offers }
 import from ...components.ui.card { Card, CardHeader, CardTitle, CardDescription, CardContent }
 import from ...components.app.desk_state { use_desk }
 import from ...components.app.tags { Tag }

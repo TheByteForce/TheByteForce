@@ -2,11 +2,11 @@
 import argparse;
 import os;
 import json;
-import from ekata.evaluation { evaluate_fixture, report_dict }
+import from crisisconnect.evaluation { evaluate_fixture, report_dict }
 with entry:__main__ {
-    parser = argparse.ArgumentParser(description="Evaluate Ekata on synthetic raw messages plus separate labels");
-    parser.add_argument("messages", nargs="?", `default="ekata/fixtures/storm_night.json");
-    parser.add_argument("--labels", `default="ekata/fixtures/storm_night.labels.json");
+    parser = argparse.ArgumentParser(description="Evaluate CrisisConnect on synthetic raw messages plus separate labels");
+    parser.add_argument("messages", nargs="?", `default="crisisconnect/fixtures/storm_night.json");
+    parser.add_argument("--labels", `default="crisisconnect/fixtures/storm_night.labels.json");
     parser.add_argument("--mode", choices=["rules", "live", "cached"], `default="rules");
     parser.add_argument("--held-out", action="store_true", help="Only for a separately authored set unseen during implementation");
     parser.add_argument("--output", `default=".jac/evaluation/latest.json");

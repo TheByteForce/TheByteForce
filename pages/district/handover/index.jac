@@ -3,8 +3,8 @@
 import from "@jac/runtime" { Link }
 import from "@hugeicons/react" { HugeiconsIcon }
 import from "@hugeicons/core-free-icons" { File01Icon, ArrowRight01Icon }
-import type from ekata.ds_sheet { DsCount }
-import from ekata.coordination_api { ds_divisions }
+import type from crisisconnect.ds_sheet { DsCount }
+import from crisisconnect.coordination_api { ds_divisions }
 import from ....components.app.desk_state { use_desk }
 import from ....components.app.labels { plural }
 import from ....components.app.page_parts { PageHero, EmptyNote, LoadingRows, IconChip }

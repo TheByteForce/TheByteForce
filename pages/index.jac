@@ -3,8 +3,8 @@
 import from "@jac/runtime" { Link }
 import from "@hugeicons/react" { HugeiconsIcon }
 import from "@hugeicons/core-free-icons" { ArrowRight01Icon }
-import type from ekata.portal { DistrictOverview }
-import from ekata.portal_api { district_board }
+import type from crisisconnect.portal { DistrictOverview }
+import from crisisconnect.portal_api { district_board }
 import from ..components.ui.button { Button }
 import from ..components.app.desk_state { use_desk }
 import from ..components.app.page_parts { Capsule }

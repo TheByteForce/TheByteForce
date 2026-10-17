@@ -3,8 +3,8 @@
 import from "@jac/runtime" { Link, useParams }
 import from "@hugeicons/react" { HugeiconsIcon }
 import from "@hugeicons/core-free-icons" { PrinterIcon, CallIcon }
-import type from ekata.ds_sheet { DsSheet }
-import from ekata.coordination_api { ds_handover }
+import type from crisisconnect.ds_sheet { DsSheet }
+import from crisisconnect.coordination_api { ds_handover }
 import from ....components.ui.card { Card, CardHeader, CardTitle, CardDescription, CardContent }
 import from ....components.ui.button { Button }
 import from ....components.ui.table { Table, TableHeader, TableBody, TableRow, TableHead, TableCell }

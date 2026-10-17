@@ -1,7 +1,7 @@
 """Citizen: the situation map for your area (households are anonymised)."""
 
-import type from ekata.geo { MapLayers }
-import from ekata.geo_api { map_layers }
+import type from crisisconnect.geo { MapLayers }
+import from crisisconnect.geo_api { map_layers }
 import from ...components.ui.card { Card, CardHeader, CardTitle, CardDescription, CardContent }
 import from ...components.app.desk_state { use_desk }
 import from ...components.app.page_parts { PageHero }

@@ -2,8 +2,8 @@
 
 import from "@hugeicons/react" { HugeiconsIcon }
 import from "@hugeicons/core-free-icons" { Route01Icon }
-import type from ekata.geo { MapLayers, RoutePlan }
-import from ekata.geo_api { map_layers, group_route }
+import type from crisisconnect.geo { MapLayers, RoutePlan }
+import from crisisconnect.geo_api { map_layers, group_route }
 import from ...components.ui.card { Card, CardHeader, CardTitle, CardDescription, CardContent }
 import from ...components.ui.button { Button }
 import from ...components.ui.alert { Alert, AlertDescription }

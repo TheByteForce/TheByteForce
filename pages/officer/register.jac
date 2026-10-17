@@ -4,8 +4,8 @@ read beside tonight's messages; vulnerable households not heard from come first.
 import from "@jac/runtime" { Link }
 import from "@hugeicons/react" { HugeiconsIcon }
 import from "@hugeicons/core-free-icons" { UserGroupIcon, Call02Icon, Alert02Icon, Location01Icon }
-import type from ekata.gn_register { GnChoice, GnRegisterView, HouseholdRow }
-import from ekata.gn_register_api { gn_areas, gn_register, setup_gn_register, open_gn_register }
+import type from crisisconnect.gn_register { GnChoice, GnRegisterView, HouseholdRow }
+import from crisisconnect.gn_register_api { gn_areas, gn_register, setup_gn_register, open_gn_register }
 import from ...components.ui.card { Card, CardHeader, CardTitle, CardDescription, CardContent }
 import from ...components.ui.native_select { NativeSelectOption }
 import from ...components.app.desk_state { use_desk }

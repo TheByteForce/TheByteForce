@@ -1,8 +1,8 @@
 """Call queue: every open incident, most urgent first, each with its reason."""
 
 import from "@hugeicons/core-free-icons" { Call02Icon }
-import type from ekata.views { QueueRow }
-import from ekata.api { call_queue }
+import type from crisisconnect.views { QueueRow }
+import from crisisconnect.api { call_queue }
 import from ...components.app.desk_state { use_desk }
 import from ...components.app.items { QueueItem }
 import from ...components.app.labels { plural }

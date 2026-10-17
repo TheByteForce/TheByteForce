@@ -5,8 +5,8 @@ import from "@hugeicons/react" { HugeiconsIcon }
 import from "@hugeicons/core-free-icons" {
     Location01Icon, UserGroupIcon, Message01Icon, Clock01Icon, ArrowRight01Icon
 }
-import type from ekata.views { MsgView, QueueRow, TraceRow }
-import from ekata.api { trace_since }
+import type from crisisconnect.views { MsgView, QueueRow, TraceRow }
+import from crisisconnect.api { trace_since }
 import from .tags { Tag, KindTag, StatusTag, RefereeTag, VulnerableTag }
 import from .labels { people_label, place_label, plural, channel_label, pretty, agent_name }
 import from ...lib.utils { cn }

@@ -1,7 +1,7 @@
 """Agent activity: every decision the agents made and what the referee allowed."""
 
 import from "@hugeicons/core-free-icons" { Activity01Icon }
-import type from ekata.views { TraceRow }
+import type from crisisconnect.views { TraceRow }
 import from ...components.ui.card { Card, CardHeader, CardTitle, CardDescription, CardContent }
 import from ...components.ui.tabs { Tabs, TabsList, TabsTrigger }
 import from ...components.app.desk_state { use_desk }

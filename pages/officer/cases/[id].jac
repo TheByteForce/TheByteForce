@@ -9,12 +9,12 @@ import from "@hugeicons/core-free-icons" {
     ArrowLeft01Icon, Search01Icon, CheckmarkCircle01Icon, Cancel01Icon, Call02Icon,
     AiBrain01Icon, TruckIcon, Location01Icon
 }
-import type from ekata.views { IncidentView }
-import type from ekata.portal { DivisionView, RequestView }
-import type from ekata.ai.brief { CallBrief }
-import from ekata.api { incident_detail, decide_merge, log_call, claim_incident, resolve_change }
-import from ekata.case_api { call_brief, refresh_call_brief }
-import from ekata.portal_api { divisions, set_gn, resource_kinds, request_resource, incident_requests }
+import type from crisisconnect.views { IncidentView }
+import type from crisisconnect.portal { DivisionView, RequestView }
+import type from crisisconnect.ai.brief { CallBrief }
+import from crisisconnect.api { incident_detail, decide_merge, log_call, claim_incident, resolve_change }
+import from crisisconnect.case_api { call_brief, refresh_call_brief }
+import from crisisconnect.portal_api { divisions, set_gn, resource_kinds, request_resource, incident_requests }
 import from ....components.ui.card { Card, CardHeader, CardTitle, CardDescription, CardContent }
 import from ....components.ui.button { Button }
 import from ....components.ui.input { Input }

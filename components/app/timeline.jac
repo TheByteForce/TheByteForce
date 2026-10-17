@@ -1,5 +1,5 @@
-import type from ekata.timeline { HouseholdTimeline }
-import from ekata.portal_api { household_timeline }
+import type from crisisconnect.timeline { HouseholdTimeline }
+import from crisisconnect.portal_api { household_timeline }
 import from .desk_state { use_desk }
 
 def:pub HouseholdStory(incId: str) -> JsxElement {

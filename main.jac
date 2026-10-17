@@ -2,10 +2,10 @@
 file-based routes in pages/ (the shell is pages/layout.jac).
 
 Each person works in one portal: /citizen, /officer, /ngo or /district.
-The situation runs live: ekata.live_feed brings reports in as time passes.
+The situation runs live: crisisconnect.live_feed brings reports in as time passes.
 """
 
-import from ekata.api {
+import from crisisconnect.api {
     load_demo,
     demo_state,
     replay_next,
@@ -20,14 +20,14 @@ import from ekata.api {
     claim_incident,
     resolve_change
 }
-import from ekata.live_feed { situation_pulse }
-import from ekata.coordination_api {
+import from crisisconnect.live_feed { situation_pulse }
+import from crisisconnect.coordination_api {
     alert_levels, set_alert_override, volunteer_offers, appeal_verdicts, run_appeal_checks, ds_handover, ds_divisions
 }
-import from ekata.memory_api { agent_run, rule_stats, precedent_stats }
-import from ekata.scenario_api { scenario_reset, scenario_next, scenario_state }
-import from ekata.geo_api { map_layers, division_route, group_route, report_at, shelters_near }
-import from ekata.case_api {
+import from crisisconnect.memory_api { agent_run, rule_stats, precedent_stats }
+import from crisisconnect.scenario_api { scenario_reset, scenario_next, scenario_state }
+import from crisisconnect.geo_api { map_layers, division_route, group_route, report_at, shelters_near }
+import from crisisconnect.case_api {
     appeals,
     appeal_detail,
     decide_appeal,
@@ -38,9 +38,9 @@ import from ekata.case_api {
     explain_queue,
     published_appeals
 }
-import from ekata.evaluation_api { evaluation_results, model_usage }
-import from ekata.gn_register_api { gn_areas, gn_register, setup_gn_register, open_gn_register }
-import from ekata.portal_api {
+import from crisisconnect.evaluation_api { evaluation_results, model_usage }
+import from crisisconnect.gn_register_api { gn_areas, gn_register, setup_gn_register, open_gn_register }
+import from crisisconnect.portal_api {
     divisions,
     officer_queue,
     set_gn,

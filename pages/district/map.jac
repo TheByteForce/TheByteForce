@@ -1,8 +1,8 @@
 """District: the whole situation map and a rescue run for any division."""
 
 import from "@jac/runtime" { useNavigate }
-import type from ekata.geo { MapLayers, RoutePlan }
-import from ekata.geo_api { map_layers, division_route }
+import type from crisisconnect.geo { MapLayers, RoutePlan }
+import from crisisconnect.geo_api { map_layers, division_route }
 import from ...components.ui.card { Card, CardHeader, CardTitle, CardDescription, CardContent }
 import from ...components.ui.native_select { NativeSelectOption }
 import from ...components.ui.alert { Alert, AlertDescription }

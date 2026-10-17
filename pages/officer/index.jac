@@ -3,9 +3,9 @@
 import from "@jac/runtime" { Link }
 import from "@hugeicons/react" { HugeiconsIcon }
 import from "@hugeicons/core-free-icons" { Call02Icon, ArrowRight01Icon, Location01Icon, UserGroupIcon, Clock01Icon }
-import type from ekata.views { QueueRow }
-import type from ekata.portal { DivisionView }
-import from ekata.portal_api { officer_queue, divisions }
+import type from crisisconnect.views { QueueRow }
+import type from crisisconnect.portal { DivisionView }
+import from crisisconnect.portal_api { officer_queue, divisions }
 import from ...components.ui.card { Card, CardHeader, CardTitle, CardDescription, CardContent }
 import from ...components.ui.button { Button }
 import from ...components.app.desk_state { use_desk }

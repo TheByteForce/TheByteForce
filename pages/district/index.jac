@@ -5,8 +5,8 @@ import from "@hugeicons/react" { HugeiconsIcon }
 import from "@hugeicons/core-free-icons" {
     Message01Icon, Call02Icon, Alert02Icon, TruckIcon, UserGroupIcon, Clock01Icon
 }
-import type from ekata.portal { DistrictOverview, RequestView }
-import from ekata.portal_api { district_board, all_requests }
+import type from crisisconnect.portal { DistrictOverview, RequestView }
+import from crisisconnect.portal_api { district_board, all_requests }
 import from ...components.ui.card { Card, CardHeader, CardTitle, CardDescription, CardContent }
 import from ...components.ui.table { Table, TableHeader, TableBody, TableRow, TableHead, TableCell }
 import from ...components.app.desk_state { use_desk }

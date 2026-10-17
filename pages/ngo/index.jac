@@ -2,8 +2,8 @@
 
 import from "@hugeicons/react" { HugeiconsIcon }
 import from "@hugeicons/core-free-icons" { InboxIcon, CheckmarkCircle01Icon, Building03Icon, ArrowRight01Icon }
-import type from ekata.portal { RequestView, NgoView }
-import from ekata.portal_api { ngo_requests, ngos }
+import type from crisisconnect.portal { RequestView, NgoView }
+import from crisisconnect.portal_api { ngo_requests, ngos }
 import from ...components.ui.alert { Alert, AlertDescription }
 import from ...components.app.desk_state { use_desk }
 import from ...components.app.labels { plural }
