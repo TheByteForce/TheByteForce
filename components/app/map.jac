@@ -11,7 +11,7 @@ import from "react-leaflet" {
     useMap, useMapEvents
 }
 import from "leaflet" { divIcon }
-import type from ekata.geo { MapLayers, RoutePlan }
+import type from crisisconnect.geo { MapLayers, RoutePlan }
 import from ..ui.skeleton { Skeleton }
 import from ...lib.utils { cn }
 

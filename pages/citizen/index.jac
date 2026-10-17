@@ -3,10 +3,10 @@
 import from "@jac/runtime" { Link }
 import from "@hugeicons/react" { HugeiconsIcon }
 import from "@hugeicons/core-free-icons" { Location01Icon, SentIcon, Search01Icon, Home01Icon }
-import type from ekata.portal { CitizenStatus }
-import type from ekata.geo { MapLayers, NearbyPlace }
-import from ekata.portal_api { citizen_send }
-import from ekata.geo_api { map_layers, report_at, shelters_near }
+import type from crisisconnect.portal { CitizenStatus }
+import type from crisisconnect.geo { MapLayers, NearbyPlace }
+import from crisisconnect.portal_api { citizen_send }
+import from crisisconnect.geo_api { map_layers, report_at, shelters_near }
 import from ...components.ui.card { Card, CardHeader, CardTitle, CardDescription, CardContent }
 import from ...components.ui.button { Button }
 import from ...components.ui.textarea { Textarea }

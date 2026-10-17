@@ -2,8 +2,8 @@
 
 import from "@hugeicons/react" { HugeiconsIcon }
 import from "@hugeicons/core-free-icons" { InboxIcon, SentIcon }
-import type from ekata.views { MsgView }
-import from ekata.api { recent_messages, submit_message }
+import type from crisisconnect.views { MsgView }
+import from crisisconnect.api { recent_messages, submit_message }
 import from ...components.ui.card { Card, CardHeader, CardTitle, CardDescription, CardContent }
 import from ...components.ui.button { Button }
 import from ...components.ui.textarea { Textarea }

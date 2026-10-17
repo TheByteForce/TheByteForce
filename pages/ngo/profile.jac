@@ -1,8 +1,8 @@
 """Relief group: your registry entry."""
 
 import from "@hugeicons/core-free-icons" { Building03Icon }
-import type from ekata.portal { NgoView }
-import from ekata.portal_api { ngos }
+import type from crisisconnect.portal { NgoView }
+import from crisisconnect.portal_api { ngos }
 import from ...components.ui.card { Card, CardHeader, CardTitle, CardDescription, CardContent }
 import from ...components.app.desk_state { use_desk }
 import from ...components.app.tags { Tag }

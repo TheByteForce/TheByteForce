@@ -3,9 +3,9 @@ warning is published."""
 
 import from "@hugeicons/react" { HugeiconsIcon }
 import from "@hugeicons/core-free-icons" { Shield01Icon, AiBrain01Icon, CheckmarkCircle01Icon, SecurityCheckIcon, Megaphone01Icon }
-import type from ekata.casework { AppealView, RumourView }
-import from ekata.case_api { appeals, rumour_log, decide_appeal, investigate_appeal }
-import from ekata.coordination_api { run_appeal_checks }
+import type from crisisconnect.casework { AppealView, RumourView }
+import from crisisconnect.case_api { appeals, rumour_log, decide_appeal, investigate_appeal }
+import from crisisconnect.coordination_api { run_appeal_checks }
 import from ...components.ui.card { Card, CardHeader, CardTitle, CardDescription, CardContent }
 import from ...components.ui.button { Button }
 import from ...components.ui.tabs { Tabs, TabsList, TabsTrigger }

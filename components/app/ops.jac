@@ -7,10 +7,10 @@ below it.
 
 import from "react" { useEffect }
 import from .desk_state { use_desk }
-import type from ekata.views { DemoState }
-import type from ekata.scenario { ScenarioView }
-import from ekata.api { load_demo, demo_state, replay_next }
-import from ekata.scenario_api { scenario_reset, scenario_next, scenario_state }
+import type from crisisconnect.views { DemoState }
+import type from crisisconnect.scenario { ScenarioView }
+import from crisisconnect.api { load_demo, demo_state, replay_next }
+import from crisisconnect.scenario_api { scenario_reset, scenario_next, scenario_state }
 
 def:pub OpsPanel -> JsxElement {
     ctx: any = use_desk();

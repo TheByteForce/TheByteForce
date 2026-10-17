@@ -2,9 +2,9 @@
 
 import from "@jac/runtime" { Link }
 import from "@hugeicons/core-free-icons" { TruckIcon }
-import type from ekata.portal { RequestView }
-import type from ekata.views { QueueRow }
-import from ekata.portal_api { all_requests, officer_queue }
+import type from crisisconnect.portal { RequestView }
+import type from crisisconnect.views { QueueRow }
+import from crisisconnect.portal_api { all_requests, officer_queue }
 import from ...components.ui.card { Card, CardContent }
 import from ...components.app.desk_state { use_desk }
 import from ...components.app.tags { RequestTag, VulnerableTag }

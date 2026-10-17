@@ -6,8 +6,8 @@ import from ..components.app.ops { OpsPanel }
 import from "@jac/runtime" { Outlet, Link, useLocation }
 import from "@hugeicons/react" { HugeiconsIcon }
 import from "@hugeicons/core-free-icons" { Home01Icon, InformationCircleIcon, GridIcon }
-import type from ekata.portal { DivisionView, NgoView }
-import from ekata.portal_api { divisions, ngos }
+import type from crisisconnect.portal { DivisionView, NgoView }
+import from crisisconnect.portal_api { divisions, ngos }
 import from ..components.ui.sidebar {
     SidebarProvider, Sidebar, SidebarHeader, SidebarContent, SidebarGroup, SidebarGroupLabel,
     SidebarGroupContent, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarFooter,

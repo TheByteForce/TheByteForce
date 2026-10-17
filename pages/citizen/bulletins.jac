@@ -2,8 +2,8 @@
 
 import from "@hugeicons/react" { HugeiconsIcon }
 import from "@hugeicons/core-free-icons" { Megaphone01Icon }
-import type from ekata.portal { BulletinView }
-import from ekata.portal_api { bulletins }
+import type from crisisconnect.portal { BulletinView }
+import from crisisconnect.portal_api { bulletins }
 import from ...components.ui.card { Card, CardHeader, CardTitle, CardDescription, CardContent }
 import from ...components.app.desk_state { use_desk }
 import from ...components.app.page_parts { PageHero, EmptyNote, LoadingRows, IconChip }

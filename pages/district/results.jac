@@ -1,12 +1,12 @@
 """District: how well the system is doing, measured, plus what the agents learned."""
 
 import from "@hugeicons/core-free-icons" { ChartLineData01Icon, AiBrain01Icon, CallIcon, InboxIcon, GitMergeIcon }
-import type from ekata.views { Metrics }
-import type from ekata.evaluation { EvaluationReport }
-import type from ekata.memory { RuleStat, Precedent }
-import from ekata.api { metrics }
-import from ekata.evaluation_api { evaluation_results }
-import from ekata.memory_api { rule_stats, precedent_stats }
+import type from crisisconnect.views { Metrics }
+import type from crisisconnect.evaluation { EvaluationReport }
+import type from crisisconnect.memory { RuleStat, Precedent }
+import from crisisconnect.api { metrics }
+import from crisisconnect.evaluation_api { evaluation_results }
+import from crisisconnect.memory_api { rule_stats, precedent_stats }
 import from ...components.ui.card { Card, CardHeader, CardTitle, CardDescription, CardContent }
 import from ...components.ui.table { Table, TableHeader, TableBody, TableRow, TableHead, TableCell }
 import from ...components.app.desk_state { use_desk }

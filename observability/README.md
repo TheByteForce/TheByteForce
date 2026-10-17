@@ -31,7 +31,7 @@ mkdir -p .jac/observability-logs
 docker compose -p crisisconnect-observability -f observability/compose.yaml up -d
 # Put the existing local admin password in ADMIN_DEFAULT_PASSWORD in ignored .env.local.
 # Also set JAC_SERVE_AUTH_SECRET. These values are never committed.
-# EKATA_AI=off runs rules; real model calls require GEMINI_API_KEY and AI enabled.
+# CRISISCONNECT_AI=off runs rules; real model calls require GEMINI_API_KEY and AI enabled.
 bash observability/run-local.sh
 ```
 
@@ -75,8 +75,8 @@ adapter. Native LLM traces are bounded in-memory diagnostics and disappear on
 restart; the friend's persisted memory/ledger is retained independently.
 
 ```bash
-jac test ekata/instrumentation.jac ekata/ai/models.jac ekata/memory.jac
-jac check main.jac ekata/instrumentation.jac ekata/ai/models.jac
+jac test crisisconnect/instrumentation.jac crisisconnect/ai/models.jac crisisconnect/memory.jac
+jac check main.jac crisisconnect/instrumentation.jac crisisconnect/ai/models.jac
 jac run --faux
 ```
 

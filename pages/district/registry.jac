@@ -2,8 +2,8 @@
 
 import from "@hugeicons/react" { HugeiconsIcon }
 import from "@hugeicons/core-free-icons" { Megaphone01Icon, CheckmarkCircle01Icon, BookOpen01Icon }
-import type from ekata.portal { NgoView, BulletinView, DivisionView }
-import from ekata.portal_api { registry, bulletins, divisions, publish_bulletin }
+import type from crisisconnect.portal { NgoView, BulletinView, DivisionView }
+import from crisisconnect.portal_api { registry, bulletins, divisions, publish_bulletin }
 import from ...components.ui.card { Card, CardHeader, CardTitle, CardDescription, CardContent }
 import from ...components.ui.button { Button }
 import from ...components.ui.textarea { Textarea }

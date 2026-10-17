@@ -1,4 +1,4 @@
-# Ekata
+# CrisisConnect
 
 **One verified household record, from first SOS to relief and appeal checks.**
 
@@ -11,7 +11,7 @@ Built by TheByteForce during AI Hackathon 2026 at the University of Moratuwa. Al
 
 On a flood night, the same family appears in many messages: an SMS, a relative's WhatsApp, a hotline call. Volunteers phone every one of them to confirm the location, needs and headcount, so the most vulnerable people get buried under repeats. During the 2025 floods one volunteer platform alone took requests from more than 300,000 people. Fake relief appeals ride the same channels: one posing as a deputy minister collected about Rs 600,000, and a false dam-breach rumour tied up the emergency hotline with hundreds of calls.
 
-**Ekata merges duplicate pleas into one verified household record, ranks who to call next (most vulnerable first, with a three-question call brief), routes relief to a registered group, and checks donation appeals against the households an officer verified by phone.** Unverified is never treated as fraud.
+**CrisisConnect merges duplicate pleas into one verified household record, ranks who to call next (most vulnerable first, with a three-question call brief), routes relief to a registered group, and checks donation appeals against the households an officer verified by phone.** Unverified is never treated as fraud.
 
 Who it's for: Grama Niladhari and divisional desk officers making the calls, registered relief groups, district coordinators, and families in the flood, who can track their own request.
 
@@ -25,9 +25,9 @@ export GEMINI_API_KEY="your-local-key"
 jac run --dev
 ```
 
-For a deterministic demonstration use `export EKATA_AI=off` before starting. For model-backed operation use `EKATA_AI=on`. Never commit keys or `.env` files.
+For a deterministic demonstration use `export CRISISCONNECT_AI=off` before starting. For model-backed operation use `CRISISCONNECT_AI=on`. Never commit keys or `.env` files.
 
-The integrated interface is branded CrisisConnect; Ekata is the project and shared household engine. Open the local address printed by Jac:
+Open the local address printed by Jac:
 
 - `/citizen`: send an SOS, track its reference, read bulletins and check appeals.
 - `/officer`: select a division, verify households by phone and request relief.
@@ -69,13 +69,13 @@ flowchart LR
     Household --> DecisionTimeline
 ```
 
-Key modules: `coordinator`, `blocking`, `referee`, `portal`, `casework`, `timeline`, `scenario`, `memory`, `geo`, and `evaluation` under `ekata/`.
+Key modules: `coordinator`, `blocking`, `referee`, `portal`, `casework`, `timeline`, `scenario`, `memory`, `geo`, and `evaluation` under `crisisconnect/`.
 
 ## Validation and evaluation
 
 ```bash
 jac check .
-jac test ekata
+jac test crisisconnect
 jac run --faux
 jac run --no-serve --no-takeover tools/evaluate.jac --mode rules
 ```
@@ -92,7 +92,7 @@ Evaluation reads raw messages first and opens the separate truth labels only aft
 - Real deployment requires access controls, verified relief registries, operational data feeds and field validation.
 - Fixtures and seeded bulletins use invented issuers. Referee rule R12 has a test that fails if a real agency's name appears in any fixture or seeded bulletin.
 - Sinhala and Tamil messages in the fixture need a native speaker's check; warning drafts in those languages stay marked "needs native-speaker check" (R11) until one approves them.
-- Data minimisation: Ekata keeps only what a call needs (names, phones, place, headcount, needs) and nothing from appeals beyond the evidence cited. A production version would mask resolved households after the emergency.
+- Data minimisation: CrisisConnect keeps only what a call needs (names, phones, place, headcount, needs) and nothing from appeals beyond the evidence cited. A production version would mask resolved households after the emergency.
 
 ## What's next
 

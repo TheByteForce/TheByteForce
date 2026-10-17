@@ -2,8 +2,8 @@
 
 import from "@jac/runtime" { Link }
 import from "@hugeicons/core-free-icons" { Alert02Icon }
-import type from ekata.alert_level { AlertRow }
-import from ekata.coordination_api { alert_levels, set_alert_override }
+import type from crisisconnect.alert_level { AlertRow }
+import from crisisconnect.coordination_api { alert_levels, set_alert_override }
 import from ...components.ui.card { Card, CardHeader, CardTitle, CardDescription, CardContent }
 import from ...components.ui.table { Table, TableHeader, TableBody, TableRow, TableHead, TableCell }
 import from ...components.ui.button { Button }

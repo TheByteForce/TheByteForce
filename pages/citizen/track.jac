@@ -3,8 +3,8 @@
 import from "@jac/runtime" { useLocation }
 import from "@hugeicons/react" { HugeiconsIcon }
 import from "@hugeicons/core-free-icons" { Search01Icon, CheckmarkCircle01Icon }
-import type from ekata.portal { CitizenStatus }
-import from ekata.portal_api { track_request }
+import type from crisisconnect.portal { CitizenStatus }
+import from crisisconnect.portal_api { track_request }
 import from ...components.ui.card { Card, CardHeader, CardTitle, CardDescription, CardContent }
 import from ...components.ui.button { Button }
 import from ...components.ui.input { Input }

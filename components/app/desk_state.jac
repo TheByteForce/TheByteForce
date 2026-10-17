@@ -10,8 +10,8 @@ few seconds otherwise.
 """
 
 import from "react" { createContext, useContext, useEffect }
-import type from ekata.live_feed { LiveState }
-import from ekata.live_feed { situation_pulse }
+import type from crisisconnect.live_feed { LiveState }
+import from crisisconnect.live_feed { situation_pulse }
 
 glob DeskCtx: any = createContext(None);
 

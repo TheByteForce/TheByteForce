@@ -3,8 +3,8 @@ Co-located component (returns JsxElement), not a route."""
 
 import from "@hugeicons/react" { HugeiconsIcon }
 import from "@hugeicons/core-free-icons" { CheckmarkCircle01Icon, Cancel01Icon, DeliveryTruck01Icon, PackageDeliveredIcon }
-import type from ekata.portal { RequestView }
-import from ekata.portal_api { respond_request }
+import type from crisisconnect.portal { RequestView }
+import from crisisconnect.portal_api { respond_request }
 import from ...components.ui.card { Card, CardHeader, CardTitle, CardDescription, CardContent }
 import from ...components.ui.button { Button }
 import from ...components.app.tags { RequestTag, VulnerableTag }
