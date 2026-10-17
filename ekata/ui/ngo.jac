@@ -1,15 +1,14 @@
 """Relief group portal: a registered group's coordinator, on a laptop.
 
-Pick the group once, then answer the requests the matcher sent to it:
+Pick the group in the sidebar, then answer the requests the matcher sent to it:
 accept or decline, then mark on the way and delivered.
 """
 
 import from "react" { useEffect }
 import from ekata.portal_api { ngos, ngo_requests, respond_request }
 import type from ekata.portal { NgoView, RequestView }
-import from .atoms {
-    PortalHeader, Panel, Empty, RequestBadge, VulnerableBadge, people_label
-}
+import from .atoms { Empty, RequestBadge, VulnerableBadge, people_label, pretty }
+import from .shell { AppShell, WorkspaceSelect, Surface }
 
 glob OFFICE_KEY: str = "ekata.ngo.office";
 
@@ -40,7 +39,7 @@ def:pub ActionButton(
     cls = (
         "min-h-10 rounded-lg border border-border bg-card px-4 text-[15px] font-semibold text-foreground hover:bg-muted focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
         if quiet
-        else "min-h-10 rounded-lg bg-primary px-4 text-[15px] font-semibold text-primary-foreground hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+        else "min-h-10 rounded-lg bg-[#43204F] px-4 text-[15px] font-semibold text-white hover:bg-[#351940] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
     );
     <button
         type="button"
@@ -52,83 +51,27 @@ def:pub ActionButton(
     </button>
 }
 
-# ---------- First visit: choose your group ----------
-
-def:pub GroupPicker(onPick: Callable[[str], None]) -> JsxElement {
-    has groups: list[NgoView] = [];
-    has loaded: bool = False;
-    has err: str = "";
-
-    async can with entry {
-        try {
-            groups = await ngos(int(Date.now()));
-        } except Exception as ex {
-            err = "Could not load the list of groups. Refresh the page to try again.";
-        }
-        loaded = True;
-    }
-
-    <main className="mx-auto max-w-[900px] px-6 py-6">
-        <h1 className="text-[21px] font-semibold">Which relief group are you?</h1>
-        <p className="mt-1 text-[15px] text-muted-foreground">
-            Choose once. This browser will remember it.
-        </p>
-        {if err != "" {
-            <p className="mt-3 text-[15px] text-blocked" role="alert">{err}</p>
-        }}
-        {if loaded and len(groups) == 0 and err == "" {
-            <div className="mt-4">
-                <Empty
-                    title="No relief groups are registered yet"
-                    hint="Load the demo data, then refresh."
-                />
-            </div>
-        }}
-        <div className="mt-4 grid gap-3 md:grid-cols-2">
-            {for g in groups {
-                <article key={g.office} className="rounded-lg border border-border bg-card p-4">
-                    <p className="text-[17px] font-semibold">{g.office}</p>
-                    <p className="mt-1 text-[15px]">
-                        {"Areas: "}{", ".join(g.areas) if len(g.areas) > 0 else "not listed"}
-                    </p>
-                    <p className="text-[15px]">
-                        {"Offers: "}{", ".join(g.offers) if len(g.offers) > 0 else "not listed"}
-                    </p>
-                    <div className="mt-3">
-                        <ActionButton
-                            label={"Use " + g.office}
-                            onPress={lambda { onPick(g.office); }}
-                        />
-                    </div>
-                </article>
-            }}
-        </div>
-    </main>
-}
-
 # ---------- One request card ----------
 
 def:pub RequestCard(r: RequestView, office: str, busy: bool, onAct: Callable[[str, str], None]) -> JsxElement {
     mine = r.ngo == office;
     passed = (office in r.declined_by) and not mine;
+    fresh = r.status == "REQUESTED" and not passed;
     <article
         className={
-            "rounded-lg border p-4 "
-            + (
-                "border-border bg-muted"
-                if passed
-                else ("border-alert/40 bg-alert-soft" if r.status == "REQUESTED" else "border-border bg-card")
-            )
+            "rounded-xl border border-border p-5 "
+            + ("bg-muted " if passed else "bg-card ")
+            + ("border-l-4 border-l-alert" if fresh else "")
         }
     >
         {if passed {
             <p className="text-[15px] text-muted-foreground">
-                {r.need}{" at "}{r.place}{". You declined; now with "}{r.ngo if r.ngo != "" else "another group"}{"."}
+                {pretty(r.need)}{" at "}{r.place}{". You declined; now with "}{r.ngo if r.ngo != "" else "another group"}{"."}
             </p>
         } else {
             <div>
                 <div className="flex flex-wrap items-start justify-between gap-2">
-                    <p className="text-[21px] font-semibold leading-tight">{r.need}</p>
+                    <p className="text-[20px] font-semibold leading-tight">{pretty(r.need)}</p>
                     <RequestBadge status={r.status}/>
                 </div>
                 <p className="mt-1 text-[15px]">
@@ -148,17 +91,19 @@ def:pub RequestCard(r: RequestView, office: str, busy: bool, onAct: Callable[[st
                     </p>
                 }}
                 {if r.reason != "" {
-                    <p className="mt-2 text-[15px]">
-                        <span className="font-semibold">{"Why you: "}</span>{r.reason}
+                    <p className="mt-2 text-[14px] text-muted-foreground">
+                        {"Why Ekata sent this to you: "}{r.reason}
                     </p>
                 }}
-                <div className="mt-3 flex flex-wrap gap-2">
+                <div className="mt-4 flex flex-wrap gap-2">
                     {if r.status == "REQUESTED" {
                         <ActionButton
                             label="Accept"
                             busy={busy}
                             onPress={lambda { onAct(r.req_id, "accept"); }}
                         />
+                    }}
+                    {if r.status == "REQUESTED" {
                         <ActionButton
                             label="Can't help"
                             busy={busy}
@@ -186,26 +131,23 @@ def:pub RequestCard(r: RequestView, office: str, busy: bool, onAct: Callable[[st
     </article>
 }
 
-# ---------- Inbox for one chosen group ----------
+# ---------- The page ----------
 
-def:pub Inbox(office: str) -> JsxElement {
+def:pub NgoPortal -> JsxElement {
+    has office: str = "";
+    has page: str = "requests";
+    has groups: list[NgoView] = [];
     has reqs: list[RequestView] = [];
-    has me: NgoView | None = None;
     has loaded: bool = False;
     has busy: bool = False;
     has err: str = "";
 
     async def refresh -> None {
         try {
-            reqs = await ngo_requests(office, int(Date.now()));
             groups = await ngos(int(Date.now()));
-            found: NgoView | None = None;
-            for g in groups {
-                if g.office == office {
-                    found = g;
-                }
+            if office != "" {
+                reqs = await ngo_requests(office, int(Date.now()));
             }
-            me = found;
             err = "";
         } except Exception as ex {
             err = "Could not refresh the list. Trying again shortly.";
@@ -225,7 +167,12 @@ def:pub Inbox(office: str) -> JsxElement {
         busy = False;
     }
 
+    can with entry {
+        office = load_office();
+    }
+
     async can with [office] entry {
+        reqs = [];
         await refresh();
     }
 
@@ -237,19 +184,80 @@ def:pub Inbox(office: str) -> JsxElement {
         [office]
     );
 
-    <main className="mx-auto grid max-w-[1100px] gap-4 px-6 py-4 lg:grid-cols-[1fr_320px]">
-        <Panel title="Requests for you" note={str(len(reqs)) + " in your list"}>
-            {if err != "" {
-                <p className="mb-3 text-[15px] text-blocked" role="alert">{err}</p>
-            }}
-            {if loaded and len(reqs) == 0 {
-                <Empty
-                    title="No requests for your group right now"
-                    hint="New ones appear here when a division officer asks for help you can give."
-                />
-            }}
+    def pick(name: str) -> None {
+        save_office(name);
+        office = name;
+    }
+
+    me: NgoView | None = None;
+    for g in groups {
+        if g.office == office {
+            me = g;
+        }
+    }
+    fresh_reqs = [r for r in reqs if r.status == "REQUESTED" and r.ngo == office];
+    done_reqs = [
+        r for r in reqs
+        if (r.ngo == office and r.status != "REQUESTED")
+        or ((office in r.declined_by) and r.ngo != office)
+    ];
+    fresh_reqs = fresh_reqs[::-1];
+    done_reqs = done_reqs[::-1];
+    nav = [
+        ["requests", "Requests for you", "inbox"],
+        ["done", "Accepted and delivered", "truck"],
+        ["profile", "Your group", "org"]
+    ];
+    title = "Requests for you";
+    subtitle = str(len(fresh_reqs)) + " waiting for an answer";
+    if page == "done" {
+        title = "Accepted and delivered";
+        subtitle = "Requests you took on, and the ones you passed to another group.";
+    }
+    if page == "profile" {
+        title = "Your group";
+        subtitle = "How Ekata sees your group when it picks who to ask.";
+    }
+    if office == "" {
+        subtitle = "Choose your group in the sidebar to see its requests.";
+    }
+
+    <AppShell
+        tone="ngo"
+        tagline="Relief group desk"
+        nav={nav}
+        active={page}
+        onNav={lambda (k: str) { page = k; }}
+        title={title}
+        subtitle={subtitle}
+        workspaceLabel="Your group"
+        workspace={
+            <WorkspaceSelect
+                value={office}
+                options={[g.office for g in groups]}
+                onPick={pick}
+                placeholder="Choose your group"
+            />
+        }
+    >
+        {if err != "" {
+            <p className="mb-3 text-[15px] text-blocked" role="alert">{err}</p>
+        }}
+        {if office == "" {
+            <Empty
+                title="No group chosen yet"
+                hint="Pick your relief group from the sidebar. This browser will remember it."
+            />
+        }}
+        {if office != "" and page == "requests" {
             <div className="space-y-3">
-                {for r in reqs {
+                {if loaded and len(fresh_reqs) == 0 {
+                    <Empty
+                        title="No requests waiting for you"
+                        hint="New ones appear here when a division officer asks for help you can give."
+                    />
+                }}
+                {for r in fresh_reqs {
                     <RequestCard
                         key={r.req_id}
                         r={r}
@@ -259,74 +267,51 @@ def:pub Inbox(office: str) -> JsxElement {
                     />
                 }}
             </div>
-        </Panel>
-        <Panel title="Your group">
-            {if me is not None {
-                <div className="space-y-3 text-[15px]">
-                    <div>
-                        <p className="text-[13px] text-muted-foreground">Areas served</p>
-                        <p>{", ".join(me.areas) if len(me.areas) > 0 else "Not listed"}</p>
-                    </div>
-                    <div>
-                        <p className="text-[13px] text-muted-foreground">What you offer</p>
-                        <p>{", ".join(me.offers) if len(me.offers) > 0 else "Not listed"}</p>
-                    </div>
-                    <div>
-                        <p className="text-[13px] text-muted-foreground">Open requests</p>
-                        <p className="text-[28px] font-bold leading-tight">{me.open_requests}</p>
-                    </div>
-                    {if me.contact != "" {
+        }}
+        {if office != "" and page == "done" {
+            <div className="space-y-3">
+                {if loaded and len(done_reqs) == 0 {
+                    <Empty
+                        title="Nothing accepted yet"
+                        hint="Requests you accept show up here until they are delivered."
+                    />
+                }}
+                {for r in done_reqs {
+                    <RequestCard
+                        key={r.req_id}
+                        r={r}
+                        office={office}
+                        busy={busy}
+                        onAct={act}
+                    />
+                }}
+            </div>
+        }}
+        {if office != "" and page == "profile" {
+            <Surface title={office}>
+                {if me is not None {
+                    <div className="grid gap-5 text-[15px] sm:grid-cols-2">
+                        <div>
+                            <p className="text-[13px] text-muted-foreground">Areas served</p>
+                            <p>{", ".join(me.areas) if len(me.areas) > 0 else "Not listed"}</p>
+                        </div>
+                        <div>
+                            <p className="text-[13px] text-muted-foreground">What you offer</p>
+                            <p>{", ".join(me.offers) if len(me.offers) > 0 else "Not listed"}</p>
+                        </div>
                         <div>
                             <p className="text-[13px] text-muted-foreground">Contact</p>
-                            <p>{me.contact}</p>
+                            <p>{me.contact if me.contact != "" else "Not listed"}</p>
                         </div>
-                    }}
-                </div>
-            } else {
-                <p className="text-[15px] text-muted-foreground">Loading your group.</p>
-            }}
-        </Panel>
-    </main>
-}
-
-# ---------- The page ----------
-
-def:pub NgoPortal -> JsxElement {
-    has office: str = "";
-    has ready: bool = False;
-
-    can with entry {
-        office = load_office();
-        ready = True;
-    }
-
-    def pick(name: str) -> None {
-        save_office(name);
-        office = name;
-    }
-
-    def forget -> None {
-        save_office("");
-        office = "";
-    }
-
-    <div className="min-h-screen bg-background text-foreground">
-        <PortalHeader portal="Relief group" who={office}>
-            {if office != "" {
-                <button
-                    type="button"
-                    className="min-h-10 rounded-lg px-3 text-[15px] text-primary underline hover:bg-muted focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
-                    onClick={lambda (e: MouseEvent) { forget(); }}
-                >
-                    Change group
-                </button>
-            }}
-        </PortalHeader>
-        {if ready and office == "" {
-            <GroupPicker onPick={pick}/>
+                        <div>
+                            <p className="text-[13px] text-muted-foreground">Open requests</p>
+                            <p className="text-[28px] font-semibold leading-tight tabular-nums">{me.open_requests}</p>
+                        </div>
+                    </div>
+                } else {
+                    <p className="text-[15px] text-muted-foreground">Loading your group.</p>
+                }}
+            </Surface>
         }}
-        {if office != "" {
-            <Inbox office={office}/>
-        }}
-    </div>
+    </AppShell>
 }
