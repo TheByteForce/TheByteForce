@@ -39,6 +39,7 @@ import from ekata.case_api {
     published_appeals
 }
 import from ekata.evaluation_api { evaluation_results, model_usage }
+import from ekata.gn_register_api { gn_areas, gn_register, setup_gn_register, open_gn_register }
 import from ekata.portal_api {
     divisions,
     officer_queue,
