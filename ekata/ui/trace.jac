@@ -3,36 +3,6 @@
 import from ekata.views { TraceRow }
 import from .atoms { Chip, RefereeBadge, pretty }
 
-def seq_of(r: TraceRow) -> int {
-    return r.seq;
-}
-
-def merge_trace(existing: list[TraceRow], incoming: list[TraceRow]) -> list[TraceRow] {
-    seen: list[int] = [];
-    out: list[TraceRow] = [];
-    for r in incoming + existing {
-        if r.seq not in seen {
-            seen = seen + [r.seq];
-            out = out + [r];
-        }
-    }
-    ordered = sorted(out, key=seq_of, reverse=True);
-    return ordered[:300];
-}
-
-def trace_cursor(rows: list[TraceRow]) -> int {
-    if len(rows) == 0 {
-        return 0;
-    }
-    top: int = 0;
-    for r in rows {
-        if r.seq > top {
-            top = r.seq;
-        }
-    }
-    return top;
-}
-
 def:pub TraceItem(
     r: TraceRow,
     knownIds: list[str],

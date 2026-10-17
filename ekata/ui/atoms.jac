@@ -9,14 +9,14 @@ import from ...components.ui.card { Card, CardHeader, CardTitle, CardContent }
 
 # ---------- Label helpers ----------
 
-def pretty(s: str) -> str {
+def:pub pretty(s: str) -> str {
     if s == "" {
         return "";
     }
     return " ".join(s.split("_"));
 }
 
-def people_label(n: int) -> str {
+def:pub people_label(n: int) -> str {
     if n <= 0 {
         return "headcount unknown";
     }
@@ -45,7 +45,7 @@ def referee_label(outcome: str) -> str {
     return "Referee: " + pretty(outcome);
 }
 
-def call_outcome_label(outcome: str) -> str {
+def:pub call_outcome_label(outcome: str) -> str {
     if outcome == "REACHED_CONFIRMED" {
         return "Reached, confirmed";
     }
