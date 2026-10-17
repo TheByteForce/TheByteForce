@@ -10,6 +10,7 @@ and model produced the last report, for the decision trail.
 """
 
 import re;
+import from ekata.replay_cache { read_cached, record_cached }
 import from ekata.schema { SosReport, MsgKind, PlaceLevel, PersonMention }
 import from ekata.ai.models { fast, call_log }
 
@@ -256,15 +257,34 @@ def finalise_report(rep: SosReport, text: str) -> SosReport {
 
 # ---------- The agent ----------
 
+def report_data(rep: SosReport) -> dict[str, any] {
+    return {"kind": rep.kind.value, "people_count": rep.people_count, "vulnerable": rep.vulnerable, "needs": rep.needs, "place_text": rep.place_text, "place_level": rep.place_level.value, "house_ref": rep.house_ref, "phones": rep.phones, "names": [{"display": x.display, "canonical": x.canonical} for x in rep.names], "language": rep.language, "rescued": rep.rescued, "summary": rep.summary, "confidence": rep.confidence, "payee_accounts": rep.payee_accounts, "urls": rep.urls, "claimed_office": rep.claimed_office, "asks_credentials": rep.asks_credentials, "claims_for_names": rep.claims_for_names};
+}
+
+def restore_report(d: any) -> SosReport {
+    return SosReport(kind=MsgKind(str(d["kind"])), people_count=int(d["people_count"]), vulnerable=[str(x) for x in d["vulnerable"]], needs=[str(x) for x in d["needs"]], place_text=str(d["place_text"]), place_level=PlaceLevel(str(d["place_level"])), house_ref=str(d["house_ref"]), phones=[str(x) for x in d["phones"]], names=[PersonMention(display=str(x["display"]), canonical=str(x["canonical"])) for x in d["names"]], language=str(d["language"]), rescued=bool(d["rescued"]), summary=str(d["summary"]), confidence=float(d["confidence"]), payee_accounts=[str(x) for x in d["payee_accounts"]], urls=[str(x) for x in d["urls"]], claimed_office=str(d["claimed_office"]), asks_credentials=[str(x) for x in d["asks_credentials"]], claims_for_names=[str(x) for x in d["claims_for_names"]]);
+}
+
 def extract_report(text: str, channel: str = "WEB") -> SosReport {
+    payload: dict[str, any] = {"text": text, "channel": channel};
+    cached: any = read_cached("intake", payload);
+    if cached is not None {
+        last_run["engine"] = "cached"; last_run["model"] = "cached:" + str(cached["model"]);
+        last_run["recorded_at"] = str(cached["recorded_at"]); last_run["error"] = "";
+        return restore_report(cached["value"]);
+    }
     mark = len(call_log);
     try {
         rep = draft_to_report(llm_extract_report(text, channel));
         last_run["engine"] = "llm";
+        last_run["error"] = "";
         last_run["model"] = model_since(mark);
-        return finalise_report(rep, text);
+        rep = finalise_report(rep, text);
+        record_cached("intake", payload, report_data(rep), last_run["model"]);
+        return rep;
     } except Exception as e {
         last_run["engine"] = "rules";
+        last_run["error"] = type(e).__name__ + ": " + re.sub(r"AIza[A-Za-z0-9_-]{20,}", "[REDACTED_SECRET]", str(e))[:220];
         last_run["model"] = "rules";
         return extract_report_rules(text, channel);
     }

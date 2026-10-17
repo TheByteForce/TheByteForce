@@ -105,6 +105,8 @@ obj Metrics {
 }
 
 obj DemoState {
+    has engine_mode: str = "";
+    has recorded_at: str = "";
     has seeded: bool = False;
     has position: int = 0;
     has total: int = 0;

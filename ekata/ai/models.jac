@@ -11,33 +11,68 @@ Keys come from the environment (GEMINI_API_KEY); nothing is hard-coded here.
 """
 
 import time;
+import os;
+import from jaclang.byllm.mtir { MTRuntime }
 import from jaclang.byllm.lib { Model, ModelPool }
 import from jaclang.byllm.types { IterationAction, IterationContext }
 import from jaclang.byllm.telemetry { register_agent_callback }
 
-# ---------- Model pools ----------
+# ---------- Configurable pools with measured usage ----------
 
-glob FAST_MODELS: list[str] = ["gemini/gemini-2.5-flash", "gemini/gemini-2.5-flash-lite"],
-     STRONG_MODELS: list[str] = ["gemini/gemini-2.5-pro", "gemini/gemini-2.5-flash"];
+glob usage_totals: dict[str, float] = {"calls": 0.0, "errors": 0.0, "tokens": 0.0, "cost": 0.0, "latency_ms": 0.0, "cost_records": 0.0};
+glob MAX_SPEND_USD: float = float(os.environ.get("EKATA_MAX_SPEND_USD", "5")),
+     MAX_AGENT_CALLS: int = int(os.environ.get("EKATA_MAX_AGENT_CALLS", "500"));
 
-glob fast = ModelPool(
-         models=[
-             Model(model_name="gemini/gemini-2.5-flash"),
-             Model(model_name="gemini/gemini-2.5-flash-lite")
-         ],
-         strategy="fallback",
-         num_retries=1,
-         timeout=30.0
-     ),
-     strong = ModelPool(
-         models=[
-             Model(model_name="gemini/gemini-2.5-pro"),
-             Model(model_name="gemini/gemini-2.5-flash")
-         ],
-         strategy="fallback",
-         num_retries=1,
-         timeout=45.0
-     );
+obj ObservedPool(ModelPool) {
+    has answered_by: str = "configured model pool";
+    override def model_call_no_stream(params: dict[str, any]) -> dict[str, any] {
+        response = super.model_call_no_stream(params);
+        self.answered_by = str(response.get("model", "configured model pool"));
+        return response;
+    }
+    override def invoke(mt_run: MTRuntime) -> any {
+        if usage_totals["cost"] >= MAX_SPEND_USD or usage_totals["calls"] >= MAX_AGENT_CALLS {
+            raise RuntimeError("Configured model budget reached; use rules mode or raise the local budget.");
+        }
+        started = time.perf_counter();
+        try {
+            value = super.invoke(mt_run);
+            record_pool_call(mt_run, (time.perf_counter() - started) * 1000.0, "success", self.answered_by);
+            return value;
+        } except Exception as exc {
+            record_pool_call(mt_run, (time.perf_counter() - started) * 1000.0, "error", self.answered_by);
+            raise exc;
+        }
+    }
+}
+
+def record_pool_call(run: any, latency: float, status: str, answered_by: str) {
+    history: list[dict[str, any]] = list(run._usage_history);
+    tokens = sum([int(x.get("total_tokens", 0)) for x in history]);
+    cost = sum([float(x.get("cost", 0.0)) for x in history]);
+    cost_rows = len([x for x in history if "cost" in x]);
+    model = answered_by;
+    usage_totals["calls"] += 1.0;
+    usage_totals["errors"] += 1.0 if status == "error" else 0.0;
+    usage_totals["tokens"] += float(tokens);
+    usage_totals["cost"] += cost;
+    usage_totals["cost_records"] += float(cost_rows);
+    usage_totals["latency_ms"] += latency;
+    call_log.append({"caller": str(run.mtir.caller.__name__), "model": model, "latency_ms": latency, "total_tokens": tokens, "status": status, "error": "provider failure" if status == "error" else "", "cost": cost});
+    if len(call_log) > MAX_TRACE_ROWS { del call_log[0]; }
+}
+
+def pool_models(primary: str) -> list[Model] {
+    names = [primary];
+    fallback = os.environ.get("EKATA_FALLBACK_MODEL", "gemini/gemini-2.5-flash-lite");
+    if fallback not in names { names.append(fallback); }
+    return [Model(model_name=name) for name in names];
+}
+
+glob FAST_MODELS: list[str] = [os.environ.get("EKATA_FAST_MODEL", "gemini/gemini-2.5-flash")],
+     STRONG_MODELS: list[str] = [os.environ.get("EKATA_STRONG_MODEL", "gemini/gemini-2.5-flash")];
+glob fast = ObservedPool(models=pool_models(FAST_MODELS[0]), strategy="fallback", num_retries=1, timeout=30.0),
+     strong = ObservedPool(models=pool_models(STRONG_MODELS[0]), strategy="fallback", num_retries=1, timeout=40.0);
 
 # ---------- Budget hook for ReAct agents ----------
 
@@ -125,13 +160,14 @@ def last_model(caller: str = "") -> str {
 
 """Telemetry rows of successful calls: count, median-free totals for cost notes."""
 def call_stats -> dict[str, any] {
-    ok = [r for r in call_log if r["status"] == "success"];
     return {
-        "calls": len(call_log),
-        "ok": len(ok),
-        "errors": len(call_log) - len(ok),
-        "tokens": sum([int(r["total_tokens"]) for r in ok]),
-        "latency_ms": sum([float(r["latency_ms"]) for r in ok])
+        "calls": int(usage_totals["calls"]),
+        "ok": int(usage_totals["calls"] - usage_totals["errors"]),
+        "errors": int(usage_totals["errors"]),
+        "tokens": int(usage_totals["tokens"]),
+        "cost_usd": usage_totals["cost"],
+        "cost_available": usage_totals["cost_records"] > 0.0,
+        "latency_ms": usage_totals["latency_ms"]
     };
 }
 

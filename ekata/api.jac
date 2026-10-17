@@ -32,6 +32,7 @@ import from ekata.store {
     is_seeded
 }
 import from ekata.seed { reset_and_seed }
+import from ekata.replay_cache { cache_label, cache_timestamp }
 import from ekata.locking { graph_writer }
 import from ekata.store { all_messages, all_incidents, open_pending, has_call_log, log_decision, to_int }
 import from ekata.referee { r5_claim }
@@ -56,6 +57,7 @@ def:pub load_demo() -> DemoState {
         total = prepare_replay(hub);
         commit();
         return DemoState(
+            engine_mode=cache_label(), recorded_at=cache_timestamp(),
             seeded=True, position=0, total=total, storm_time=hub.storm_time, synthetic=True
         );
     }
@@ -68,6 +70,7 @@ def:pub demo_state(tick: int = 0) -> DemoState {
         total = len(load_fixture());
     }
     return DemoState(
+            engine_mode=cache_label(), recorded_at=cache_timestamp(),
         seeded=is_seeded(hub),
         position=hub.replay_pos,
         total=total,

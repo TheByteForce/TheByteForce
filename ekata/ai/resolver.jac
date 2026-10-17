@@ -1,4 +1,5 @@
 """Choose among direct Candidate neighbours, then independently score that choice."""
+import from ekata.replay_cache { read_cached, record_cached }
 import from ekata.schema { Message, Incident, Candidate }
 import from ekata.ai.models { strong, last_model }
 
@@ -24,6 +25,7 @@ walker Resolver {
     has block_reason: str = "";
     has message_text: str = "";
     has source: Message | None = None;
+    has context: dict[str, any] = {};
 
     can start with Message entry {
         self.source = here;
@@ -31,6 +33,20 @@ walker Resolver {
         if len([here ->:Candidate:->]) == 0 {
             self.reason = "No candidate incidents: open a new incident.";
             self.model = "rules";
+            disengage;
+        }
+        choices: list[str] = [];
+        for inc in [here ->:Candidate:->[?:Incident]] {
+            reasons: list[str] = [];
+            for e in [edge here ->:Candidate:-> inc] { reasons = reasons + e.reasons; }
+            choices.append(inc.inc_id + ":" + inc.summary + ":" + inc.place + ":" + str(reasons));
+        }
+        self.context = {"message": here.text, "choices": sorted(choices), "feedback": self.block_reason};
+        cached: any = read_cached("resolver", self.context);
+        if cached is not None {
+            value: any = cached["value"];
+            self.chosen_inc_id = str(value["chosen_inc_id"]); self.score = float(value["score"]);
+            self.reason = str(value["reason"]); self.model = "cached:" + str(cached["model"]);
             disengage;
         }
         visit [->:Candidate:->] by resolver_model(
@@ -52,6 +68,7 @@ walker Resolver {
         self.model = last_model();
         if self.model == "" { self.model = "llm"; }
         if result.same_household { self.chosen_inc_id = here.inc_id; }
+        record_cached("resolver", self.context, {"chosen_inc_id": self.chosen_inc_id, "score": self.score, "reason": self.reason, "visited_inc_id": here.inc_id}, self.model);
         disengage;
     }
 }

@@ -148,7 +148,7 @@ def run_intake(text: str, channel: str) -> IntakeOutcome {
                 model=model if model != "" else engine,
                 note=""
                     if engine == "llm"
-                    else "LLM unavailable: the intake rules extractor was used"
+                    else ("Cached output recorded at " + info.get("recorded_at", "unknown") if engine == "cached" else "LLM unavailable: the intake rules extractor was used")
             );
         } except Exception as e {
             return IntakeOutcome(
@@ -602,10 +602,10 @@ def register_appeal(
         hub,
         "intake",
         "register_appeal",
-        f"appeal {ap.appeal_id} registered with verdict CHECKING: {len(
+        f"appeal {ap.appeal_id} registered for evidence review: {len(
             phones
         )} phone(s), {len(rep.payee_accounts)} account(s), {len(rep.urls)} link(s)",
-        "CHECKING",
+        "REGISTERED",
         t,
         [msg, ap],
         confidence=rep.confidence,
@@ -703,6 +703,7 @@ def process_in_hub(
         );
     }
     refresh_appeals(hub);
+    for rumour in [hub ->:Holds:->[?:RumourClaim]] { link_bulletins(hub, rumour); }
     if inc is not None {
         for d in decs {
             d +>:About:+> inc;

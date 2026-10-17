@@ -29,6 +29,9 @@ import from ekata.case_api {
 }
 import ".styles.global.css";
 
+import from ekata.ui.metrics { MetricsPage }
+import from ekata.evaluation_api { evaluation_results, model_usage }
+
 def:pub app() -> JsxElement {
     has page: str = "desk";
     can with entry {
@@ -83,11 +86,8 @@ def:pub app() -> JsxElement {
             >
                 Synthetic data
             </span>
+            <button className={"rounded-md border px-3 py-2 text-sm font-semibold " + ("bg-primary text-primary-foreground" if page == "metrics" else "text-muted-foreground")} onClick={lambda (e: MouseEvent) { page = "metrics"; }}>Impact & evaluation</button>
         </nav>
-        {if page == "desk" {
-            <Desk/>;
-        } else {
-            <Cases/>;
-        } }
+        {if page == "desk" { <Desk />; } elif page == "cases" { <Cases />; } else { <MetricsPage />; }}
     </div>
 }

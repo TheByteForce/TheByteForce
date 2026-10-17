@@ -5,6 +5,8 @@ import from ...components.ui.badge { Badge }
 
 def:pub TopBar(
     stormTime: str,
+    engineMode: str,
+    recordedAt: str,
     position: int,
     total: int,
     running: bool,
@@ -37,6 +39,7 @@ def:pub TopBar(
                 <p className="text-sm text-muted-foreground">
                     One call per household, most vulnerable first
                 </p>
+                <p className="mt-1 text-xs text-muted-foreground">{engineMode + (" · recorded " + recordedAt if recordedAt != "" else "")}</p>
             </div>
             <div
                 className="flex items-baseline gap-2"

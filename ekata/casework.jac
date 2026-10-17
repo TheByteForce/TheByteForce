@@ -1,12 +1,13 @@
 """Evidence-led appeal review and rumour routing. Model tools are read-only."""
 import os;
+import from ekata.replay_cache { read_cached, record_cached }
 import re;
 import from ekata.schema {
     EkataHub, Holds, Appeal, PersonName, Phone, BankAccount, Url, ClaimedOfficial, RegistryEntry,
     Incident, Message, RumourClaim, Bulletin, Decision, Candidate, ClaimsFor,
     AppealHasPhone, PaysTo, Links, ClaimsToBe, ListedAs, Checks, HasPhone, Names, At
 }
-import from ekata.store { all_incidents, messages_of, has_call_log, normalise_phone, normalise_name, normalise_place, place_compatible, log_decision }
+import from ekata.store { all_incidents, messages_of, has_call_log, normalise_phone, normalise_name, normalise_place, place_compatible, log_decision, storm_minutes }
 import from ekata.ai.models { strong, budget_hook, drain_agent_steps, last_model }
 
 glob investigator_model: any = strong;
@@ -222,12 +223,22 @@ def review_appeal(hub: EkataHub, ap: Appeal, use_ai: bool = False) -> AppealView
     if not use_ai and ap.verdict == verdict and ap.reason != "" { explanation = ap.reason; }
     if use_ai {
         try {
-            ap spawn AppealExplorer();
-            result = AnalystTools(hub=hub, appeal_id=ap.appeal_id).investigate(ap.text);
+            payload: dict[str, any] = {"text": ap.text, "evidence": [e.ref + ":" + e.text for e in facts.evidence], "signals": sorted(facts.signals)};
+            cached: any = read_cached("appeal", payload);
+            result = Investigation();
+            if cached is not None {
+                value: any = cached["value"];
+                result = Investigation(reason=str(value["reason"]), confidence=float(value["confidence"]), evidence_ids=[str(x) for x in value["evidence_ids"]]);
+                ap.model = "cached:" + str(cached["model"]);
+            } else {
+                ap spawn AppealExplorer();
+                result = AnalystTools(hub=hub, appeal_id=ap.appeal_id).investigate(ap.text);
+                ap.model = last_model() or "configured model pool";
+                record_cached("appeal", payload, {"reason": result.reason, "confidence": result.confidence, "evidence_ids": result.evidence_ids}, ap.model);
+            }
             known = [e.ref for e in facts.evidence];
             cited = [ref for ref in result.evidence_ids if ref in known];
             if len(cited) > 0 and result.reason != "" { explanation = result.reason + " [" + ", ".join(cited) + "]"; }
-            ap.model = last_model();
         } except Exception { ap.model = "rules"; }
         for row in drain_agent_steps() {
             log_decision(hub, "appeal_investigator", "tool_call", str(row.get("tool", "tool")) + ": " + str(row.get("result_preview", "")), "READ_ONLY", hub.storm_time, [ap], model=ap.model, target_label=ap.appeal_id);
@@ -264,6 +275,7 @@ def appeal_view(hub: EkataHub, ap: Appeal) -> AppealView {
 
 def link_bulletins(hub: EkataHub, claim: RumourClaim) {
     for b in [hub ->:Holds:->[?:Bulletin]] {
+        if storm_minutes(b.issued_at) > storm_minutes(hub.storm_time) { continue; }
         if b.area.lower() in claim.claim.lower() {
             stance = "COMPARE_WITH_BULLETIN";
             if "kotmale" in claim.claim.lower() and "breach" in claim.claim.lower() and "safe" in b.text.lower() { stance = "CONTRADICTED_BY_BULLETIN"; }
@@ -277,6 +289,7 @@ def rumour_view(hub: EkataHub, claim: RumourClaim) -> RumourView {
     notices: list[Evidence] = [];
     low = claim.claim.lower();
     for b in [hub ->:Holds:->[?:Bulletin]] {
+        if storm_minutes(b.issued_at) > storm_minutes(hub.storm_time) { continue; }
         if b.area.lower() in low or ("kotmale" in low and "kotmale" in b.area.lower()) {
             notices.append(Evidence(ref="bulletin:" + b.issuer + ":" + b.area + ":" + b.issued_at, kind="official_bulletin", text=b.text + " (issued " + b.issued_at + ")"));
         }

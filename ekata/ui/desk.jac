@@ -301,6 +301,8 @@ def:pub Desk -> JsxElement {
     >
         <TopBar
             stormTime={clock}
+            engineMode={demo.engine_mode if demo is not None else "Connecting..."}
+            recordedAt={demo.recorded_at if demo is not None else ""}
             position={cur_pos}
             total={cur_total}
             running={running}
