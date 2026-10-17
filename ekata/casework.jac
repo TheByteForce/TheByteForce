@@ -1,4 +1,5 @@
 """Evidence-led appeal review and rumour routing. Model tools are read-only."""
+import from ekata.instrumentation { NativeSpan }
 import os;
 import from ekata.replay_cache { read_cached, record_cached }
 import re;
@@ -229,19 +230,25 @@ obj AnalystTools {
     has appeal_id: str;
 
     def lookup_official() -> list[Evidence] {
-        ap = find_appeal(self.hub, self.appeal_id);
-        if ap is None { return []; }
-        return [e for e in collect_facts(self.hub, ap).evidence if e.kind == "registry" or e.kind == "impersonation"];
+        with NativeSpan(name="lookup_official", args={"appeal_id": self.appeal_id}, kind="tool") as span {
+            ap = find_appeal(self.hub, self.appeal_id);
+            if ap is None { return span.finish([]); }
+            return span.finish([e for e in collect_facts(self.hub, ap).evidence if e.kind == "registry" or e.kind == "impersonation"]);
+        }
     }
     def appeals_sharing() -> list[Evidence] {
-        ap = find_appeal(self.hub, self.appeal_id);
-        if ap is None { return []; }
-        return [Evidence(ref=x.appeal_id, kind="shared_identifier", text=x.text) for x in shared_appeals(ap)];
+        with NativeSpan(name="appeals_sharing", args={"appeal_id": self.appeal_id}, kind="tool") as span {
+            ap = find_appeal(self.hub, self.appeal_id);
+            if ap is None { return span.finish([]); }
+            return span.finish([Evidence(ref=x.appeal_id, kind="shared_identifier", text=x.text) for x in shared_appeals(ap)]);
+        }
     }
     def verified_incident_for() -> list[Evidence] {
-        ap = find_appeal(self.hub, self.appeal_id);
-        if ap is None { return []; }
-        return [Evidence(ref=x.inc_id, kind="verified_incident", text=x.summary) for x in verified_matches(self.hub, ap)];
+        with NativeSpan(name="verified_incident_for", args={"appeal_id": self.appeal_id}, kind="tool") as span {
+            ap = find_appeal(self.hub, self.appeal_id);
+            if ap is None { return span.finish([]); }
+            return span.finish([Evidence(ref=x.inc_id, kind="verified_incident", text=x.summary) for x in verified_matches(self.hub, ap)]);
+        }
     }
     def investigate(text: str) -> Investigation by investigator_model(
         tools=[self.lookup_official, self.appeals_sharing, self.verified_incident_for],

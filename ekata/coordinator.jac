@@ -15,6 +15,7 @@ extractor below and the resolver is replaced by a rules pick over the
 blocking tiers. The same path is the fallback when an LLM call fails.
 """
 
+import from ekata.instrumentation { NativeSpan }
 import os;
 import from ekata.schema {
     EkataHub,
@@ -138,32 +139,34 @@ def rules_report(text: str, channel: str) -> SosReport {
 }
 
 def run_intake(text: str, channel: str) -> IntakeOutcome {
-    if ai_enabled() {
-        try {
-            rep = extract_report(text, channel);
-            info = intake_run_info();
-            engine = info.get("engine", "llm");
-            model = info.get("model", "");
-            return IntakeOutcome(
-                rep=rep,
-                model=model if model != "" else engine,
-                note=""
-                    if engine == "llm"
-                    else ("Cached output recorded at " + info.get("recorded_at", "unknown") if engine == "cached" else "LLM unavailable: the intake rules extractor was used")
-            );
-        } except Exception as e {
-            return IntakeOutcome(
-                rep=rules_report(text, channel),
-                model="rules",
-                note="LLM intake failed (" + str(e)[:60] + "): rules extractor used"
-            );
+    with NativeSpan(name="run_intake", kind="workflow") {
+        if ai_enabled() {
+            try {
+                rep = extract_report(text, channel);
+                info = intake_run_info();
+                engine = info.get("engine", "llm");
+                model = info.get("model", "");
+                return IntakeOutcome(
+                    rep=rep,
+                    model=model if model != "" else engine,
+                    note=""
+                        if engine == "llm"
+                        else ("Cached output recorded at " + info.get("recorded_at", "unknown") if engine == "cached" else "LLM unavailable: the intake rules extractor was used")
+                );
+            } except Exception as e {
+                return IntakeOutcome(
+                    rep=rules_report(text, channel),
+                    model="rules",
+                    note="LLM intake failed (" + str(e)[:60] + "): rules extractor used"
+                );
+            }
         }
+        return IntakeOutcome(
+            rep=rules_report(text, channel),
+            model="rules",
+            note="AI switched off: rules extractor used"
+        );
     }
-    return IntakeOutcome(
-        rep=rules_report(text, channel),
-        model="rules",
-        note="AI switched off: rules extractor used"
-    );
 }
 
 # ---------- Decisions ----------
@@ -183,20 +186,22 @@ def step(
     model: str = "rules",
     label: str = ""
 ) -> Decision {
-    d = log_decision(
-        hub,
-        agent,
-        action,
-        reason,
-        outcome,
-        t,
-        [msg],
-        confidence=conf,
-        model=model,
-        target_label=label if label != "" else msg.msg_id
-    );
-    decs.append(d);
-    return d;
+    with NativeSpan(name=agent + ":" + action, kind="rules", args={"outcome": outcome, "reason": reason, "msg_id": msg.msg_id}) as span {
+        d = log_decision(
+            hub,
+            agent,
+            action,
+            reason,
+            outcome,
+            t,
+            [msg],
+            confidence=conf,
+            model=model,
+            target_label=label if label != "" else msg.msg_id
+        );
+        decs.append(d);
+        return d;
+    }
 }
 
 # ---------- Identifier nodes ----------
@@ -334,24 +339,26 @@ def rules_pick(infos: list[CandInfo], why: str) -> Pick {
 def resolve_pick(
     msg: Message, infos: list[CandInfo], block_reason: str, use_ai: bool
 ) -> Pick {
-    why = "";
-    if use_ai {
-        walked = run_resolver(msg, block_reason);
-        if walked is not None {
-            if walked.chosen_inc_id != "" or walked.model != "" {
-                return Pick(
-                    chosen=walked.chosen_inc_id,
-                    score=walked.score,
-                    reason=walked.reason,
-                    model=walked.model if walked.model != "" else "llm"
-                );
+    with NativeSpan(name="resolve_pick", kind="workflow") {
+        why = "";
+        if use_ai {
+            walked = run_resolver(msg, block_reason);
+            if walked is not None {
+                if walked.chosen_inc_id != "" or walked.model != "" {
+                    return Pick(
+                        chosen=walked.chosen_inc_id,
+                        score=walked.score,
+                        reason=walked.reason,
+                        model=walked.model if walked.model != "" else "llm"
+                    );
+                }
+                why = "resolver gave no decision, rules fallback: ";
+            } else {
+                why = "resolver unavailable, rules fallback: ";
             }
-            why = "resolver gave no decision, rules fallback: ";
-        } else {
-            why = "resolver unavailable, rules fallback: ";
         }
+        return rules_pick(infos, why);
     }
-    return rules_pick(infos, why);
 }
 
 def ensure_candidate_edges(hub: EkataHub, msg: Message, infos: list[CandInfo]) {
@@ -622,97 +629,99 @@ def register_appeal(
 def process_in_hub(
     hub: EkataHub, text: str, channel: str, storm_time: str, msg_id: str = ""
 ) -> Message {
-    mem_mark = memory_mark();
-    t = storm_time if storm_time != "" else hub.storm_time;
-    advance_clock(hub, t);
-    ch = channel.upper() if channel != "" else "WEB";
-    use_ai = ai_enabled();
-    decs: list[Decision] = [];
+    with NativeSpan(name="process_in_hub", args={"msg_id": msg_id, "channel": channel}, kind="workflow") {
+        mem_mark = memory_mark();
+        t = storm_time if storm_time != "" else hub.storm_time;
+        advance_clock(hub, t);
+        ch = channel.upper() if channel != "" else "WEB";
+        use_ai = ai_enabled();
+        decs: list[Decision] = [];
 
-    out = run_intake(text, ch);
-    rep = out.rep;
-    mid = msg_id if msg_id != "" else next_msg_id(hub);
-    msg = Message(
-        msg_id=mid,
-        text=text,
-        channel=ch,
-        language=rep.language,
-        storm_time=t,
-        kind=rep.kind.value,
-        seq=next_message_seq(hub)
-    );
-    hub +>:Holds:+> msg;
-    phones = attach_identifiers(hub, msg, rep);
-    why = f"read as {rep.kind.value}: {len(phones)} phone(s), {len(rep.names)} name(s)";
-    if rep.people_count > 0 {
-        why = why + f", {rep.people_count} people";
-    }
-    if rep.place_text != "" {
-        why = why + ", place " + rep.place_text;
-    }
-    if out.note != "" {
-        why = why + ". " + out.note;
-    }
-    step(
-        hub,
-        decs,
-        msg,
-        "intake",
-        "extract",
-        why,
-        "APPLIED",
-        t,
-        conf=rep.confidence,
-        model=out.model
-    );
-
-    inc: Incident | None = None;
-    if rep.kind == MsgKind.SOS or rep.kind == MsgKind.UPDATE {
-        inc = route_rescue(hub, msg, rep, t, decs, use_ai);
-    } elif rep.kind == MsgKind.APPEAL {
-        register_appeal(hub, msg, rep, phones, t);
-    } elif rep.kind == MsgKind.RUMOUR {
-        claim = RumourClaim(
-            claim=text, source_msg_id=msg.msg_id,
-            stance="UNCONFIRMED",
-            storm_time=t
+        out = run_intake(text, ch);
+        rep = out.rep;
+        mid = msg_id if msg_id != "" else next_msg_id(hub);
+        msg = Message(
+            msg_id=mid,
+            text=text,
+            channel=ch,
+            language=rep.language,
+            storm_time=t,
+            kind=rep.kind.value,
+            seq=next_message_seq(hub)
         );
-        hub +>:Holds:+> claim;
-        link_bulletins(hub, claim);
-        log_decision(
-            hub,
-            "intake",
-            "register_rumour",
-            "unverified claim recorded as UNCONFIRMED; never enters the call queue (R7)",
-            "UNCONFIRMED",
-            t,
-            [msg, claim],
-            confidence=rep.confidence,
-            model=out.model,
-            target_label=msg.msg_id
-        );
-    } else {
+        hub +>:Holds:+> msg;
+        phones = attach_identifiers(hub, msg, rep);
+        why = f"read as {rep.kind.value}: {len(phones)} phone(s), {len(rep.names)} name(s)";
+        if rep.people_count > 0 {
+            why = why + f", {rep.people_count} people";
+        }
+        if rep.place_text != "" {
+            why = why + ", place " + rep.place_text;
+        }
+        if out.note != "" {
+            why = why + ". " + out.note;
+        }
         step(
             hub,
             decs,
             msg,
             "intake",
-            "note_offer",
-            "an offer of help is recorded; it is not a call-queue item (R7)",
+            "extract",
+            why,
             "APPLIED",
             t,
+            conf=rep.confidence,
             model=out.model
         );
-    }
-    refresh_appeals(hub);
-    for rumour in [hub ->:Holds:->[?:RumourClaim]] { link_bulletins(hub, rumour); }
-    if inc is not None {
-        for d in decs {
-            d +>:About:+> inc;
+
+        inc: Incident | None = None;
+        if rep.kind == MsgKind.SOS or rep.kind == MsgKind.UPDATE {
+            inc = route_rescue(hub, msg, rep, t, decs, use_ai);
+        } elif rep.kind == MsgKind.APPEAL {
+            register_appeal(hub, msg, rep, phones, t);
+        } elif rep.kind == MsgKind.RUMOUR {
+            claim = RumourClaim(
+                claim=text, source_msg_id=msg.msg_id,
+                stance="UNCONFIRMED",
+                storm_time=t
+            );
+            hub +>:Holds:+> claim;
+            link_bulletins(hub, claim);
+            log_decision(
+                hub,
+                "intake",
+                "register_rumour",
+                "unverified claim recorded as UNCONFIRMED; never enters the call queue (R7)",
+                "UNCONFIRMED",
+                t,
+                [msg, claim],
+                confidence=rep.confidence,
+                model=out.model,
+                target_label=msg.msg_id
+            );
+        } else {
+            step(
+                hub,
+                decs,
+                msg,
+                "intake",
+                "note_offer",
+                "an offer of help is recorded; it is not a call-queue item (R7)",
+                "APPLIED",
+                t,
+                model=out.model
+            );
         }
+        refresh_appeals(hub);
+        for rumour in [hub ->:Holds:->[?:RumourClaim]] { link_bulletins(hub, rumour); }
+        if inc is not None {
+            for d in decs {
+                d +>:About:+> inc;
+            }
+        }
+        record_run(hub, msg, mem_mark);
+        return msg;
     }
-    record_run(hub, msg, mem_mark);
-    return msg;
 }
 
 # Public entry: one message through the pipeline on the shared hub, one commit.

@@ -1,4 +1,5 @@
 """A bounded top-five explainer; deterministic vulnerability floors always win."""
+import from ekata.instrumentation { NativeSpan }
 import os;
 import from ekata.schema { EkataHub, Incident, Holds }
 import from ekata.views { QueueRow }
@@ -21,16 +22,22 @@ node RankNote {
 obj Ranker {
     has rows: list[QueueRow];
     def incident_summary(inc_id: str) -> str {
-        for r in self.rows { if r.inc_id == inc_id { return r.headline + ": " + r.place + "; " + r.reason; } }
-        return "Not in the current top five";
+        with NativeSpan(name="incident_summary", args={"inc_id": inc_id}, kind="tool") as span {
+            for r in self.rows { if r.inc_id == inc_id { return span.finish(r.headline + ": " + r.place + "; " + r.reason); } }
+            return span.finish("Not in the current top five");
+        }
     }
     def vulnerable_flags(inc_id: str) -> list[str] {
-        for r in self.rows { if r.inc_id == inc_id { return r.vulnerable; } }
-        return [];
+        with NativeSpan(name="vulnerable_flags", args={"inc_id": inc_id}, kind="tool") as span {
+            for r in self.rows { if r.inc_id == inc_id { return span.finish(r.vulnerable); } }
+            return span.finish([]);
+        }
     }
     def waiting_time(inc_id: str) -> str {
-        for r in self.rows { if r.inc_id == inc_id { return r.waiting; } }
-        return "unknown";
+        with NativeSpan(name="waiting_time", args={"inc_id": inc_id}, kind="tool") as span {
+            for r in self.rows { if r.inc_id == inc_id { return span.finish(r.waiting); } }
+            return span.finish("unknown");
+        }
     }
     def explain() -> list[RankExplanation] by rank_model(
         tools=[self.incident_summary, self.vulnerable_flags, self.waiting_time],

@@ -1,0 +1,24 @@
+services:
+  prometheus:
+    image: prom/prometheus:v3.7.2
+    network_mode: host
+    command: ["--config.file=/etc/prometheus.yaml", "--web.listen-address=127.0.0.1:19090"]
+    volumes: ["./prometheus.yaml:/etc/prometheus.yaml:ro"]
+  tempo:
+    image: grafana/tempo:2.9.0
+    command: ["-config.file=/etc/tempo.yaml"]
+    volumes: ["./tempo.yaml:/etc/tempo.yaml:ro"]
+    ports: ["127.0.0.1:13200:3200"]
+  loki:
+    image: grafana/loki:3.5.7
+    command: ["-config.file=/etc/loki.yaml"]
+    volumes: ["./loki.yaml:/etc/loki.yaml:ro"]
+    ports: ["127.0.0.1:13100:3100"]
+  alloy:
+    image: grafana/alloy:v1.11.2
+    command: ["run", "/etc/alloy/config.alloy", "--storage.path=/tmp/alloy"]
+    volumes:
+      - ./alloy.alloy:/etc/alloy/config.alloy:ro
+      - ../.jac/observability-logs:/logs:ro
+    ports: ["127.0.0.1:14318:4318"]
+    depends_on: [tempo, loki]

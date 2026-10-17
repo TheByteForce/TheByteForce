@@ -11,6 +11,7 @@ Keys come from the environment (GEMINI_API_KEY); nothing is hard-coded here.
 """
 
 import time;
+import from ekata.instrumentation { NativeSpan }
 import os;
 import from jaclang.byllm.mtir { MTRuntime }
 import from jaclang.byllm.lib { Model, ModelPool }
@@ -34,14 +35,22 @@ obj ObservedPool(ModelPool) {
         if usage_totals["cost"] >= MAX_SPEND_USD or usage_totals["calls"] >= MAX_AGENT_CALLS {
             raise RuntimeError("Configured model budget reached; use rules mode or raise the local budget.");
         }
-        started = time.perf_counter();
-        try {
-            value = super.invoke(mt_run);
-            record_pool_call(mt_run, (time.perf_counter() - started) * 1000.0, "success", self.answered_by);
-            return value;
-        } except Exception as exc {
-            record_pool_call(mt_run, (time.perf_counter() - started) * 1000.0, "error", self.answered_by);
-            raise exc;
+        assert mt_run.mtir is not None;
+        with NativeSpan(name=str(mt_run.mtir.caller.__name__), kind="model") as span {
+            mt_run._invocation_id = span.run._invocation_id;
+            mt_run._parent_invocation_id = span.run._parent_invocation_id;
+            span.run = mt_run;
+            self.answered_by = "configured model pool";
+            status = "error";
+            try {
+                value = super.invoke(mt_run);
+                status = "success";
+                span.output = str(value);
+                return value;
+            } finally {
+                span.kind = self.answered_by;
+                record_pool_call(mt_run, (time.perf_counter() - span.started) * 1000.0, status, self.answered_by);
+            }
         }
     }
 }
@@ -58,8 +67,7 @@ def record_pool_call(run: any, latency: float, status: str, answered_by: str) {
     usage_totals["cost"] += cost;
     usage_totals["cost_records"] += float(cost_rows);
     usage_totals["latency_ms"] += latency;
-    call_log.append({"caller": str(run.mtir.caller.__name__), "model": model, "latency_ms": latency, "total_tokens": tokens, "status": status, "error": "provider failure" if status == "error" else "", "cost": cost});
-    if len(call_log) > MAX_TRACE_ROWS { del call_log[0]; }
+
 }
 
 def pool_models(primary: str) -> list[Model] {
@@ -125,6 +133,7 @@ def drain_agent_steps -> list[dict[str, any]] {
 glob call_log: list[dict[str, any]] = [];
 
 def _record_call(rec: dict[str, any]) -> None {
+    if str(rec.get("model")) in ["workflow", "rules", "tool", "human"] { return; }
     tokens = rec.get("tokens") or {};
     per_call = tokens.get("per_call") or [];
     answered_by = str(rec.get("model") or "");
@@ -135,6 +144,11 @@ def _record_call(rec: dict[str, any]) -> None {
     call_log.append(
         {
             "caller": str(rec.get("caller_name") or ""),
+            "invocation_id": rec.get("invocation_id"),
+            "parent_invocation_id": rec.get("parent_invocation_id"),
+            "input_tokens": int(total.get("prompt_tokens") or 0),
+            "output_tokens": int(total.get("completion_tokens") or 0),
+            "cost": float(total.get("cost") or 0),
             "model": answered_by,
             "latency_ms": float(rec.get("latency_ms") or 0.0),
             "total_tokens": int(total.get("total_tokens") or 0),

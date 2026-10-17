@@ -11,6 +11,7 @@ they offer, lets the model pick among the top candidates when AI is on, and
 falls back to the next NGO when one declines.
 """
 
+import from ekata.instrumentation { NativeSpan }
 import os;
 import from ekata.schema {
     EkataHub, Holds, Incident, Message, GNDivision, DSDivision, District, InDS, InDistrict,
@@ -420,34 +421,36 @@ def next_request_id(hub: EkataHub) -> str {
 }
 
 def create_request(hub: EkataHub, inc_id: str, need: str, officer: str) -> ResourceRequest | None {
-    inc = find_incident(hub, inc_id);
-    if inc is None {
-        return None;
-    }
-    kind = normal_need(need);
-    for r in requests_of(inc) {
-        if r.need == kind and r.status in ["REQUESTED", "ACCEPTED", "DISPATCHED"] {
-            log_decision(
-                hub, "matcher", "duplicate_blocked",
-                f"{inc_id} already has {kind} {r.status.lower()} with {r.ngo or 'the district desk'} ({r.req_id}); no second request sent",
-                "BLOCKED", hub.storm_time, [inc], confidence=1.0, model="rules", target_label=r.req_id
-            );
-            return r;
+    with NativeSpan(name="create_request", kind="workflow") {
+        inc = find_incident(hub, inc_id);
+        if inc is None {
+            return None;
         }
+        kind = normal_need(need);
+        for r in requests_of(inc) {
+            if r.need == kind and r.status in ["REQUESTED", "ACCEPTED", "DISPATCHED"] {
+                log_decision(
+                    hub, "matcher", "duplicate_blocked",
+                    f"{inc_id} already has {kind} {r.status.lower()} with {r.ngo or 'the district desk'} ({r.req_id}); no second request sent",
+                    "BLOCKED", hub.storm_time, [inc], confidence=1.0, model="rules", target_label=r.req_id
+                );
+                return r;
+            }
+        }
+        delivered = [r for r in requests_of(inc) if r.need == kind and r.status == "DELIVERED"];
+        req = ResourceRequest(req_id=next_request_id(hub), need=kind, requested_by=officer, storm_time=hub.storm_time);
+        hub +>:Holds:+> req;
+        req +>:RequestFor:+> inc;
+        if len(delivered) > 0 {
+            log_decision(
+                hub, "matcher", "repeat_flagged",
+                f"{kind} was already delivered to {inc_id} by {delivered[0].ngo}; a second delivery needs a person to confirm",
+                "NEEDS_HUMAN", hub.storm_time, [inc], confidence=1.0, model="rules", target_label=req.req_id
+            );
+        }
+        route_request(hub, req, inc);
+        return req;
     }
-    delivered = [r for r in requests_of(inc) if r.need == kind and r.status == "DELIVERED"];
-    req = ResourceRequest(req_id=next_request_id(hub), need=kind, requested_by=officer, storm_time=hub.storm_time);
-    hub +>:Holds:+> req;
-    req +>:RequestFor:+> inc;
-    if len(delivered) > 0 {
-        log_decision(
-            hub, "matcher", "repeat_flagged",
-            f"{kind} was already delivered to {inc_id} by {delivered[0].ngo}; a second delivery needs a person to confirm",
-            "NEEDS_HUMAN", hub.storm_time, [inc], confidence=1.0, model="rules", target_label=req.req_id
-        );
-    }
-    route_request(hub, req, inc);
-    return req;
 }
 
 def requests_of(inc: Incident) -> list[ResourceRequest] {
@@ -484,27 +487,29 @@ def request_view(hub: EkataHub, req: ResourceRequest) -> RequestView {
 
 # NGO answers: accept, decline (re-routes to the next group), dispatched, delivered.
 def answer_request(hub: EkataHub, req_id: str, ngo: str, action: str) -> ResourceRequest | None {
-    req = find_request(hub, req_id);
-    if req is None or req.ngo != ngo {
-        return None;
-    }
-    inc = incident_of_request(req);
-    act = action.lower();
-    if act == "decline" {
-        req.declined_by = req.declined_by + [ngo];
-        log_decision(hub, "ngo", "decline", f"{ngo} declined {req.need}", "APPLIED", hub.storm_time, [inc] if inc is not None else [], model="human", target_label=req_id);
-        if inc is not None {
-            route_request(hub, req, inc);
+    with NativeSpan(name="answer_request", kind="human") {
+        req = find_request(hub, req_id);
+        if req is None or req.ngo != ngo {
+            return None;
         }
+        inc = incident_of_request(req);
+        act = action.lower();
+        if act == "decline" {
+            req.declined_by = req.declined_by + [ngo];
+            log_decision(hub, "ngo", "decline", f"{ngo} declined {req.need}", "APPLIED", hub.storm_time, [inc] if inc is not None else [], model="human", target_label=req_id);
+            if inc is not None {
+                route_request(hub, req, inc);
+            }
+            return req;
+        }
+        status_for = {"accept": "ACCEPTED", "dispatched": "DISPATCHED", "delivered": "DELIVERED"};
+        if act not in status_for {
+            return req;
+        }
+        req.status = status_for[act];
+        log_decision(hub, "ngo", act, f"{ngo} marked {req.need} {req.status.lower()}", "APPLIED", hub.storm_time, [inc] if inc is not None else [], model="human", target_label=req_id);
         return req;
     }
-    status_for = {"accept": "ACCEPTED", "dispatched": "DISPATCHED", "delivered": "DELIVERED"};
-    if act not in status_for {
-        return req;
-    }
-    req.status = status_for[act];
-    log_decision(hub, "ngo", act, f"{ngo} marked {req.need} {req.status.lower()}", "APPLIED", hub.storm_time, [inc] if inc is not None else [], model="human", target_label=req_id);
-    return req;
 }
 
 def ngo_views(hub: EkataHub, kind: str) -> list[NgoView] {
