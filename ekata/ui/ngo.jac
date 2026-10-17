@@ -8,6 +8,7 @@ import from "react" { useEffect }
 import from ekata.portal_api { ngos, ngo_requests, respond_request }
 import type from ekata.portal { NgoView, RequestView }
 import from .atoms { Empty, RequestBadge, VulnerableBadge, people_label, pretty }
+import from .ngo_map { NgoMapPage }
 import from .shell { AppShell, WorkspaceSelect, Surface }
 
 glob OFFICE_KEY: str = "ekata.ngo.office";
@@ -53,7 +54,10 @@ def:pub ActionButton(
 
 # ---------- One request card ----------
 
-def:pub RequestCard(r: RequestView, office: str, busy: bool, onAct: Callable[[str, str], None]) -> JsxElement {
+def:pub RequestCard(
+    r: RequestView, office: str, busy: bool, onAct: Callable[[str, str], None],
+    onMap: Callable[[], None] = lambda { }
+) -> JsxElement {
     mine = r.ngo == office;
     passed = (office in r.declined_by) and not mine;
     fresh = r.status == "REQUESTED" and not passed;
@@ -125,6 +129,13 @@ def:pub RequestCard(r: RequestView, office: str, busy: bool, onAct: Callable[[st
                             onPress={lambda { onAct(r.req_id, "delivered"); }}
                         />
                     }}
+                    <button
+                        type="button"
+                        className="min-h-10 px-2 text-[15px] font-semibold text-primary hover:underline"
+                        onClick={lambda (e: MouseEvent) { onMap(); }}
+                    >
+                        Show on map
+                    </button>
                 </div>
             </div>
         }}
@@ -206,6 +217,7 @@ def:pub NgoPortal -> JsxElement {
     nav = [
         ["requests", "Requests for you", "inbox"],
         ["done", "Accepted and delivered", "truck"],
+        ["map", "Map and route", "pin"],
         ["profile", "Your group", "org"]
     ];
     title = "Requests for you";
@@ -213,6 +225,10 @@ def:pub NgoPortal -> JsxElement {
     if page == "done" {
         title = "Accepted and delivered";
         subtitle = "Requests you took on, and the ones you passed to another group.";
+    }
+    if page == "map" {
+        title = "Map and route";
+        subtitle = "Where your requests are, and the best run from your base.";
     }
     if page == "profile" {
         title = "Your group";
@@ -264,6 +280,7 @@ def:pub NgoPortal -> JsxElement {
                         office={office}
                         busy={busy}
                         onAct={act}
+                        onMap={lambda { page = "map"; }}
                     />
                 }}
             </div>
@@ -283,9 +300,13 @@ def:pub NgoPortal -> JsxElement {
                         office={office}
                         busy={busy}
                         onAct={act}
+                        onMap={lambda { page = "map"; }}
                     />
                 }}
             </div>
+        }}
+        {if office != "" and page == "map" {
+            <NgoMapPage office={office}/>
         }}
         {if office != "" and page == "profile" {
             <Surface title={office}>

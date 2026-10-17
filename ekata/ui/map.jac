@@ -39,7 +39,7 @@ def:pub stop_icon(label: str, base: bool) -> any {
 def:pub Recenter(lat: float, lon: float, zoom: int) -> JsxElement {
     m = useMap();
     useEffect(
-        lambda { m.setView([lat, lon], zoom); return None; },
+        lambda { m.setView([lat, lon], zoom); return lambda { done = True; }; },
         [lat, lon, zoom]
     );
     <></>
@@ -53,7 +53,7 @@ def:pub FitRoute(path: list[list[float]]) -> JsxElement {
             if len(path) > 1 {
                 m.fitBounds(path, {"padding": [40, 40]});
             }
-            return None;
+            return lambda { done = True; };
         },
         [len(path)]
     );
