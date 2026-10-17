@@ -5,7 +5,8 @@ import re;
 import from ekata.schema {
     EkataHub, Holds, Appeal, PersonName, Phone, BankAccount, Url, ClaimedOfficial, RegistryEntry,
     Incident, Message, RumourClaim, Bulletin, Decision, Candidate, ClaimsFor,
-    AppealHasPhone, PaysTo, Links, ClaimsToBe, ListedAs, Checks, HasPhone, Names, At
+    AppealHasPhone, PaysTo, Links, ClaimsToBe, ListedAs, Checks, HasPhone, Names, At,
+    CallLog, Logged, ResourceRequest, RequestFor, GNDivision, DSDivision, LocatedIn, InDS
 }
 import from ekata.store { all_incidents, messages_of, has_call_log, normalise_phone, normalise_name, normalise_place, place_compatible, log_decision, storm_minutes }
 import from ekata.ai.models { strong, budget_hook, drain_agent_steps, last_model }
@@ -91,11 +92,22 @@ def shared_appeals(ap: Appeal) -> list[Appeal] {
     return out;
 }
 
-def verified_matches(hub: EkataHub, ap: Appeal) -> list[Incident] {
+# A call verifies a household only when it reached someone.
+glob VERIFYING_CALLS: list[str] = ["REACHED_CONFIRMED", "STILL_IN_NEED", "RESCUED"];
+
+def verifying_call_of(inc: Incident) -> CallLog | None {
+    best: CallLog | None = None;
+    for c in [inc <-:Logged:<-[?:CallLog]] {
+        if c.outcome in VERIFYING_CALLS and (best is None or c.storm_time >= best.storm_time) { best = c; }
+    }
+    return best;
+}
+
+# Households the appeal names (same phone, or same person at a compatible place).
+def named_households(hub: EkataHub, ap: Appeal) -> list[Incident] {
     phones = [p.number for p in [ap ->:AppealHasPhone:->[?:Phone]]];
     out: list[Incident] = [];
     for inc in all_incidents(hub) {
-        if inc.status != "CONFIRMED" or not has_call_log(inc) { continue; }
         matched = False;
         for m in messages_of(inc) {
             for ph in [m ->:HasPhone:->[?:Phone]] {
@@ -108,6 +120,29 @@ def verified_matches(hub: EkataHub, ap: Appeal) -> list[Incident] {
         if matched { out.append(inc); }
     }
     return out;
+}
+
+def verified_matches(hub: EkataHub, ap: Appeal) -> list[Incident] {
+    return [inc for inc in named_households(hub, ap) if inc.status in ["CONFIRMED", "VERIFYING", "RESOLVED"] and verifying_call_of(inc) is not None];
+}
+
+# The verified household record, reused as appeal evidence.
+def household_record(inc: Incident) -> str {
+    call = verifying_call_of(inc);
+    ds = "";
+    for gn in [inc ->:LocatedIn:->[?:GNDivision]] {
+        for d in [gn ->:InDS:->[?:DSDivision]] { ds = d.name; }
+    }
+    who = f"{inc.headcount} people" if inc.headcount > 0 else "headcount not given";
+    text = f"Verified by phone ({call.desk} at {call.storm_time}): {who}" if call is not None else f"Not yet verified: {who}";
+    if ds != "" { text = text + f" in {ds} division"; }
+    helping = [r for r in [inc <-:RequestFor:<-[?:ResourceRequest]] if r.status in ["ACCEPTED", "DISPATCHED", "DELIVERED"]];
+    if len(helping) > 0 {
+        text = text + ". Relief is coordinated through " + ", ".join([f"{r.ngo} ({r.need}, {r.status.lower()})" for r in helping]);
+    } else {
+        text = text + ". No relief group is assigned yet";
+    }
+    return text + ".";
 }
 
 obj AppealFacts {
@@ -157,7 +192,12 @@ def collect_facts(hub: EkataHub, ap: Appeal) -> AppealFacts {
         facts.evidence.append(Evidence(ref=ap.source_msg_id, kind="credential_request", text="Requests from the reader: " + ", ".join(ap.credential_requests)));
     }
     for inc in facts.matches {
-        facts.evidence.append(Evidence(ref=inc.inc_id, kind="verified_incident", text=inc.summary + " (CONFIRMED with call log)"));
+        facts.evidence.append(Evidence(ref=inc.inc_id, kind="verified_incident", text=household_record(inc)));
+    }
+    for inc in named_households(hub, ap) {
+        if inc not in facts.matches {
+            facts.evidence.append(Evidence(ref=inc.inc_id, kind="unverified_household", text="The appeal names this household, but no officer has reached it yet. Wait for verification before donating."));
+        }
     }
     facts.signals = list(set(facts.signals));
     return facts;
@@ -218,7 +258,7 @@ def review_appeal(hub: EkataHub, ap: Appeal, use_ai: bool = False) -> AppealView
     facts = collect_facts(hub, ap);
     verdict = referee_appeal(facts.signals, len(facts.matches) > 0, facts.official);
     explanation = "No verified incident and official channel yet; this alone is not evidence of fraud.";
-    if verdict == "MATCHED" { explanation = "Confirmed household with a logged call and a registered contact."; }
+    if verdict == "MATCHED" { explanation = "Matches a household an officer verified by phone, and the contact is a registered channel. " + household_record(facts.matches[0]); }
     if len(facts.signals) > 0 { explanation = "; ".join(facts.signals) + ". Analyst review required."; }
     if not use_ai and ap.verdict == verdict and ap.reason != "" { explanation = ap.reason; }
     if use_ai {
