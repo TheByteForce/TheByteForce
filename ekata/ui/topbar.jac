@@ -33,37 +33,44 @@ def:pub TopBar(
     <header className="border-b bg-card px-4 py-3 lg:px-6">
         <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
             <div>
-                <h1 className="text-2xl font-bold tracking-tight">Ekata</h1>
-                <p className="text-sm text-muted-foreground">One trusted inbox for flood nights</p>
+                <h1 className="text-xl font-bold tracking-tight">Rescue operations</h1>
+                <p className="text-sm text-muted-foreground">
+                    One call per household, most vulnerable first
+                </p>
             </div>
-
-            <div className="flex items-baseline gap-2" role="timer" aria-label="Storm clock">
-                <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+            <div
+                className="flex items-baseline gap-2"
+                role="timer"
+                aria-label="Storm clock"
+            >
+                <span
+                    className="text-xs font-semibold uppercase tracking-wider text-muted-foreground"
+                >
                     Storm clock
                 </span>
-                <span className="font-mono text-3xl font-semibold tabular-nums">{clock}</span>
+                <span className="font-mono text-3xl font-semibold tabular-nums">
+                    {clock}
+                </span>
             </div>
-
-            <Badge
-                variant="outline"
-                className="h-auto border-amber-600 bg-amber-100 px-3 py-1 text-sm font-semibold text-amber-950 dark:bg-amber-950 dark:text-amber-100"
-            >
-                Synthetic data
-            </Badge>
-
             <div className="ml-auto flex flex-wrap items-center gap-3">
                 {if is_live {
                     <span
                         className="flex items-center gap-2 rounded-full border border-emerald-600 bg-emerald-50 px-3 py-1 text-sm font-semibold text-emerald-900 dark:bg-emerald-950 dark:text-emerald-100"
                         role="status"
                     >
-                        <span className="size-2 animate-pulse rounded-full bg-emerald-600" aria-hidden="true"></span>
+                        <span
+                            className="size-2 animate-pulse rounded-full bg-emerald-600"
+                            aria-hidden="true"
+                        ></span>
                         Replay running
                     </span>
                 }}
-                <div className="min-w-40" aria-label="Replay progress">
-                    <div className="flex justify-between text-sm tabular-nums">
-                        <span className="text-muted-foreground">Replay · 1 message / 1.5 s</span>
+                <div
+                    className="min-w-44 flex-1 sm:min-w-52"
+                    aria-label="Replay progress"
+                >
+                    <div className="flex justify-between gap-4 text-xs tabular-nums">
+                        <span className="text-muted-foreground">Replay</span>
                         <span className="font-semibold">{f"{position} / {total}"}</span>
                     </div>
                     <div
@@ -73,8 +80,14 @@ def:pub TopBar(
                         aria-valuemax={100}
                         aria-valuenow={pct}
                     >
-                        <div className="h-full bg-primary transition-all" style={{"width": f"{pct}%"}}></div>
+                        <div
+                            className="h-full bg-primary transition-all"
+                            style={{"width": f"{pct}%"}}
+                        ></div>
                     </div>
+                    <p className="mt-1 text-xs text-muted-foreground">
+                        1 message every 1.5 seconds
+                    </p>
                 </div>
                 <Button
                     variant="outline"

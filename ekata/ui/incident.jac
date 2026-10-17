@@ -1,12 +1,19 @@
 """Right column: the selected incident, its evidence, merge proposals and call log."""
 
-import from ekata.views { IncidentView }
+import type from ekata.views { IncidentView }
 import from .brief { BriefPanel }
 import from ekata.api { decide_merge, log_call, claim_incident, resolve_change }
 import from ...components.ui.button { Button }
 import from .atoms {
-    Panel, MessageItem, StatusBadge, VulnerableBadge, RefereeBadge, Chip,
-    people_label, call_outcome_label, pretty
+    Panel,
+    MessageItem,
+    StatusBadge,
+    VulnerableBadge,
+    RefereeBadge,
+    Chip,
+    people_label,
+    call_outcome_label,
+    pretty
 }
 
 def:pub IncidentCard(
@@ -61,27 +68,40 @@ def:pub IncidentCard(
     }
 
     async def claim(iid: str, release: bool) -> None {
-        try { onChanged(await claim_incident(iid, desk, release)); err = ""; }
-        except Exception as ex { err = str(ex); }
+        try {
+            onChanged(await claim_incident(iid, desk, release));
+            err = "";
+        } except Exception as ex {
+            err = str(ex);
+        }
     }
     async def review(iid: str, field: str, accept: bool) -> None {
-        try { onChanged(await resolve_change(iid, field, desk, accept)); err = ""; }
-        except Exception as ex { err = str(ex); }
+        try {
+            onChanged(await resolve_change(iid, field, desk, accept));
+            err = "";
+        } except Exception as ex {
+            err = str(ex);
+        }
     }
 
     if inc is None {
-        return <Panel title="Incident">
-            <p className="rounded-lg border border-dashed p-4 text-center text-muted-foreground">
-                {"Loading incident..." if loading else "Select an incident in the call queue to see its evidence, merge proposals and call log."}
-            </p>
-        </Panel>;
+        return
+            <Panel title="Incident">
+                <p
+                    className="rounded-lg border border-dashed p-4 text-center text-muted-foreground"
+                >
+                    {"Loading incident..."
+                        if loading
+                        else "Select an incident in the call queue to see its evidence, merge proposals and call log."}
+                </p>
+            </Panel>;
     }
 
     iid: str = inc.inc_id;
 
     <Panel title="Incident" note={iid}>
         <div className="flex flex-wrap items-center gap-2">
-            <StatusBadge status={inc.status} />
+            <StatusBadge status={inc.status}/>
             <span className="text-lg font-semibold">{people_label(inc.headcount)}</span>
             <span className="text-base text-muted-foreground">
                 {inc.place if inc.place != "" else "place unknown"}
@@ -99,57 +119,74 @@ def:pub IncidentCard(
                 </select>
             </label>
         </div>
-
         {if inc.summary != "" {
             <p className="mt-2 text-base leading-snug">{inc.summary}</p>
         }}
-
         <div className="mt-2 flex flex-wrap items-center gap-1.5">
             {for v in inc.vulnerable {
-                <VulnerableBadge key={v} flag={v} />
+                <VulnerableBadge key={v} flag={v}/>
             }}
             {for n in inc.needs {
-                <Chip key={n} label={"Needs: " + n} tone="border-border bg-secondary text-secondary-foreground" />
+                <Chip
+                    key={n}
+                    label={"Needs: " + n}
+                    tone="border-border bg-secondary text-secondary-foreground"
+                />
             }}
             {if inc.claimed_by != "" {
-                <Chip label={"Claimed by " + inc.claimed_by} tone="border-indigo-500 bg-indigo-50 text-indigo-900 dark:bg-indigo-950 dark:text-indigo-100" />
+                <Chip
+                    label={"Claimed by " + inc.claimed_by}
+                    tone="border-indigo-500 bg-indigo-50 text-indigo-900 dark:bg-indigo-950 dark:text-indigo-100"
+                />
             }}
         </div>
-
         {if flash != "" {
-            <p role="status" className="sticky top-0 z-10 mt-3 rounded-md border border-emerald-600 bg-emerald-50 p-2 text-sm font-semibold text-emerald-900 dark:bg-emerald-950 dark:text-emerald-100">
+            <p
+                role="status"
+                className="sticky top-0 z-10 mt-3 rounded-md border border-emerald-600 bg-emerald-50 p-2 text-sm font-semibold text-emerald-900 dark:bg-emerald-950 dark:text-emerald-100"
+            >
                 {flash}
             </p>
         }}
         {if err != "" {
-            <p role="alert" className="sticky top-0 z-10 mt-3 rounded-md border border-red-600 bg-red-50 p-2 text-sm font-semibold text-red-900 dark:bg-red-950 dark:text-red-100">
+            <p
+                role="alert"
+                className="sticky top-0 z-10 mt-3 rounded-md border border-red-600 bg-red-50 p-2 text-sm font-semibold text-red-900 dark:bg-red-950 dark:text-red-100"
+            >
                 {err}
             </p>
         }}
-
         <h3 className="mt-4 text-base font-semibold">
             {f"Cited messages ({len(inc.messages)})"}
         </h3>
         {if len(inc.messages) == 0 {
-            <p className="text-sm text-muted-foreground">No messages are attached to this incident yet.</p>
+            <p className="text-sm text-muted-foreground">
+                No messages are attached to this incident yet.
+            </p>
         }}
         <div className="mt-1 flex flex-col gap-2">
             {for m in inc.messages {
-                <MessageItem key={m.msg_id} m={m} />
+                <MessageItem key={m.msg_id} m={m}/>
             }}
         </div>
-
         <h3 className="mt-4 text-base font-semibold">
             {f"Candidate incidents ({len(inc.candidates)})"}
         </h3>
         {if len(inc.candidates) == 0 {
-            <p className="text-sm text-muted-foreground">No other incident shares details with this one.</p>
+            <p className="text-sm text-muted-foreground">
+                No other incident shares details with this one.
+            </p>
         }}
         <ul className="mt-1 flex flex-col gap-2">
             {for c in inc.candidates {
-                <li key={c.inc_id} className="rounded-lg border border-dashed bg-background p-3">
+                <li
+                    key={c.inc_id}
+                    className="rounded-lg border border-dashed bg-background p-3"
+                >
                     <div className="flex items-center gap-2">
-                        <span className="font-mono text-sm font-semibold">{c.inc_id}</span>
+                        <span className="font-mono text-sm font-semibold">
+                            {c.inc_id}
+                        </span>
                         <Button
                             variant="outline"
                             size="sm"
@@ -167,22 +204,30 @@ def:pub IncidentCard(
                 </li>
             }}
         </ul>
-
         <h3 className="mt-4 text-base font-semibold">
             {f"Merge proposals ({len(inc.proposals)})"}
         </h3>
         {if len(inc.proposals) == 0 {
-            <p className="text-sm text-muted-foreground">No merge proposals for this incident.</p>
+            <p className="text-sm text-muted-foreground">
+                No merge proposals for this incident.
+            </p>
         }}
         <ul className="mt-1 flex flex-col gap-2">
             {for p in inc.proposals {
-                <li key={p.msg_id + ">" + p.inc_id} className="rounded-lg border bg-background p-3">
+                <li
+                    key={p.msg_id + ">" + p.inc_id}
+                    className="rounded-lg border bg-background p-3"
+                >
                     <div className="flex flex-wrap items-center gap-2">
                         <span className="font-mono text-sm">{p.msg_id}</span>
                         <span aria-hidden="true">{"→"}</span>
                         <span className="font-mono text-sm">{p.inc_id}</span>
-                        <span className="text-sm text-muted-foreground">{f"score {p.score:.2f}"}</span>
-                        <span className="ml-auto"><RefereeBadge outcome={p.outcome} /></span>
+                        <span className="text-sm text-muted-foreground">
+                            {f"score {p.score:.2f}"}
+                        </span>
+                        <span className="ml-auto">
+                            <RefereeBadge outcome={p.outcome}/>
+                        </span>
                     </div>
                     {if p.reason != "" {
                         <p className="mt-1 text-sm leading-snug">
@@ -194,18 +239,24 @@ def:pub IncidentCard(
                         <div className="mt-2 flex flex-wrap items-center gap-2">
                             <Button
                                 disabled={saving}
-                                onClick={lambda (e: MouseEvent) { decide(p.msg_id, p.inc_id, True); }}
+                                onClick={lambda (e: MouseEvent) { decide(
+                                    p.msg_id, p.inc_id, True
+                                ); }}
                             >
                                 Approve merge
                             </Button>
                             <Button
                                 variant="outline"
                                 disabled={saving}
-                                onClick={lambda (e: MouseEvent) { decide(p.msg_id, p.inc_id, False); }}
+                                onClick={lambda (e: MouseEvent) { decide(
+                                    p.msg_id, p.inc_id, False
+                                ); }}
                             >
                                 Reject merge
                             </Button>
-                            <span className="text-sm font-semibold text-amber-900 dark:text-amber-200">
+                            <span
+                                className="text-sm font-semibold text-amber-900 dark:text-amber-200"
+                            >
                                 A person must decide
                             </span>
                         </div>
@@ -213,24 +264,57 @@ def:pub IncidentCard(
                 </li>
             }}
         </ul>
-
         <div className="mt-4 flex gap-2">
-            <Button disabled={inc.claimed_by != "" and inc.claimed_by != desk} onClick={lambda (e: MouseEvent) { claim(iid, False); }}>Claim before calling</Button>
-            {if inc.claimed_by == desk { <Button variant="outline" onClick={lambda (e: MouseEvent) { claim(iid, True); }}>Release</Button> }}
+            <Button
+                disabled={inc.claimed_by != "" and inc.claimed_by != desk}
+                onClick={lambda (e: MouseEvent) { claim(iid, False); }}
+            >
+                Claim before calling
+            </Button>
+            {if inc.claimed_by == desk {
+                <Button
+                    variant="outline"
+                    onClick={lambda (e: MouseEvent) { claim(iid, True); }}
+                >
+                    Release
+                </Button>
+            }}
         </div>
         {for p in inc.pending {
-            <div key={p.field + p.msg_id} className="mt-3 rounded border border-amber-600 p-3">
-                <p className="font-semibold">{p.field + ": " + p.old_value + " → " + p.new_value}</p>
-                <p className="text-sm">Verify by phone before accepting a correction.</p>
-                <Button onClick={lambda (e: MouseEvent) { review(iid, p.field, True); }}>Accept after call</Button>
-                <Button variant="outline" onClick={lambda (e: MouseEvent) { review(iid, p.field, False); }}>Keep previous value</Button>
+            <div
+                key={p.field + p.msg_id}
+                className="mt-3 rounded border border-amber-600 p-3"
+            >
+                <p className="font-semibold">
+                    {p.field + ": " + p.old_value + " → " + p.new_value}
+                </p>
+                <p className="text-sm">
+                    Verify by phone before accepting a correction.
+                </p>
+                <Button
+                    onClick={lambda (e: MouseEvent) { review(iid, p.field, True); }}
+                >
+                    Accept after call
+                </Button>
+                <Button
+                    variant="outline"
+                    onClick={lambda (e: MouseEvent) { review(iid, p.field, False); }}
+                >
+                    Keep previous value
+                </Button>
             </div>
         }}
-        <BriefPanel key={iid + str(len(inc.messages)) + str(len(inc.calls))} incId={iid} />
+        <BriefPanel
+            key={iid + str(len(inc.messages)) + str(len(inc.calls))}
+            incId={iid}
+        />
         <h3 className="mt-4 text-base font-semibold">Log a call</h3>
         <form
             className="mt-1 rounded-lg border bg-muted/40 p-3"
-            onSubmit={lambda (e: FormEvent) { e.preventDefault(); submit_call(iid); }}
+            onSubmit={lambda (e: FormEvent) {
+                e.preventDefault();
+                submit_call(iid);
+            }}
         >
             <div className="flex flex-wrap items-end gap-3">
                 <label className="flex flex-col gap-1 text-sm font-semibold">
@@ -247,7 +331,9 @@ def:pub IncidentCard(
                         <option value="STILL_IN_NEED">Still in need</option>
                     </select>
                 </label>
-                <label className="flex min-w-40 flex-1 flex-col gap-1 text-sm font-semibold">
+                <label
+                    className="flex min-w-40 flex-1 flex-col gap-1 text-sm font-semibold"
+                >
                     Note (optional)
                     <input
                         type="text"
@@ -261,7 +347,6 @@ def:pub IncidentCard(
                 </Button>
             </div>
         </form>
-
         <h3 className="mt-4 text-base font-semibold">
             {f"Past calls ({len(inc.calls)})"}
         </h3>
@@ -270,9 +355,16 @@ def:pub IncidentCard(
         }}
         <ul className="mt-1 flex flex-col gap-1">
             {for (i, c) in enumerate(inc.calls) {
-                <li key={str(i)} className="flex flex-wrap items-center gap-2 rounded-md border bg-background px-3 py-2 text-sm">
-                    <span className="font-mono tabular-nums text-muted-foreground">{c.storm_time}</span>
-                    <span className="font-semibold">{call_outcome_label(c.outcome)}</span>
+                <li
+                    key={str(i)}
+                    className="flex flex-wrap items-center gap-2 rounded-md border bg-background px-3 py-2 text-sm"
+                >
+                    <span className="font-mono tabular-nums text-muted-foreground">
+                        {c.storm_time}
+                    </span>
+                    <span className="font-semibold">
+                        {call_outcome_label(c.outcome)}
+                    </span>
                     <span className="text-muted-foreground">{c.desk}</span>
                     {if c.note != "" {
                         <span className="basis-full">{c.note}</span>
