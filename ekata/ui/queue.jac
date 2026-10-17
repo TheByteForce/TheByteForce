@@ -5,8 +5,8 @@ import from ...components.ui.button { Button }
 import from .atoms { StatusBadge, VulnerableBadge, people_label, pretty }
 
 def:pub call_sentence(row: QueueRow) -> str {
-    who = people_label(row.headcount) if row.headcount > 0 else "People (headcount not known)";
-    s = who + " somewhere we still need to confirm";
+    who = people_label(row.headcount) if row.headcount > 0 else "A household";
+    s = who + ", place not confirmed yet";
     if row.place != "" {
         joiner = " " if row.place.lower().startswith("near") else " at ";
         s = who + joiner + row.place;
@@ -19,6 +19,24 @@ def:pub call_sentence(row: QueueRow) -> str {
         s = s + f", waiting {row.waiting}";
     }
     return s;
+}
+
+# The ranker's reason in plain words: flags and waiting time are already shown.
+def:pub plain_reason(reason: str) -> str {
+    out: list[str] = [];
+    for part in reason.split(";") {
+        p = part.strip();
+        low = p.lower();
+        if p == "" or low.endswith("flagged") or low.startswith("waiting") {
+            continue;
+        }
+        if "floor" in low {
+            out = out + ["Kept at the top because vulnerable people are waiting"];
+        } else {
+            out = out + [p[:1].upper() + p[1:]];
+        }
+    }
+    return ". ".join(out);
 }
 
 def:pub NextCall(row: QueueRow, selected: bool, onSelect: Callable[[str], None]) -> JsxElement {
@@ -37,8 +55,8 @@ def:pub NextCall(row: QueueRow, selected: bool, onSelect: Callable[[str], None])
                 {"1 message" if row.msg_count == 1 else f"{row.msg_count} messages"}
             </span>
         </div>
-        {if row.reason != "" {
-            <p className="mt-3 text-[15px] leading-snug text-muted-foreground">{row.reason}</p>
+        {if plain_reason(row.reason) != "" {
+            <p className="mt-3 text-[15px] leading-snug text-muted-foreground">{plain_reason(row.reason)}</p>
         }}
         <div className="mt-5">
             <Button
@@ -75,9 +93,9 @@ def:pub QueueItem(
                         <VulnerableBadge key={v} flag={v}/>
                     }}
                 </span>
-                {if row.reason != "" {
+                {if plain_reason(row.reason) != "" {
                     <span className="mt-1.5 block text-[13px] text-muted-foreground">
-                        {row.reason}
+                        {plain_reason(row.reason)}
                     </span>
                 }}
             </span>
