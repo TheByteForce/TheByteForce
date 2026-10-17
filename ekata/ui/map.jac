@@ -12,6 +12,7 @@ import from "react-leaflet" {
 }
 import from "leaflet" { divIcon }
 import type from ekata.geo { MapLayers, RoutePlan }
+import from ...components.ui.skeleton { Skeleton }
 
 def:pub tone_hex(tone: str) -> str {
     if tone == "alert" {
@@ -112,6 +113,15 @@ def:pub EkataMap(
         zoom = layers.zoom;
     }
 
+    if layers is None {
+        return
+            <div className={"relative overflow-hidden rounded-xl border border-border " + height}>
+                <Skeleton className="h-full w-full rounded-none"/>
+                <p className="absolute inset-0 flex items-center justify-center text-[14px] text-muted-foreground">
+                    Loading the map
+                </p>
+            </div>;
+    }
     <div className={"relative overflow-hidden rounded-xl border border-border " + height}>
         <MapContainer
             center={[lat, lon]}

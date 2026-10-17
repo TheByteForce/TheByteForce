@@ -79,7 +79,7 @@ def:pub RequestCard(
                     <RequestBadge status={r.status}/>
                 </div>
                 <p className="mt-1 text-[15px]">
-                    {r.place}{". "}{people_label(r.headcount)}{"."}
+                    {(r.place + ". " if r.place != "" else "Place not confirmed yet. ") + people_label(r.headcount) + "."}
                 </p>
                 {if len(r.vulnerable) > 0 {
                     <div className="mt-2 flex flex-wrap gap-2">

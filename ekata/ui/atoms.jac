@@ -10,6 +10,7 @@ alone: every badge prints its word.
 import type from ekata.views { MsgView }
 import from ...components.ui.badge { Badge }
 import from ...components.ui.card { Card, CardHeader, CardTitle, CardContent }
+import from ...components.ui.empty { Empty as EmptyBox, EmptyHeader, EmptyTitle, EmptyDescription }
 
 # ---------- Label helpers ----------
 
@@ -274,12 +275,14 @@ def:pub Panel(title: str, note: str = "", children: any = None) -> JsxElement {
 # ---------- Empty state ----------
 
 def:pub Empty(title: str, hint: str = "") -> JsxElement {
-    <div className="rounded-lg border border-dashed border-border px-4 py-8 text-center">
-        <p className="text-[15px] font-semibold">{title}</p>
-        {if hint != "" {
-            <p className="mt-1 text-[13px] text-muted-foreground">{hint}</p>
-        }}
-    </div>
+    <EmptyBox className="border border-dashed border-border bg-card py-10">
+        <EmptyHeader>
+            <EmptyTitle className="text-[16px] font-semibold">{title}</EmptyTitle>
+            {if hint != "" {
+                <EmptyDescription className="text-[14px] text-muted-foreground">{hint}</EmptyDescription>
+            }}
+        </EmptyHeader>
+    </EmptyBox>
 }
 
 # ---------- One message ----------
