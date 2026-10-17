@@ -1,0 +1,128 @@
+{
+  "_note": "Synthetic GN household register for the demo. Every household, resident and phone is invented; phones use 07X-555-01NN with a literal X so nobody can dial them. Households from the storm-night story keep their fixture phones and house numbers so tonight's messages link to them.",
+  "areas": [
+    {
+      "gn": "Hettimulla",
+      "ds": "Kegalle",
+      "district": "Kegalle",
+      "officer": "Grama Niladhari, Hettimulla",
+      "households": [
+        {"id": "HET-01", "house": "14", "road": "Hettimulla Road", "phones": ["07X-555-0101", "07X-555-0102"],
+         "residents": [
+           {"name": "Seelawathie Perera", "age": 78, "needs": ["elderly", "disability"], "evac_help": true, "note": "Uses a wheelchair"},
+           {"name": "Kasun Perera", "age": 19}
+         ]},
+        {"id": "HET-02", "house": "11", "road": "Hettimulla Road", "phones": ["07X-555-0137"],
+         "residents": [
+           {"name": "Piyumi Dassanayake", "age": 36},
+           {"name": "Chathura Dassanayake", "age": 39},
+           {"name": "Senuri Dassanayake", "age": 9, "needs": ["child"]},
+           {"name": "Methum Dassanayake", "age": 6, "needs": ["child"]}
+         ]},
+        {"id": "HET-03", "house": "21", "road": "Hettimulla Road", "phones": ["07X-555-0150"],
+         "note": "Lives alone; a neighbour usually checks on her",
+         "residents": [
+           {"name": "Somawathi Ranasinghe", "age": 84, "needs": ["elderly", "disability"], "evac_help": true, "note": "Bedridden"}
+         ]},
+        {"id": "HET-04", "house": "3", "road": "Hettimulla Road", "phones": ["07X-555-0151"],
+         "residents": [
+           {"name": "Wasantha Kumara", "age": 44},
+           {"name": "Dulani Kumara", "age": 41},
+           {"name": "Nethmi Kumara", "age": 7, "needs": ["child", "medical"], "note": "Asthma, uses an inhaler"}
+         ]},
+        {"id": "HET-05", "house": "8", "road": "Hettimulla Road", "phones": ["07X-555-0152"],
+         "residents": [
+           {"name": "Nirosha Jayalath", "age": 33},
+           {"name": "Saman Jayalath", "age": 35},
+           {"name": "Kalum Jayalath", "age": 30}
+         ]}
+      ]
+    },
+    {
+      "gn": "Udagama",
+      "ds": "Mawanella",
+      "district": "Kegalle",
+      "officer": "Grama Niladhari, Udagama",
+      "households": [
+        {"id": "UDA-01", "house": "7", "road": "Udagama Road", "phones": ["07X-555-0103"],
+         "residents": [
+           {"name": "Sunil Bandara", "age": 46},
+           {"name": "Chandrika Bandara", "age": 43},
+           {"name": "Isuru Bandara", "age": 15, "needs": ["child"]},
+           {"name": "Hiruni Bandara", "age": 12, "needs": ["child"]}
+         ]},
+        {"id": "UDA-02", "house": "near the Bodhi temple", "road": "Udagama Road", "phones": ["07X-555-0104"],
+         "residents": [
+           {"name": "Kamala Bandara", "age": 31},
+           {"name": "Ajith Bandara", "age": 34},
+           {"name": "Baby Bandara", "age": 0, "needs": ["child"], "note": "Three months old"},
+           {"name": "Rupa Bandara", "age": 58},
+           {"name": "Sarath Bandara", "age": 61},
+           {"name": "Nadun Bandara", "age": 10, "needs": ["child"]}
+         ]},
+        {"id": "UDA-03", "house": "19", "road": "Udagama Road", "phones": ["07X-555-0153"],
+         "note": "Same surname and road as two other households: never linked on that alone",
+         "residents": [
+           {"name": "Heen Banda Bandara", "age": 81, "needs": ["elderly"], "evac_help": true},
+           {"name": "Podi Menike Bandara", "age": 77, "needs": ["elderly"], "evac_help": true}
+         ]},
+        {"id": "UDA-04", "house": "4", "road": "Udagama Road", "phones": ["07X-555-0154"],
+         "residents": [
+           {"name": "Mariyam Faleel", "age": 27, "needs": ["pregnant"], "note": "Eight months pregnant"},
+           {"name": "Faleel Hamid", "age": 30},
+           {"name": "Aysha Faleel", "age": 4, "needs": ["child"]}
+         ]},
+        {"id": "UDA-05", "house": "26", "road": "Udagama Road", "phones": ["07X-555-0155"],
+         "residents": [
+           {"name": "Anura Dissanayake", "age": 52},
+           {"name": "Kumudini Dissanayake", "age": 49},
+           {"name": "Pasindu Dissanayake", "age": 22, "needs": ["disability"], "evac_help": true, "note": "Uses a wheelchair"}
+         ]}
+      ]
+    },
+    {
+      "gn": "Pahala Kotuwa",
+      "ds": "Aranayake",
+      "district": "Kegalle",
+      "officer": "Grama Niladhari, Pahala Kotuwa",
+      "households": [
+        {"id": "PAH-01", "house": "9", "road": "Pahala Kotuwa", "phones": ["07X-555-0105", "07X-555-0106"],
+         "residents": [
+           {"name": "Mohamed Rizwan", "age": 38},
+           {"name": "Fathima Rizwan", "age": 32, "needs": ["pregnant"], "note": "Eight months pregnant"},
+           {"name": "Amaan Rizwan", "age": 8, "needs": ["child"]},
+           {"name": "Zainab Rizwan", "age": 5, "needs": ["child"]},
+           {"name": "Hafsa Rizwan", "age": 62}
+         ]},
+        {"id": "PAH-02", "house": "12", "road": "Pahala Kotuwa", "phones": ["07X-555-0126"],
+         "residents": [
+           {"name": "Sriyani Abeysekara", "age": 45},
+           {"name": "Nalin Abeysekara", "age": 48},
+           {"name": "Tharushi Abeysekara", "age": 17}
+         ]},
+        {"id": "PAH-03", "house": "2", "road": "Pahala Kotuwa", "phones": ["07X-555-0156"],
+         "note": "House below the slope named in the landslide alert",
+         "residents": [
+           {"name": "Leelawathi Samarakoon", "age": 74, "needs": ["elderly", "medical"], "evac_help": true, "note": "Needs insulin"},
+           {"name": "Gunadasa Samarakoon", "age": 79, "needs": ["elderly"], "evac_help": true}
+         ]},
+        {"id": "PAH-04", "house": "15", "road": "Pahala Kotuwa", "phones": ["07X-555-0157"],
+         "residents": [
+           {"name": "Ruwan Pathirana", "age": 40},
+           {"name": "Dilini Pathirana", "age": 37},
+           {"name": "Yasas Pathirana", "age": 11, "needs": ["child"]},
+           {"name": "Sachini Pathirana", "age": 8, "needs": ["child"]}
+         ]},
+        {"id": "PAH-05", "house": "6", "road": "Pahala Kotuwa", "phones": ["07X-555-0158"],
+         "residents": [
+           {"name": "Mohideen Ismail", "age": 55},
+           {"name": "Rahila Ismail", "age": 50},
+           {"name": "Imran Ismail", "age": 26, "needs": ["disability"], "evac_help": true, "note": "Cannot walk unaided"},
+           {"name": "Nusra Ismail", "age": 23},
+           {"name": "Rifka Ismail", "age": 19},
+           {"name": "Shafi Ismail", "age": 16}
+         ]}
+      ]
+    }
+  ]
+}
