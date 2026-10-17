@@ -194,6 +194,13 @@ def collect_facts(hub: EkataHub, ap: Appeal) -> AppealFacts {
     for inc in facts.matches {
         facts.evidence.append(Evidence(ref=inc.inc_id, kind="verified_incident", text=household_record(inc)));
     }
+    # Verification reused: money for a verified household should go through a
+    # registered channel. An unregistered account asking for it is a signal.
+    accounts = [b.account for b in [ap ->:PaysTo:->[?:BankAccount]]];
+    if len(facts.matches) > 0 and len(accounts) > 0 and not facts.official {
+        facts.signals.append("unregistered_payee_for_verified_household");
+        facts.evidence.append(Evidence(ref="payee:" + accounts[0], kind="payee_mismatch", text=f"Asks for money to account {accounts[0]}, which is not a registered channel for verified household {facts.matches[0].inc_id}."));
+    }
     for inc in named_households(hub, ap) {
         if inc not in facts.matches {
             facts.evidence.append(Evidence(ref=inc.inc_id, kind="unverified_household", text="The appeal names this household, but no officer has reached it yet. Wait for verification before donating."));
