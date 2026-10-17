@@ -1,14 +1,14 @@
-"""Coordination endpoints modelled on Japan's disaster system (all :pub, on the shared hub).
+"""Coordination endpoints for the desk and its partners (all :pub, on the shared hub).
 
-  alert_levels      Japan's 5-level evacuation alerts: each open incident gets a
-                    level 1-5 with an action; Level 3 means vulnerable people first.
-  volunteer_offers  Japan's Disaster Volunteer Centres: offers of help are listed
-                    against open incidents that need them (listing only, no dispatch).
-  appeal_verdicts   "Donate only through official channels": ring, impersonation and
-                    credential-request signals give an evidence-backed verdict (R8/R9).
+  alert_levels      A 5-level alert per open incident with an action
+                    (Level 3 means vulnerable people first).
+  volunteer_offers  Offers of help listed against open incidents that need them
+                    (listing only, no dispatch).
+  appeal_verdicts   Ring, impersonation and credential-request signals give an
+                    evidence-backed appeal verdict (R8/R9).
   run_appeal_checks The same check as a writer: stores each verdict on its appeal.
-  ds_handover       Japan's shared information platform (SIP4D): a clean sheet of
-                    phone-verified incidents for one DS division's officers.
+  ds_handover       A clean sheet of phone-verified incidents for one DS
+                    division's officers.
   ds_divisions      Which DS divisions have incidents, for picking a sheet.
 
 Readers take a tick argument because the client caches reads for 60 s.
