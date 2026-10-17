@@ -150,6 +150,12 @@ node GNDivision {
 node Appeal {
     has appeal_id: str;
     has text: str;
+    has source_msg_id: str = "";
+    has beneficiary_names: list[str] = [];
+    has place_text: str = "";
+    has credential_requests: list[str] = [];
+    has approved_by: str = "";
+    has model: str = "rules";
     has channel: str = "WHATSAPP";
     has verdict: str = "CHECKING";
     has reason: str = "";
@@ -184,6 +190,7 @@ node Bulletin {
 
 node RumourClaim {
     has claim: str;
+    has source_msg_id: str = "";
     has stance: str = "UNCONFIRMED";
     has storm_time: str = "";
 }

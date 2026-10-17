@@ -5,9 +5,23 @@ every writer call is followed by a full re-fetch.
 """
 
 import from "react" { useEffect }
-import from ekata.views { DemoState, ReplayStep, MsgView, QueueRow, TraceRow, IncidentView }
+import from ekata.case_api { explain_queue }
+import type from ekata.views {
+    DemoState,
+    ReplayStep,
+    MsgView,
+    QueueRow,
+    TraceRow,
+    IncidentView
+}
 import from ekata.api {
-    load_demo, demo_state, replay_next, call_queue, incident_detail, trace_since
+    load_demo,
+    demo_state,
+    replay_next,
+    call_queue,
+    incident_detail,
+    trace_since,
+    recent_messages
 }
 import from .topbar { TopBar }
 import from .inbox { Inbox }
@@ -86,9 +100,7 @@ def:pub Desk -> JsxElement {
     def apply_step(r: ReplayStep) -> None {
         step = r;
         add_message(r.message);
-        if len(r.queue) > 0 {
-            queue = r.queue;
-        }
+        queue = r.queue;
         if len(r.new_trace) > 0 {
             trace = merge_trace(trace, r.new_trace);
         }
@@ -100,6 +112,7 @@ def:pub Desk -> JsxElement {
         try {
             d = await demo_state(t);
             demo = d;
+            inbox = await recent_messages(t);
             q = await call_queue(t);
             queue = q;
             fresh = await trace_since(trace_cursor(trace));
@@ -216,6 +229,17 @@ def:pub Desk -> JsxElement {
         refresh();
     }
 
+    async def explain_top_queue -> None {
+        busy = True;
+        try {
+            queue = await explain_queue();
+            await refresh();
+        } except Exception as ex {
+            error = str(ex);
+        }
+        busy = False;
+    }
+
     async def poll -> None {
         if busy or running or loadingDemo {
             return;
@@ -272,9 +296,13 @@ def:pub Desk -> JsxElement {
     }
     known_ids: list[str] = [r.inc_id for r in queue];
 
-    <div className="flex min-h-screen flex-col bg-background text-foreground lg:h-screen">
+    <div
+        className="flex min-h-[calc(100dvh-64px)] flex-col bg-muted/25 text-foreground lg:h-[calc(100dvh-64px)]"
+    >
         <TopBar
             stormTime={clock}
+            engineMode={demo.engine_mode if demo is not None else "Connecting..."}
+            recordedAt={demo.recorded_at if demo is not None else ""}
             position={cur_pos}
             total={cur_total}
             running={running}
@@ -293,12 +321,20 @@ def:pub Desk -> JsxElement {
                 {error}
             </div>
         }}
-        <main className="grid min-h-[26rem] flex-1 grid-cols-1 gap-4 p-4 lg:min-h-0 lg:grid-cols-12 lg:grid-rows-[minmax(0,1fr)] lg:px-6">
+        <main
+            className="grid min-h-[26rem] flex-1 grid-cols-1 gap-4 p-4 lg:min-h-0 lg:grid-cols-12 lg:grid-rows-[minmax(0,1fr)] lg:px-6"
+        >
             <section aria-label="Inbox" className="lg:col-span-3 lg:min-h-0">
-                <Inbox messages={inbox} onSent={on_sent} />
+                <Inbox messages={inbox} onSent={on_sent}/>
             </section>
             <section aria-label="Call queue" className="lg:col-span-4 lg:min-h-0">
-                <CallQueue rows={queue} selected={selected} onSelect={lambda (id: str) { select_inc(id); }} />
+                <CallQueue
+                    rows={queue}
+                    selected={selected}
+                    onSelect={lambda (id: str) { select_inc(id); }}
+                    onExplain={lambda { explain_top_queue(); }}
+                    busy={busy}
+                />
             </section>
             <section aria-label="Incident card" className="lg:col-span-5 lg:min-h-0">
                 <IncidentCard

@@ -3,7 +3,7 @@
 Colour never carries meaning alone: every badge below prints its word.
 """
 
-import from ekata.views { MsgView }
+import type from ekata.views { MsgView }
 import from ...components.ui.badge { Badge }
 import from ...components.ui.card { Card, CardHeader, CardTitle, CardContent }
 
@@ -119,22 +119,23 @@ def referee_class(outcome: str) -> str {
 def:pub Chip(label: str, tone: str = "") -> JsxElement {
     <Badge
         variant="outline"
-        className={"h-auto whitespace-normal px-2.5 py-0.5 text-sm font-semibold " + tone}
+        className={"h-auto whitespace-normal px-2.5 py-0.5 text-sm font-semibold "
+            + tone}
     >
         {label}
     </Badge>
 }
 
 def:pub KindBadge(kind: str) -> JsxElement {
-    <Chip label={kind if kind != "" else "UNSORTED"} tone={kind_class(kind)} />
+    <Chip label={kind if kind != "" else "UNSORTED"} tone={kind_class(kind)}/>
 }
 
 def:pub StatusBadge(status: str) -> JsxElement {
-    <Chip label={pretty(status)} tone={status_class(status)} />
+    <Chip label={pretty(status)} tone={status_class(status)}/>
 }
 
 def:pub RefereeBadge(outcome: str) -> JsxElement {
-    <Chip label={referee_label(outcome)} tone={referee_class(outcome)} />
+    <Chip label={referee_label(outcome)} tone={referee_class(outcome)}/>
 }
 
 def:pub VulnerableBadge(flag: str) -> JsxElement {
@@ -147,12 +148,18 @@ def:pub VulnerableBadge(flag: str) -> JsxElement {
 # ---------- Panel frame ----------
 
 def:pub Panel(title: str, note: str = "", children: any = None) -> JsxElement {
-    <Card className="h-full min-h-0 gap-0 py-0">
-        <CardHeader className="flex flex-row items-center justify-between gap-2 border-b py-3">
+    <Card
+        className="h-full min-h-0 gap-0 overflow-hidden border-border/80 py-0 shadow-sm"
+    >
+        <CardHeader
+            className="flex flex-row items-center justify-between gap-2 border-b py-3"
+        >
             <CardTitle className="text-lg font-semibold">{title}</CardTitle>
-            <span className="text-sm text-muted-foreground">{note}</span>
+            <span className="text-right text-xs text-muted-foreground">{note}</span>
         </CardHeader>
-        <CardContent className="min-h-0 flex-1 overflow-y-auto py-3">{children}</CardContent>
+        <CardContent className="min-h-0 flex-1 overflow-y-auto py-3">
+            {children}
+        </CardContent>
     </Card>
 }
 
@@ -161,15 +168,19 @@ def:pub Panel(title: str, note: str = "", children: any = None) -> JsxElement {
 def:pub MessageItem(m: MsgView) -> JsxElement {
     <article className="rounded-lg border bg-background p-3">
         <div className="flex flex-wrap items-center gap-2">
-            <KindBadge kind={m.kind} />
-            <span className="font-mono text-sm tabular-nums text-muted-foreground">{m.storm_time}</span>
-            <span className="text-sm text-muted-foreground">
-                {m.channel}
-                {" "}
-                {m.language}
+            <KindBadge kind={m.kind}/>
+            <span className="font-mono text-sm tabular-nums text-muted-foreground">
+                {m.storm_time}
             </span>
-            <span className="ml-auto font-mono text-sm text-muted-foreground">{m.msg_id}</span>
+            <span className="text-sm text-muted-foreground">
+                {m.channel}{" "}{m.language}
+            </span>
+            <span className="ml-auto font-mono text-sm text-muted-foreground">
+                {m.msg_id}
+            </span>
         </div>
-        <p className="mt-2 whitespace-pre-wrap break-words text-base leading-snug">{m.text}</p>
+        <p className="mt-2 whitespace-pre-wrap break-words text-base leading-snug">
+            {m.text}
+        </p>
     </article>
 }

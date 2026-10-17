@@ -1,18 +1,22 @@
 """Bottom strip: the agent trace, newest first, plus the live graph link."""
 
-import from ekata.views { TraceRow }
+import type from ekata.views { TraceRow }
 import from .atoms { Chip, RefereeBadge, pretty }
 
 def:pub TraceItem(
-    r: TraceRow,
-    knownIds: list[str],
-    onSelect: Callable[[str], None]
+    r: TraceRow, knownIds: list[str], onSelect: Callable[[str], None]
 ) -> JsxElement {
-    <li className="flex flex-wrap items-center gap-x-2 gap-y-1 border-b px-4 py-2 text-sm last:border-b-0">
-        <span className="w-10 shrink-0 font-mono text-xs text-muted-foreground">{f"#{r.seq}"}</span>
-        <span className="w-14 shrink-0 font-mono tabular-nums text-muted-foreground">{r.storm_time}</span>
+    <li
+        className="flex flex-wrap items-center gap-x-2 gap-y-1 border-b px-4 py-2 text-sm last:border-b-0"
+    >
+        <span className="w-10 shrink-0 font-mono text-xs text-muted-foreground">
+            {f"#{r.seq}"}
+        </span>
+        <span className="w-14 shrink-0 font-mono tabular-nums text-muted-foreground">
+            {r.storm_time}
+        </span>
         <Chip
-            label={r.agent}
+            label={r.agent + (" / " + r.model if r.model != "" else "")}
             tone="border-border bg-secondary text-secondary-foreground uppercase tracking-wide"
         />
         <span aria-hidden="true">{"→"}</span>
@@ -26,15 +30,17 @@ def:pub TraceItem(
                 {r.target}
             </button>
         } elif r.target != "" {
-            <span className="rounded border border-dashed px-1.5 font-mono text-xs">{r.target}</span>
-        }}
+            <span className="rounded border border-dashed px-1.5 font-mono text-xs">
+                {r.target}
+            </span>
+        } }
         {if r.reason != "" {
             <span aria-hidden="true">{"→"}</span>
             <span className="min-w-0">{r.reason}</span>
         }}
         {if r.outcome != "" {
             <span aria-hidden="true">{"→"}</span>
-            <RefereeBadge outcome={r.outcome} />
+            <RefereeBadge outcome={r.outcome}/>
         }}
         {if r.confidence > 0.0 {
             <span className="ml-auto text-xs text-muted-foreground">
@@ -45,19 +51,21 @@ def:pub TraceItem(
 }
 
 def:pub TraceStrip(
-    rows: list[TraceRow],
-    knownIds: list[str],
-    onSelect: Callable[[str], None]
+    rows: list[TraceRow], knownIds: list[str], onSelect: Callable[[str], None]
 ) -> JsxElement {
     <section
         aria-label="Agent trace"
-        className="flex min-h-0 flex-col border-t bg-card lg:h-52 lg:shrink-0"
+        className="flex min-h-0 flex-col border-t bg-card lg:h-40 lg:shrink-0"
     >
-        <div className="flex flex-wrap items-center justify-between gap-2 border-b px-4 py-2 lg:px-6">
+        <div
+            className="flex flex-wrap items-center justify-between gap-2 border-b px-4 py-2 lg:px-6"
+        >
             <h2 className="text-lg font-semibold">
                 Agent trace
-                <span className="ml-2 text-sm font-normal text-muted-foreground">
-                    newest first: agent, action, reason, referee outcome
+                <span
+                    className="ml-2 hidden text-xs font-normal text-muted-foreground md:inline"
+                >
+                    Newest decisions · cited reasons · referee outcomes
                 </span>
             </h2>
             <a
@@ -77,7 +85,12 @@ def:pub TraceStrip(
             }}
             <ol>
                 {for r in rows {
-                    <TraceItem key={str(r.seq)} r={r} knownIds={knownIds} onSelect={onSelect} />
+                    <TraceItem
+                        key={str(r.seq)}
+                        r={r}
+                        knownIds={knownIds}
+                        onSelect={onSelect}
+                    />
                 }}
             </ol>
         </div>
