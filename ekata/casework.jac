@@ -10,6 +10,7 @@ import from ekata.schema {
 }
 import from ekata.store { all_incidents, messages_of, has_call_log, normalise_phone, normalise_name, normalise_place, place_compatible, log_decision, storm_minutes }
 import from ekata.ai.models { strong, budget_hook, drain_agent_steps, last_model }
+import from ekata.agent_tools { lookup_ngo_in, official_channel_for_in }
 
 glob investigator_model: any = strong;
 
@@ -220,8 +221,20 @@ def referee_appeal(signals: list[str], confirmed: bool, official: bool) -> str {
 }
 
 # R10-R11: no public warning without approval; Sinhala/Tamil also need native review.
+# R10: no verdict is shown publicly, and no warning goes out, without analyst approval.
+def r10_publish_allowed(approved_by: str) -> bool {
+    return approved_by.strip() != "";
+}
+
+# R11: Sinhala and Tamil warning drafts are marked until a native speaker checks them.
+glob NATIVE_CHECK_LABEL: str = "needs native-speaker check";
+
+def r11_native_label(language: str, native_reviewed: bool) -> str {
+    return NATIVE_CHECK_LABEL if language in ["si", "ta"] and not native_reviewed else "";
+}
+
 def warning_allowed(approved: bool, language: str, native_reviewed: bool) -> bool {
-    return approved and (language not in ["si", "ta"] or native_reviewed);
+    return approved and r11_native_label(language, native_reviewed) == "";
 }
 
 obj AnalystTools {
@@ -243,8 +256,14 @@ obj AnalystTools {
         if ap is None { return []; }
         return [Evidence(ref=x.inc_id, kind="verified_incident", text=x.summary) for x in verified_matches(self.hub, ap)];
     }
+    def lookup_ngo(name: str) -> str {
+        return lookup_ngo_in(self.hub, name);
+    }
+    def official_channel_for(gn_division: str) -> str {
+        return official_channel_for_in(self.hub, gn_division);
+    }
     def investigate(text: str) -> Investigation by investigator_model(
-        tools=[self.lookup_official, self.appeals_sharing, self.verified_incident_for],
+        tools=[self.lookup_official, self.appeals_sharing, self.verified_incident_for, self.lookup_ngo, self.official_channel_for],
         max_react_iterations=4, on_iteration=budget_hook, temperature=0.0,
         incl_info={"policy": "Use the read-only tools and cite returned reference IDs. Not verified yet is never fraud. Reused account/phone/URL is one signal; an accusation requires an independent fraud signal. Explain uncertainties. Never publish a warning."}
     );
@@ -252,13 +271,26 @@ obj AnalystTools {
 sem AnalystTools.lookup_official = "Check the claimed office and official contact against the fictional registry.";
 sem AnalystTools.appeals_sharing = "Find other appeals connected by a shared payee, phone or URL.";
 sem AnalystTools.verified_incident_for = "Find only confirmed incidents supported by a human call log.";
+sem AnalystTools.lookup_ngo = "Look up a relief group by name in the fictional registry: registered or not, and its official contact.";
+sem AnalystTools.official_channel_for = "The official channels for a GN division: its officer and the registered groups there.";
 
+# visit by llm over the appeal's direct leads: the model picks the one lead
+# (payee account, phone, link, claimed office or household) most worth
+# checking; the investigator is told which one, and the trace records it.
 walker AppealExplorer {
     has visited: list[str] = [];
     can begin with Appeal entry {
-        visit [->:PaysTo:->] by investigator_model(select=1, intent="Follow the payee account lead relevant to verifying this appeal");
+        if len([here -->]) == 0 { disengage; }
+        visit [-->] by investigator_model(
+            select=1,
+            intent="Pick the one lead (payee account, phone, link, claimed office or household) most worth checking to verify this appeal"
+        );
     }
-    can account with BankAccount entry { self.visited.append(here.account); }
+    can account with BankAccount entry { self.visited.append("payee account " + here.account); }
+    can phone with Phone entry { self.visited.append("phone " + here.number); }
+    can link with Url entry { self.visited.append("link " + here.value); }
+    can office with ClaimedOfficial entry { self.visited.append("claimed office " + here.office); }
+    can household with Incident entry { self.visited.append("household " + here.inc_id); }
 }
 
 def review_appeal(hub: EkataHub, ap: Appeal, use_ai: bool = False) -> AppealView {
@@ -278,8 +310,16 @@ def review_appeal(hub: EkataHub, ap: Appeal, use_ai: bool = False) -> AppealView
                 result = Investigation(reason=str(value["reason"]), confidence=float(value["confidence"]), evidence_ids=[str(x) for x in value["evidence_ids"]]);
                 ap.model = "cached:" + str(cached["model"]);
             } else {
-                ap spawn AppealExplorer();
-                result = AnalystTools(hub=hub, appeal_id=ap.appeal_id).investigate(ap.text);
+                lead = "";
+                try {
+                    explorer = AppealExplorer();
+                    ap spawn explorer;
+                    if len(explorer.visited) > 0 { lead = explorer.visited[0]; }
+                } except Exception { lead = ""; }
+                if lead != "" {
+                    log_decision(hub, "appeal_investigator", "lead_followed", "visit by llm picked the " + lead, "READ_ONLY", hub.storm_time, [ap], model=last_model() or "configured model pool", target_label=ap.appeal_id);
+                }
+                result = AnalystTools(hub=hub, appeal_id=ap.appeal_id).investigate(ap.text if lead == "" else ap.text + " [lead to check first: " + lead + "]");
                 ap.model = last_model() or "configured model pool";
                 record_cached("appeal", payload, {"reason": result.reason, "confidence": result.confidence, "evidence_ids": result.evidence_ids}, ap.model);
             }

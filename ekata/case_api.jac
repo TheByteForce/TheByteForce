@@ -1,6 +1,6 @@
 """Case-lane endpoints: analyst decisions always go through the single writer."""
 import from ekata.schema { Appeal, RumourClaim, Holds }
-import from ekata.casework { AppealView, RumourView, CaseFile, Describes, find_appeal, review_appeal, appeal_view, rumour_view }
+import from ekata.casework { AppealView, RumourView, CaseFile, Describes, find_appeal, review_appeal, appeal_view, rumour_view, r10_publish_allowed }
 import from ekata.store { get_hub, log_decision }
 import from ekata.locking { graph_writer }
 
@@ -64,5 +64,5 @@ def:pub explain_queue() -> list[QueueRow] {
 
 def:pub published_appeals(tick: int = 0) -> list[AppealView] {
     hub = get_hub();
-    return [appeal_view(hub, ap) for ap in [hub ->:Holds:->[?:Appeal]] if ap.approved_by != ""];
+    return [appeal_view(hub, ap) for ap in [hub ->:Holds:->[?:Appeal]] if r10_publish_allowed(ap.approved_by)];
 }
