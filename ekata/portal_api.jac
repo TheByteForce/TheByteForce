@@ -17,6 +17,7 @@ import from ekata.portal {
     escalation_rows, district_overview, RESOURCE_KINDS
 }
 import from ekata.store { find_incident }
+import from ekata.timeline { HouseholdTimeline, build_timeline }
 
 def:pub divisions(tick: int = 0) -> list[DivisionView] {
     return division_views(get_hub());
@@ -117,4 +118,8 @@ def:pub escalations(tick: int = 0) -> list[EscalationRow] {
 
 def:pub district_board(tick: int = 0) -> DistrictOverview {
     return district_overview(get_hub());
+}
+
+def:pub household_timeline(inc_id: str, tick: int = 0) -> HouseholdTimeline {
+    return build_timeline(get_hub(), inc_id);
 }

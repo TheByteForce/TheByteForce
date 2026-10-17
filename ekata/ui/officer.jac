@@ -22,6 +22,7 @@ import type from ekata.geo { MapLayers, RoutePlan }
 import from .map { EkataMap, MapLegend, RouteSummary }
 import from .queue { OfficerQueue }
 import from .incident { CasePanel }
+import from .timeline { HouseholdStory }
 
 def:pub OfficerMap(ds: str, onOpen: Callable[[str], None]) -> JsxElement {
     has layers: MapLayers | None = None;
@@ -305,6 +306,11 @@ def:pub OfficerPortal -> JsxElement {
                 onChanged={on_changed}
                 onRefresh={on_refresh}
             />
+        }}
+        {if ds != "" and page == "case" and selected != "" {
+            <div className="mt-6">
+                <HouseholdStory incId={selected}/>
+            </div>
         }}
         {if ds != "" and page == "map" {
             <OfficerMap ds={ds} onOpen={lambda (id: str) { open_case(id); }}/>

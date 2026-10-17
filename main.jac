@@ -59,7 +59,8 @@ import from ekata.portal_api {
     bulletins,
     publish_bulletin,
     escalations,
-    district_board
+    district_board,
+    household_timeline
 }
 import ".styles.global.css";
 
