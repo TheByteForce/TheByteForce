@@ -6,77 +6,85 @@
 
 **Every SOS in one trusted queue.**
 
-One verified household record, from first SOS to relief and appeal checks.
+Every flood SOS becomes one verified household, and that verified record then guides rescue, relief and donation safety.
 
-[Live app](https://preview-jac-sbx-cd4e1dc040734b5c8ad09986a0e011cc.jachammer.app) ·
+[Live app](http://3.107.243.34) ·
+[Guided demo](http://3.107.243.34/officer?ops) ·
+[Live graph](http://3.107.243.34/graph) ·
 [Pitch deck](docs/CrisisConnect.pptx) ·
-[How it works](#how-it-works) ·
 [Results](#results) ·
-[Run it](#run-it-locally)
+[For reviewers](#for-reviewers)
 
 ![Jac 0.37.25](https://img.shields.io/badge/Jac-0.37.25-1447e6)
 ![Jaseci](https://img.shields.io/badge/Jaseci-graph-7c3aed)
 ![byLLM](https://img.shields.io/badge/byLLM-Gemini%202.5%20Flash-059669)
+![Tests: 132](https://img.shields.io/badge/tests-132-d97706)
 ![License: MIT](https://img.shields.io/badge/license-MIT-71717a)
 
 <img src="docs/screenshots/start.jpg" alt="CrisisConnect start page with the four portals" width="900" />
 
 </div>
 
-Built by **TheByteForce** during **AI Hackathon 2026** at the University of Moratuwa. All demonstration households, contacts, organisations and bulletins are fictional.
+Built by **TheByteForce** at **AI Hackathon 2026** (Jaseci Labs × EESoc, University of Moratuwa), written in Jac on Jaseci.
 
-- **Live app:** https://preview-jac-sbx-cd4e1dc040734b5c8ad09986a0e011cc.jachammer.app (Jac Hammer sandbox, synthetic data). The first visit takes in the opening backlog of reports, so allow about 30 seconds.
+- **Live app:** http://3.107.243.34 (mirror: [Jac Hammer sandbox](https://preview-jac-sbx-cd4e1dc040734b5c8ad09986a0e011cc.jachammer.app))
+- **Guided demo:** http://3.107.243.34/officer?ops. Press **Start over**, then **Next step** seven times.
+- **Live Jac graph:** http://3.107.243.34/graph
 - **Pitch deck:** [`docs/CrisisConnect.pptx`](docs/CrisisConnect.pptx) (17 slides, with speaker notes)
 - **Demo video:** _link added at submission_
 
 ## Contents
 
-- [The problem](#the-problem)
-- [What CrisisConnect does](#what-crisisconnect-does)
-- [Four portals](#four-portals)
-- [How it works](#how-it-works)
+- [Why this matters](#why-this-matters)
+- [One household, end to end](#one-household-end-to-end)
+- [Four portals, one shared graph](#four-portals-one-shared-graph)
+- [The agents](#the-agents)
 - [Why Jac and Jaseci](#why-jac-and-jaseci)
 - [Results](#results)
-- [Run it locally](#run-it-locally)
-- [Seven-step demonstration](#seven-step-demonstration)
-- [Validation and evaluation](#validation-and-evaluation)
+- [For reviewers](#for-reviewers)
 - [Project layout](#project-layout)
-- [Deployment](#deployment)
 - [Practical boundaries](#practical-boundaries)
 - [What's next](#whats-next)
 
-## The problem
+## Why this matters
 
-In a crisis, the same family shows up in many messages: an SMS, a relative's WhatsApp, a hotline call. Volunteers phone every one of them to confirm the location, needs and headcount, so the most vulnerable people get buried under repeats. During the 2025 floods, one volunteer platform alone took requests from more than 300,000 people.
+When floods hit Sri Lanka, help requests arrive faster than any desk can read them. One family in danger sends an SMS, a relative forwards a WhatsApp message, a neighbour calls the hotline. Volunteers phone every message, confirming the same household again and again. Meanwhile the people who cannot move (the elderly, children, people with disabilities) wait in the same queue as everyone else. In the 2025 floods, a single volunteer platform received requests from more than 300,000 people.
 
-Fake relief appeals spread through the same channels. One posing as a deputy minister collected about Rs 600,000, and a false dam-breach rumour tied up the emergency hotline with hundreds of calls.
+The same channels carry fake donation appeals. One posing as a deputy minister collected about Rs 600,000, and a false dam-breach rumour tied up the emergency hotline with hundreds of calls.
 
-The information exists. What's missing is coordination.
+**CrisisConnect is AI for good, built for that night.** Its agents:
 
-## What CrisisConnect does
+- read every message in Sinhala, Tamil or English;
+- merge the repeats into one household and put the most vulnerable first;
+- route relief to a registered group that can actually deliver;
+- check donation appeals against the households an officer has verified by phone.
 
-**CrisisConnect merges duplicate pleas into one verified household record and ranks who to call next: the most vulnerable first, with a three-question call brief. It routes relief to a registered group and checks donation appeals against the households an officer has verified by phone.** An unverified appeal is never treated as fraud.
+An unverified appeal is never treated as fraud.
 
-| | |
-|---|---|
-| **Merge** | Messages that share a phone number, a full name or a household-level place become one incident. A shared surname or road is never enough. |
-| **Rank** | Elderly, child, medical, disabled and pregnant flags lift a household. Every rank says why, in words. |
-| **Verify** | An officer claims the case and confirms it by phone. A missed call never verifies anything. |
-| **Deliver** | A relief request goes to an eligible registered group. A decline reassigns it, and the citizen sees when help is on the way and when it is delivered. |
-| **Protect** | Citizens and analysts check appeals against official bulletins, the relief registry and verified households before anyone pays. |
+> **Agents propose. Rules constrain. People confirm.**
 
-**Who it's for:** Grama Niladhari and divisional desk officers making the calls, registered relief groups, district coordinators, and families in the crisis, who can track their own request.
+## One household, end to end
 
-## Four portals
+The [guided demo](http://3.107.243.34/officer?ops) follows a single family through the whole system. Every step runs the real pipeline.
 
-Each person works in one portal, and every portal reads the same graph.
+1. **Two reports, one family.** An SMS and a relative's WhatsApp message arrive. The resolver agent recognises the same household and merges them, so the officer makes one call instead of two.
+2. **Same surname, different family.** Another Perera household at a different address stays a separate case. The household story shows the evidence, and the safety rule that kept them apart.
+3. **Verified by a person.** The officer's first call goes unanswered, so the household stays unverified and moves up the queue. The second call reaches the family and confirms them. The citizen's tracker updates to *Officer confirmed by phone*.
+4. **Relief that adapts.** The officer asks for a boat. The relief matcher sends the request only to registered groups that offer boats and serve that division. The first group declines, and CrisisConnect re-routes the request to the next eligible group automatically.
+5. **Help on the way.** The group accepts and sets off. The family sees *Help is on the way* with their reference number.
+6. **Safe giving.** Two appeals name the family. The one through a registered relief group is matched to the verified household. The one asking for money to an unregistered account plus an OTP code goes to an analyst as a likely scam.
+7. **The whole record.** The household story shows every message, agent proposal, rule check, human decision and action, in order. The live Jac graph shows the nodes and edges behind it.
 
-| Portal | Route | For | What they do |
-|---|---|---|---|
-| Citizen | `/citizen` | People affected and their families | Send an SOS in Sinhala, Tamil or English, track it by reference, read bulletins, check an appeal |
-| Division officer | `/officer` | Grama Niladhari and divisional desks | Work the ranked call queue, verify households by phone, request relief, plan the rescue route |
-| Relief group | `/ngo` | Registered NGOs and volunteers | Accept or decline requests that fit, dispatch, mark help delivered |
-| District coordination | `/district` | District secretariat and disaster management | Monitor escalations, alert levels, appeals, agent activity, bulletins and results |
+## Four portals, one shared graph
+
+Each person uses the portal for their role, and every portal reads the same graph.
+
+| Portal | Who | What they do |
+|---|---|---|
+| **Citizen** `/citizen` | People in the flood and their families | Send an SOS (with a map pin or "use my location"), track it by reference number, check an appeal before donating, read official bulletins, find the nearest shelters |
+| **Division officer** `/officer` | Grama Niladhari and divisional desks | Work the division's queue (most vulnerable first, with a three-question call brief), verify households by phone, ask a relief group for help, plan the best rescue run on the map |
+| **Relief group** `/ngo` | Registered NGOs and volunteer groups | Receive matched requests with the reason they were chosen, accept or decline, mark on the way and delivered, plan the best delivery run from their base |
+| **District coordination** `/district` | District disaster management | See every division, households waiting too long, the situation map, appeals and rumours, bulletins, every agent decision, and the results |
 
 <table>
   <tr>
@@ -84,12 +92,12 @@ Each person works in one portal, and every portal reads the same graph.
     <td width="50%"><img src="docs/screenshots/officer-case.jpg" alt="Officer case page with call brief" /><br /><sub><b>Case page.</b> A three-question call brief, the call log and relief requests.</sub></td>
   </tr>
   <tr>
-    <td><img src="docs/screenshots/citizen-sos.jpg" alt="Citizen SOS page with a location map" /><br /><sub><b>Citizen SOS.</b> Pin a location, write in any language, get a reference.</sub></td>
-    <td><img src="docs/screenshots/citizen-check.jpg" alt="Citizen appeal checker" /><br /><sub><b>Check a message.</b> Compare an appeal with official bulletins and the registry before paying.</sub></td>
+    <td><img src="docs/screenshots/citizen-sos.jpg" alt="Citizen SOS page with a location map" /><br /><sub><b>Citizen SOS.</b> Pin a location, write in any language, get a reference number.</sub></td>
+    <td><img src="docs/screenshots/citizen-check.jpg" alt="Citizen appeal checker" /><br /><sub><b>Check a message.</b> Compare an appeal with official bulletins and the registry before donating.</sub></td>
   </tr>
   <tr>
-    <td><img src="docs/screenshots/district-overview.jpg" alt="District overview with escalations" /><br /><sub><b>District overview.</b> Escalations: 30 minutes without a call, or 15 when someone vulnerable is waiting.</sub></td>
-    <td><img src="docs/screenshots/officer-route.jpg" alt="Rescue route planning" /><br /><sub><b>Rescue run.</b> The route agent weighs vulnerable people, headcount and travel time.</sub></td>
+    <td><img src="docs/screenshots/district-overview.jpg" alt="District overview with escalations" /><br /><sub><b>District overview.</b> Escalation after 30 minutes without a call, or 15 when someone vulnerable is waiting.</sub></td>
+    <td><img src="docs/screenshots/officer-route.jpg" alt="Rescue route planning" /><br /><sub><b>Rescue run.</b> Three candidate runs; a vulnerable household is never dropped.</sub></td>
   </tr>
   <tr>
     <td><img src="docs/screenshots/district-appeals.jpg" alt="Appeals and rumours review" /><br /><sub><b>Appeals and rumours.</b> Shared payees, impersonated officials and OTP requests go to an analyst.</sub></td>
@@ -97,35 +105,51 @@ Each person works in one portal, and every portal reads the same graph.
   </tr>
 </table>
 
-## How it works
+## The agents
 
-**AI proposes. Rules referee. People decide.**
+| Agent | What it does | Where |
+|---|---|---|
+| Intake | Reads each message in any of three languages and returns typed facts: kind, people, vulnerable people, needs, place, phones, names | [`crisisconnect/ai/intake.jac`](crisisconnect/ai/intake.jac) |
+| Resolver | Walks the graph to candidate households with `visit [->:Candidate:->] by llm`, scores the match, and retries once with the referee's reason if a rule blocks it | [`crisisconnect/ai/resolver.jac`](crisisconnect/ai/resolver.jac) |
+| Ranker | A tool-using ReAct agent (capped at 4 iterations) that explains the top of the queue. A vulnerable household can never drop below its rule-based priority | [`crisisconnect/ai/triage.jac`](crisisconnect/ai/triage.jac) |
+| Call brief | Writes exactly three questions for the officer's call | [`crisisconnect/ai/brief.jac`](crisisconnect/ai/brief.jac) |
+| Relief matcher | Picks among eligible registered groups for a need and a place, explains why, and re-routes on a decline | [`crisisconnect/portal.jac`](crisisconnect/portal.jac) |
+| Route agent | Builds three runs (vulnerable first, most people, shortest drive), orders each on real roads, and picks the one that covers the most. It can never drop a vulnerable household | [`crisisconnect/geo.jac`](crisisconnect/geo.jac) |
+| Appeal investigator | Chooses which lead to follow with `visit [-->] by llm`, then checks the registry, shared accounts and the verified household with read-only tools, citing what it found | [`crisisconnect/casework.jac`](crisisconnect/casework.jac) |
+| Referee | Fourteen plain Jac rules (R1 to R14) that every agent proposal passes before it changes anything | [`crisisconnect/referee.jac`](crisisconnect/referee.jac) (R8 to R11 in `casework.jac`) |
 
-```mermaid
-flowchart LR
-    Message --> Intake --> Identifiers
-    Identifiers --> Resolver --> Referee
-    Referee --> Household
-    Household --> HumanCall --> VerifiedRecord
-    VerifiedRecord --> ReliefRequest --> EligibleGroup
-    EligibleGroup --> AcceptDispatchDeliver
-    VerifiedRecord --> AppealChecks --> Analyst
-    Household --> DecisionTimeline
-```
+Every decision is saved as a node in the graph with its reason, model and outcome. That is how the household story and the district's agent activity page show exactly why each step happened ([`crisisconnect/timeline.jac`](crisisconnect/timeline.jac)).
 
-1. **Read.** Each SOS, update, offer or appeal is read into the same fields: who, how many, where, which phone, who is vulnerable.
-2. **Match.** Walkers find messages that share a phone, a full name or a household-level place.
-3. **Referee.** Clear matches merge. Unclear ones wait for a person. Nothing merges on a guess.
-4. **Rank.** Open incidents are ranked by risk, vulnerable people and waiting time, with reasons.
-5. **Verify.** An officer claims the case and confirms it by phone.
-6. **Dispatch.** An eligible relief group accepts. A decline reassigns the request.
-7. **Deliver.** Delivery is recorded, and the citizen's tracking updates.
+**What the referee guarantees.** Each rule has its own test.
+
+| Rule | Guarantee |
+|---|---|
+| R1–R2 | A merge needs shared evidence: an exact phone, or a full name plus a household-level place |
+| R3 | A model can never lower the priority of a medical, child or elderly case |
+| R4 | Confirmed and resolved need a logged phone call |
+| R5 | Two desks cannot claim the same incident |
+| R6 | A contradiction in headcount or location re-opens verification |
+| R7 | Rumours never enter the call queue |
+| R10–R11 | No public warning without approval; Sinhala and Tamil drafts also need a native speaker's check |
+| R12 | Real people's names and real office titles never appear in fixtures or generated warnings |
+| R13 | Every applied change carries a Decision with agent, action and reason |
+| R14 | Model tools are read-only. Only the single writer applies changes |
 
 ## Why Jac and Jaseci
 
-A household in a crisis is a graph: messages, phones, names, calls, appeals and relief requests, all connected. So we built on one.
+- **One persistent graph.** Messages, phones, names, places, households, calls, relief requests, appeals and decisions are nodes and typed edges on `root.shared`. A verified household is reused by relief and appeal checks because it is the same node.
+- **Walkers as agents.** The resolver and the appeal investigator traverse the graph with `visit ... by llm`, choosing their next step among real neighbours.
+- **Meaning-typed AI.** `by llm` functions return typed objects, guided by `sem` notes, so every agent output is structured and checked before use.
+- **Agent memory in the graph.** The same graph stores:
+  - each message's run, with its ordered steps;
+  - every model call (model, latency, tokens);
+  - the rule each decision cites;
+  - desk feedback on merges;
+  - a usage ledger that survives resets.
 
-Messages, identifiers, incidents, calls, appeals and resource requests share a persistent graph anchored explicitly on `root.shared`. Walkers find candidates through shared identifiers. The resolver uses `visit ... by llm` to choose a graph neighbour, and a typed scoring function to assess the household match. Typed `by llm` functions handle intake, briefing and resource matching. Tool-using agents inspect read-only evidence. Plain Jac referee rules constrain automatic actions, while humans verify calls and review consequential findings. Decision nodes preserve the reasoning and outcome, and `commit()` makes each completed unit visible to other requests. The frontend is also written in Jac.
+  The resolver reads tonight's desk precedents as evidence, as counts, never as old message text.
+- **`commit()` per unit of work.** Each completed message becomes visible to every other request at once.
+- **Full stack in Jac.** The four portals, the map and the guided demo are written in Jac too. Over 98% of the repository is Jac, by GitHub's language bar.
 
 ```jac
 walker Resolver {
@@ -140,151 +164,118 @@ walker Resolver {
 
 <sub>Shortened from <a href="crisisconnect/ai/resolver.jac"><code>crisisconnect/ai/resolver.jac</code></a>.</sub>
 
-- **Agents:**
-  - *Intake:* typed `by llm`, with canonical names and phones.
-  - *Resolver:* `visit [->:Candidate:->] by llm` plus a typed scorer, retried once with the referee's block reason.
-  - *Call brief:* typed, exactly three questions.
-  - *Ranker:* a ReAct agent capped at 4 iterations. It explains the top five but can never push a vulnerable household below its deterministic score.
-  - *Appeal investigator:* `visit [-->] by llm` picks which lead to check first (payee, phone, link, claimed office or household). A ReAct agent with five read-only tools then cites what it found.
-- **Referee:** fourteen plain Jac rules (R1–R14), each with a test. Nothing an agent proposes changes the graph until a rule allows it or a person approves it.
+```mermaid
+flowchart LR
+    Message --> Intake --> Identifiers
+    Identifiers --> Resolver --> Referee
+    Referee --> Household
+    Household --> OfficerCall --> VerifiedRecord
+    VerifiedRecord --> ReliefMatcher --> EligibleGroup
+    EligibleGroup --> AcceptDispatchDeliver
+    VerifiedRecord --> AppealChecks
+    Household --> HouseholdStory
+```
 
-  | Rule | Guarantee |
-  |---|---|
-  | R1–R2 | A merge needs shared evidence: an exact phone, or a full name plus a household-level place |
-  | R3 | A model can never lower the priority of a medical, child or elderly case |
-  | R4 | Confirmed and resolved need a logged phone call |
-  | R5 | Two desks cannot claim the same incident |
-  | R6 | A contradiction in headcount or location re-opens verification |
-  | R7 | Rumours never enter the call queue |
-  | R11 | Sinhala and Tamil warning drafts stay marked for a native speaker's check |
-  | R12 | Real people's names and real office titles never appear in fixtures or generated warnings |
-  | R13 | Every applied change carries a Decision with agent, action and reason |
-  | R14 | Model tools are read-only. Only the single writer applies changes |
+**Reliability:**
 
-- **Agent memory in the same graph:** a memory hub keeps one run per message with its ordered steps. It records every model call (model, latency, tokens), the rule each decision cites, desk feedback on merge proposals, and a usage ledger that survives resets. The resolver reads tonight's desk precedents as evidence, in the form of counts, never old message text.
-- **Reliability:**
-  - a fallback model pool;
-  - a spend and call cap;
-  - a rules-only mode, in which phone-match merges and the priority score keep working with every model down;
-  - a labelled recorded run of real model outputs.
-- **Storage:** the whole graph (the crisis night and the agents' memory) lives in the Postgres that Jac Hammer provisions. There is no separate database.
-- **Observability:** native Jac tracing, metrics and logs. See [`observability/README.md`](observability/README.md).
+- A fallback model pool, and a cap on spending and calls.
+- A rules-only mode: phone-match merges and the priority score keep working with every model down.
+- A labelled recorded run of real model outputs.
+
+**Storage:** the whole graph lives in the Postgres that Jac Hammer provisions; there is no separate database.
+
+**Observability:** native Jac traces, metrics and logs ([`observability/README.md`](observability/README.md)).
 
 ## Results
 
-There are three completed runs of the integrated 94-message fixture. Each JSON includes pairwise counts, engine, timestamp, language groups and unavailable measurements.
+Measured on the team's 94-message storm-night fixture (64 rescue messages):
 
-- [`results/development-rules.json`](results/development-rules.json): rules only, no model.
-- [`results/development-live.json`](results/development-live.json): live Gemini 2.5 Flash agents, 17 Oct 2026.
-- [`results/development-cached.json`](results/development-cached.json): the same live outputs re-scored from the recorded run. This adds appeal accuracy.
-
-| Development fixture (94 synthetic messages, 64 rescue) | Rules only | Live model agents |
+| | Rules only | With AI agents |
 |---|---|---|
-| Calls needed (incidents) | 40, **24 calls saved** | 39, **25 calls saved** |
+| Calls saved by merging duplicates | 24 | **25** |
 | Merge precision (no wrong merges) | **100%** (29 of 29 pairs) | **100%** (38 of 38 pairs) |
-| Merge recall | 65.9% (29 of 44 pairs) | **86.4%** (38 of 44 pairs) |
-| Message kind accuracy | 81.9% | **92.6%** |
-| Referee interventions | 11 blocks or hand-offs, 8 retries | 24 blocks or hand-offs, 8 retries |
+| Duplicates found (recall) | 65.9% (29 of 44 pairs) | **86.4%** (38 of 44 pairs) |
+| Message type accuracy | 81.9% | **92.6%** |
 | Appeal verdict accuracy (20 labelled appeals) | not measured | **70%** (14 of 20) |
-| Model calls, cost, median time per message | none | 189 calls, US$0.35 for the night, 9.1 s |
+| Referee interventions | 11 blocks or hand-offs, 8 retries | 24 blocks or hand-offs, 8 retries |
+| Model calls, median time per message | none | 189 calls, 9.1 s |
+| Cost for the whole night | none | **US$0.35** |
 | Failed messages | 0 | 0 |
 
-The agents find a third more of the true duplicates than the rules alone, and still make no wrong merge: the referee blocked every unsafe proposal. These are development numbers on synthetic data the team wrote, not held-out performance.
+**The agents find a third more of the real duplicates than rules alone, and the referee kept every merge correct.** These are development numbers on synthetic data the team wrote, not held-out performance.
 
-**Recorded run:** [`crisisconnect/fixtures/recorded_run.json`](crisisconnect/fixtures/recorded_run.json) holds the real model outputs from the live run (94 intake results, 7 appeal investigations). With `CRISISCONNECT_CACHE_MODE=cached`, the app replays them and every screen says "Cached replay · live on cache miss". It is a demo backup for when the model is unreachable, and is never presented as live.
+Full outputs are in [`results/`](results):
 
-## Run it locally
+- `development-rules.json`: rules only.
+- `development-live.json`: live Gemini 2.5 Flash, 17 Oct 2026.
+- `development-cached.json`: the same live outputs re-scored, which adds appeal accuracy.
 
-Use Linux or WSL with Jac **0.37.25**. Keep the checkout in the Linux filesystem.
+The recorded model run is in [`crisisconnect/fixtures/recorded_run.json`](crisisconnect/fixtures/recorded_run.json). With `CRISISCONNECT_CACHE_MODE=cached`, the app replays it and every screen says "Cached replay · live on cache miss". It is a backup for when the model is unreachable, and is never presented as live.
+
+## For reviewers
+
+**Try it.** Open http://3.107.243.34/officer?ops and step through the guided story, or visit `/citizen`, `/officer`, `/ngo` and `/district`. The live graph is at [`/graph`](http://3.107.243.34/graph).
+
+**Run it** (Linux or WSL, Jac 0.37.25; keep the checkout in the Linux filesystem):
 
 ```bash
 jac install
-export GEMINI_API_KEY="your-local-key"
-jac run --dev
+export CRISISCONNECT_AI=on GEMINI_API_KEY="your-key"     # or CRISISCONNECT_AI=off for rules only
+jac run --no-dev --host 0.0.0.0 -p 8000
 ```
 
-| Variable | Effect |
-|---|---|
-| `CRISISCONNECT_AI=off` | Deterministic, rules-only demonstration |
-| `CRISISCONNECT_AI=on` | Model-backed agents |
-| `CRISISCONNECT_CACHE_MODE=cached` | Replay the labelled recorded run, live on a cache miss |
+Use `jac run --dev` for hot reload while developing. Never commit keys or `.env` files.
 
-Never commit keys or `.env` files.
-
-Open the local address printed by Jac:
-
-- `/citizen`: send an SOS, track its reference, read bulletins and check appeals.
-- `/officer`: select a division, verify households by phone and request relief.
-- `/ngo`: accept, decline, dispatch and deliver requests for a registered group.
-- `/district`: monitor escalations, appeals, agent activity and evaluation.
-- `/officer?ops`: guided demonstration controls. "Start over" resets the synthetic demonstration data.
-
-## Seven-step demonstration
-
-1. An SMS and a relative's WhatsApp become one household incident.
-2. A different Perera household remains separate.
-3. A missed call does not verify the household; a successful call does.
-4. A boat request goes to an eligible registered group. Its decline triggers reassignment.
-5. The next group accepts and dispatches; the citizen can see that help is on the way.
-6. An appeal through the registered channel matches the verified household. An unregistered payee plus an OTP request triggers analyst review.
-7. The group records delivery, and citizen tracking updates to "Help delivered". Open the household story and the Jac graph to inspect evidence, agent proposals, rules, human decisions and actions.
-
-The operator panel feeds fictional messages and recorded human actions into the real application pipeline. In rules mode, the demonstration does not claim live model inference.
-
-## Validation and evaluation
+**Check it:**
 
 ```bash
-jac check .
-jac test crisisconnect
-jac run --faux
+jac check .                 # type-checks every module
+jac test crisisconnect      # 132 tests, including one per referee rule
+jac run --faux              # lists every served endpoint
 jac run --no-serve --no-takeover tools/evaluate.jac --mode rules
 ```
 
-Evaluation reads the raw messages first and opens the separate truth labels only after predictions are produced. Results identify the engine and dataset. The bundled storm night is development data, not independent held-out evidence. A separately authored set can be supplied with message and label paths; use `--held-out` only when that independence is true. No production-performance claim is made.
+Evaluation reads the raw messages first and opens the separate truth labels only after predictions are produced. The bundled storm night is development data, not independent held-out evidence. Use `--held-out` only with a separately written set.
+
+**Deploying:** deploy the release commit, then confirm that `/functions` includes `scenario_next`, `citizen_send`, `household_timeline`, `respond_request` and `map_layers`. A local build passing does not prove the remote revision matches.
 
 ## Project layout
 
 ```text
 main.jac                 app entry point
-pages/                   routed pages: citizen, officer, ngo, district, about
+pages/                   the four portals and the about page
 components/              Jac UI components (jac-shadcn primitives, map, timeline)
-crisisconnect/           engine: coordinator, blocking, referee, portal, casework,
-                         timeline, scenario, memory, geo, evaluation
-crisisconnect/ai/        intake, resolver, call brief, triage, model pool
+crisisconnect/           engine: coordinator, referee, blocking, portal, geo,
+                         casework, timeline, scenario, memory, evaluation
+crisisconnect/ai/        intake, resolver, call brief, ranker, model pool
 crisisconnect/fixtures/  storm night, truth labels, registry, GN register, recorded run
-results/                 recorded development evaluations
+results/                 recorded evaluations
 tools/                   evaluation runner
-observability/           tracing, metrics and logs setup
+observability/           traces, metrics and logs
 docs/                    pitch deck and screenshots
 assets/                  logo and public-domain photos (credits on /about)
 ```
-
-## Deployment
-
-Deploy the release commit rather than an earlier dashboard copy. Verify that `/functions` includes `scenario_next`, `citizen_send`, `household_timeline`, `respond_request` and `map_layers`. The existing sandbox must be republished through its authorised Jac Hammer account; a local build passing is not proof that the remote revision matches.
 
 ## Practical boundaries
 
 - Role selection is a demonstration workflow, not authenticated production authorisation.
 - An unverified appeal is not evidence of fraud; public warnings require review.
-- Map locations inferred from a division are approximate. Road routing does not establish safe access; straight-line fallback estimates are labelled.
+- Map locations inferred from a division are approximate. Road routing does not prove safe access; straight-line fallback estimates are labelled.
 - Human decision precedents are retrieved graph memory, not model fine-tuning.
-- A recorded model run must be labelled; unseen inputs may still invoke the live provider.
+- Sinhala and Tamil messages in the fixture need a native speaker's check (R11).
+- Data minimisation: only what a call needs is kept (names, phones, place, headcount, needs). A production version would mask resolved households after the emergency.
 - Real deployment requires access controls, verified relief registries, operational data feeds and field validation.
-- Fixtures and seeded bulletins use invented issuers. Referee rule R12 has a test that fails if a real agency's name appears in any fixture or seeded bulletin.
-- Sinhala and Tamil messages in the fixture need a native speaker's check. Warning drafts in those languages stay marked "needs native-speaker check" (R11) until one approves them.
-- Data minimisation: CrisisConnect keeps only what a call needs (names, phones, place, headcount, needs), and nothing from appeals beyond the evidence cited. A production version would mask resolved households after the emergency.
 
 ## What's next
 
 - An SMS gateway and a WhatsApp webhook feeding the same intake, so people without mobile data can reach the desk.
-- Verified relief registries and official bulletin feeds in place of the fictional registry.
-- Officer logins per division, and a print-ready hand-over sheet for each Divisional Secretariat.
+- Official relief registries and bulletin feeds in place of the demonstration registry.
+- Officer logins per division, and a printable hand-over sheet for each Divisional Secretariat.
 - An independent, separately written held-out set to measure merge and appeal accuracy.
 - Beyond floods: landslides, cyclones and any crisis where people need to be found, verified and reached.
 
-## Credits and license
+---
 
-Photos are public-domain FEMA, National Guard and NASA images from Wikimedia Commons; full credits are on the app's `/about` page.
+All demonstration households, contacts, organisations and bulletins are fictional. All code was written during the hackathon's hacking hours. Photos are public-domain FEMA, National Guard and NASA images from Wikimedia Commons; full credits are on the app's `/about` page.
 
 MIT licensed. See [LICENSE](LICENSE).
