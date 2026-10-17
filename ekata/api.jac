@@ -12,12 +12,16 @@ Report shapes (the typed return value is the wire format, see views.jac):
   incident_detail / decide_merge / log_call -> IncidentView | None
   trace_since -> list[TraceRow] (ascending, at most 50)
   metrics -> Metrics
+  inbox_messages -> list[MsgView] (messages received so far, newest first)
 """
 
 import from ekata.views {
     MsgView, QueueRow, IncidentView, TraceRow, ReplayStep, Metrics, DemoState
 }
-import from ekata.store { get_hub, next_msg_id, find_incident, find_message, incident_of, is_seeded }
+import from ekata.store {
+    get_hub, next_msg_id, find_incident, find_message, incident_of, is_seeded, all_messages
+}
+import from ekata.schema { Message }
 import from ekata.seed { reset_and_seed }
 import from ekata.fixtures { prepare_replay, load_fixture }
 import from ekata.coordinator {
@@ -94,10 +98,19 @@ def:pub log_call(inc_id: str, outcome: str, desk: str, note: str = "") -> Incide
     return build_incident_view(hub, inc);
 }
 
-def:pub trace_since(cursor: int = 0) -> list[TraceRow] {
+def:pub trace_since(cursor: int = 0, tick: int = 0) -> list[TraceRow] {
     return decisions_since(get_hub(), cursor, 50);
 }
 
 def:pub metrics(tick: int = 0) -> Metrics {
     return build_metrics(get_hub());
+}
+
+def message_seq(m: Message) -> int {
+    return m.seq;
+}
+
+def:pub inbox_messages(tick: int = 0) -> list[MsgView] {
+    msgs = sorted(all_messages(get_hub()), key=message_seq, reverse=True);
+    return [msg_view(m) for m in msgs];
 }

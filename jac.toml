@@ -6,8 +6,8 @@ jac-version = "==0.37.25"
 
 [jac-shadcn]
 style = "nova"
-baseColor = "neutral"
-theme = "rose"
+baseColor = "zinc"
+theme = "blue"
 font = "inter"
 radius = "default"
 menuAccent = "subtle"
@@ -17,6 +17,9 @@ default_model = "${BYLLM_DEFAULT_MODEL:-gemini/gemini-2.5-flash}"
 
 [dependencies]
 [dependencies.npm]
+"@hugeicons/core-free-icons" = "^4.2.3"
+"@hugeicons/react" = "^1.1.9"
+"@radix-ui/react-slot" = "^1.3.3"
 radix-ui = "*"
 class-variance-authority = "*"
 "@fontsource-variable/inter" = "*"
@@ -25,6 +28,12 @@ tailwindcss = "^4.1.17"
 clsx = "^2.1.1"
 tailwind-merge = "^3.5.0"
 tw-animate-css = "^1.4.0"
+
+[client.app_meta_data]
+title = "CrisisConnect · Flood response desk"
+description = "CrisisConnect: one trusted inbox for a flood duty desk. Merges SOS messages into incidents, ranks who to call first, and checks appeals."
+theme_color = "#ffffff"
+icon = "/static/assets/crisisconnect-mark.svg"
 
 [client.vite]
 plugins = ["tailwindcss()"]
