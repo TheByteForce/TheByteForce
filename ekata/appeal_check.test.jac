@@ -18,7 +18,7 @@ def pay_to(hub: EkataHub, ap: Appeal, acct: BankAccount) {
 }
 
 def mk_registry(hub: EkataHub) {
-    hub +>:Holds:+> RegistryEntry(office="Sri Lanka Red Cross", contact="0112222222", kind="NGO");
+    hub +>:Holds:+> RegistryEntry(office="Hill Country Aid Circle", contact="0112222222", kind="NGO");
 }
 
 def only(vs: list[AppealVerdict], aid: str) -> AppealVerdict {
@@ -55,7 +55,7 @@ test "an unknown office gives IMPERSONATION" {
 test "a registered office with a different contact gives IMPERSONATION" {
     hub = fresh_hub("t-ac-imp2");
     mk_registry(hub);
-    ap = mk_appeal(hub, "APL-11", "Red Cross appeal", "Red Cross", "0779999999");
+    ap = mk_appeal(hub, "APL-11", "Aid Circle appeal", "Aid Circle", "0779999999");
     v = check_appeal(hub, ap);
     assert "IMPERSONATION" in v.signals;
 }
@@ -80,7 +80,7 @@ test "two signal types give LIKELY_SCAM" {
 test "no signals and no confirmed match is UNVERIFIED, never a scam" {
     hub = fresh_hub("t-ac-unv");
     mk_registry(hub);
-    ap = mk_appeal(hub, "APL-40", "Please help Kamal Perera", "Sri Lanka Red Cross", "0112222222");
+    ap = mk_appeal(hub, "APL-40", "Please help Kamal Perera", "Hill Country Aid Circle", "0112222222");
     v = check_appeal(hub, ap);
     assert v.signals == [];
     assert v.verdict == "UNVERIFIED";
@@ -97,7 +97,7 @@ test "confirmed incident name plus registered office is MATCHED, and apply write
     pn = PersonName(canonical="kamal perera", display="Kamal Perera");
     hub +>:Holds:+> pn;
     msg +>:Names:+> pn;
-    good = mk_appeal(hub, "APL-50", "Appeal for Kamal Perera via Red Cross", "Sri Lanka Red Cross", "0112222222");
+    good = mk_appeal(hub, "APL-50", "Appeal for Kamal Perera via Hill Country Aid Circle", "Hill Country Aid Circle", "0112222222");
     bad = mk_appeal(hub, "APL-51", "Send OTP now", "Nobody Org", "0770000000");
     assert good.verdict == "CHECKING";
     vs = check_all_appeals(hub, False);

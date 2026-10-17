@@ -1,5 +1,5 @@
 """Ekata DS hand-over sheet: a clean per-Divisional-Secretariat picture of
-phone-verified incidents for DS/GN officers (inspired by SIP4D). Read-only.
+phone-verified incidents for DS/GN officers. Read-only.
 
 Note: the count of open incidents is named open_count (not open) to avoid the
 Python builtin.

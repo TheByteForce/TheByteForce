@@ -1,7 +1,7 @@
 """Appeal checking (R8/R9): fraud signals, then a verdict. Pure reads; only
 check_all_appeals(apply=True) writes, and the caller is the single writer.
 
-Official-channel idea (Japan after 2011): donate only through channels in the
+Official-channel rule: donations should go only through channels listed in the
 registry. "No verified incident yet" is never evidence of fraud.
 """
 
