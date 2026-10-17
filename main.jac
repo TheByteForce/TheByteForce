@@ -1,15 +1,10 @@
-"""Ekata entry point: serves every endpoint and routes each person to their portal.
+"""CrisisConnect entry point: registers every server endpoint and mounts the
+file-based routes in pages/ (the shell is pages/layout.jac).
 
-Each person uses one portal, reached by its own address:
-  #/citizen   people in the flood and their families
-  #/officer   division officers (Grama Niladhari / divisional desks)
-  #/ngo       registered relief groups
-  #/district  district coordination
-There are no links between portals. ?ops adds the hidden operator panel used
-to replay the synthetic storm night for the demo.
+Each person works in one portal: /citizen, /officer, /ngo or /district.
+The situation runs live: ekata.live_feed brings reports in as time passes.
 """
 
-import from "react" { useEffect }
 import from ekata.api {
     load_demo,
     demo_state,
@@ -25,6 +20,7 @@ import from ekata.api {
     claim_incident,
     resolve_change
 }
+import from ekata.live_feed { situation_pulse }
 import from ekata.coordination_api {
     alert_levels, set_alert_override, volunteer_offers, appeal_verdicts, run_appeal_checks, ds_handover, ds_divisions
 }
@@ -63,55 +59,11 @@ import from ekata.portal_api {
     district_board,
     household_timeline
 }
+
 import ".styles.global.css";
+import ".styles.app.css";
 
-import from ekata.ui.home { Home }
-import from ekata.ui.citizen { CitizenPortal }
-import from ekata.ui.officer { OfficerPortal }
-import from ekata.ui.ngo { NgoPortal }
-import from ekata.ui.district { DistrictPortal }
-import from ekata.ui.ops { OpsPanel }
-
-def:pub app() -> JsxElement {
-    has route: str = "";
-    has ops: bool = False;
-
-    # Kept inline: a def:pub helper becomes a server endpoint, and a plain
-    # helper here is not placed on the client.
-    def read_route -> None {
-        h = window.location.hash.replace("#", "").replace("/", "").lower();
-        route = h if h in ["citizen", "officer", "ngo", "district"] else "";
-    }
-
-    can with entry {
-        read_route();
-        ops = "ops" in window.location.search;
-        document.title = "Ekata";
-    }
-
-    useEffect(
-        lambda {
-            handler = lambda { read_route(); window.scrollTo(0, 0); };
-            window.addEventListener("hashchange", handler);
-            return lambda { window.removeEventListener("hashchange", handler); };
-        },
-        []
-    );
-
-    <div className="min-h-screen bg-background text-foreground">
-        {if route == "citizen" {
-            <CitizenPortal/>;
-        } elif route == "officer" {
-            <OfficerPortal/>;
-        } elif route == "ngo" {
-            <NgoPortal/>;
-        } elif route == "district" {
-            <DistrictPortal/>;
-        } else {
-            <Home/>;
-        }}
-        {if ops {
-            <OpsPanel/>
-        }}
-    </div>
+# File-based routing: pages/ supplies the routes and pages/layout.jac the shell.
+def:pub app(children: any) -> JsxElement {
+    return <>{children}</>;
 }

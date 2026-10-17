@@ -16,13 +16,13 @@ jac run --dev
 
 For a deterministic demonstration use `export EKATA_AI=off` before starting. For model-backed operation use `EKATA_AI=on`. Never commit keys or `.env` files.
 
-Open the local address printed by Jac:
+The integrated interface is branded CrisisConnect; Ekata is the project and shared household engine. Open the local address printed by Jac:
 
-- `/#/citizen`: send an SOS, track its reference, read bulletins and check appeals.
-- `/#/officer`: select a division, verify households by phone and request relief.
-- `/#/ngo`: accept, decline, dispatch and deliver requests for a registered group.
-- `/#/district`: monitor escalations, appeals, agent activity and evaluation.
-- `/?ops#/officer`: guided demonstration controls. Start over resets synthetic demonstration data.
+- `/citizen`: send an SOS, track its reference, read bulletins and check appeals.
+- `/officer`: select a division, verify households by phone and request relief.
+- `/ngo`: accept, decline, dispatch and deliver requests for a registered group.
+- `/district`: monitor escalations, appeals, agent activity and evaluation.
+- `/officer?ops`: guided demonstration controls. Start over resets synthetic demonstration data.
 
 ## Seven-step demonstration
 
@@ -75,3 +75,12 @@ Evaluation reads raw messages first and opens the separate truth labels only aft
 - Real deployment requires access controls, verified relief registries, operational data feeds and field validation.
 
 MIT licensed. See [LICENSE](LICENSE).
+
+
+## Recorded development baseline
+
+`results/development-rules.json` contains a completed rules-only run of the integrated 94-message fixture. It is supplied as a reproducible development baseline, not an independent held-out or live-model result. Pairwise counts, engine, timestamp, language groups and unavailable measurements are included in the JSON.
+
+## Deployment
+
+Deploy the release commit rather than an earlier dashboard copy. Verify `/functions` includes `scenario_next`, `citizen_send`, `household_timeline`, `respond_request` and `map_layers`. The existing sandbox must be republished through its authorised Jac Hammer account; a local build passing is not proof that the remote revision matches.

@@ -106,6 +106,7 @@ def parse_report(d: any) -> EvaluationReport {
 
 def latest_report() -> EvaluationReport | None {
     path = os.path.join(".jac", "evaluation", "latest.json");
+    if not os.path.exists(path) { path = os.path.join("results", "development-rules.json"); }
     if not os.path.exists(path) { return None; }
     with open(path, encoding="utf-8") as fh { return parse_report(json.load(fh)); }
 }
@@ -191,7 +192,7 @@ def evaluate_fixture(messages_path: str, labels_path: str, mode: str = "rules", 
         }
         outcome.appeal_labels = len(expected_appeals);
         outcome.appeal_accuracy = ratio(correct_appeals, outcome.appeal_labels);
-        outcome.notes = ["Synthetic data; results apply only to this labelled dataset.", "Language groups use provided labels where available, otherwise intake-detected language.", "Critical ranks refer to flagged incidents, not a measured clinical accuracy.", "Language pair scores use within-language pairs; mixed-language pairs are included in overall scores."];
+        outcome.notes = ["Results apply only to this labelled dataset.", "Language groups use provided labels where available, otherwise intake-detected language.", "Critical ranks refer to flagged incidents, not a measured clinical accuracy.", "Language pair scores use within-language pairs; mixed-language pairs are included in overall scores."];
         if dataset_role != "independent held-out" { outcome.notes.append("Development fixture results; do not describe them as independent held-out performance."); }
         if outcome.appeal_labels == 0 { outcome.notes.append("No expected appeal verdict labels supplied; appeal accuracy is unavailable."); }
         return outcome;

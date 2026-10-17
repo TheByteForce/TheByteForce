@@ -58,27 +58,27 @@ def bulletin_seeds() -> list[BulletinSeed] {
     return [
         BulletinSeed(
             issuer="DMC", area="Kegalle",
-            text="[SYNTHETIC] Situation note 19:30: heavy rain continues over Kegalle and Ratnapura districts. Residents near river banks should be ready to move to higher ground.",
+            text="Situation note 19:30: heavy rain continues over Kegalle and Ratnapura districts. Residents near river banks should be ready to move to higher ground.",
             issued_at="19:30"
         ),
         BulletinSeed(
             issuer="NBRO", area="Kegalle",
-            text="[SYNTHETIC] Landslide alert (level 2) for the Mawanella, Aranayaka and Warakapola divisions. Avoid steep slopes and cut banks tonight.",
+            text="Landslide alert (level 2) for the Mawanella, Aranayaka and Warakapola divisions. Avoid steep slopes and cut banks tonight.",
             issued_at="20:15"
         ),
         BulletinSeed(
             issuer="Irrigation", area="Kotmale",
-            text="[SYNTHETIC] Kotmale dam: spill gates are operating as planned and water levels are within safe limits. The dam is safe; reports of a breach are false.",
+            text="Kotmale dam: spill gates are operating as planned and water levels are within safe limits. The dam is safe; reports of a breach are false.",
             issued_at="21:00"
         ),
         BulletinSeed(
             issuer="Irrigation", area="Ratnapura",
-            text="[SYNTHETIC] River level rising at the Ratnapura gauge. Flood warning for low-lying areas along the river.",
+            text="River level rising at the Ratnapura gauge. Flood warning for low-lying areas along the river.",
             issued_at="22:00"
         ),
         BulletinSeed(
             issuer="DMC", area="Ratnapura",
-            text="[SYNTHETIC] Relief shelters are open at schools in Ratnapura and Kuruwita. Families should bring identity papers and essential medicine.",
+            text="Relief shelters are open at schools in Ratnapura and Kuruwita. Families should bring identity papers and essential medicine.",
             issued_at="22:30"
         )
     ];

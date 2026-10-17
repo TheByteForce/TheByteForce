@@ -177,7 +177,7 @@ def collect_facts(hub: EkataHub, ap: Appeal) -> AppealFacts {
         }
         if not registered {
             facts.signals.append("unregistered_claimed_office");
-            facts.evidence.append(Evidence(ref="office:" + co.office, kind="impersonation", text="Claimed office is absent from the synthetic registry: " + co.office));
+            facts.evidence.append(Evidence(ref="office:" + co.office, kind="impersonation", text="Claimed office is not in the official registry: " + co.office));
         }
     }
     # A registered NGO's exact contact is an official channel even without an office claim.

@@ -147,7 +147,7 @@ def:pub log_call(
     }
 }
 
-def:pub trace_since(cursor: int = 0) -> list[TraceRow] {
+def:pub trace_since(cursor: int = 0, tick: int = 0) -> list[TraceRow] {
     return decisions_since(get_hub(), cursor, 50);
 }
 
