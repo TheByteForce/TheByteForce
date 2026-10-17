@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@import "leaflet/dist/leaflet.css";
 @import "@fontsource-variable/atkinson-hyperlegible-next";
 @import "@fontsource/noto-sans-sinhala/400.css";
 @import "@fontsource/noto-sans-sinhala/600.css";
@@ -243,3 +244,20 @@
         @apply font-sans;
     }
 }
+/* Map: numbered route stops and quiet attribution. */
+.ekata-stop {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 9999px;
+    border: 2px solid #fff;
+    background: #14212B;
+    color: #fff;
+    font: 700 13px/1 'Atkinson Hyperlegible Next Variable', system-ui, sans-serif;
+    box-shadow: 0 1px 3px rgb(0 0 0 / 0.35);
+}
+.ekata-stop.is-base { background: #1F5F7A; width: 30px; height: 30px; }
+.leaflet-container { font-family: inherit; background: #E8EEF1; }
+.leaflet-control-attribution { font-size: 10px; }

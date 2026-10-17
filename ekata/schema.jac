@@ -126,6 +126,8 @@ node Incident {
     has first_seen: str = "";
     has last_seen: str = "";
     has claimed_by: str = "";
+    has lat: float = 0.0;
+    has lon: float = 0.0;
 }
 
 node CallLog {
