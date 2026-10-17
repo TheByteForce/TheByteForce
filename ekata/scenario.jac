@@ -50,7 +50,7 @@ glob STEPS: list[ScenarioStep] = [
     ScenarioStep(n=4, title="A boat is requested and the first group declines", show="Relief group portal: the first group declined; Ekata sent the request to the next eligible group."),
     ScenarioStep(n=5, title="The second group accepts and sets off", show="Citizen tracker: 'Help is on the way'. Relief group map: plan the run from its base."),
     ScenarioStep(n=6, title="Two appeals name this household", show="District, Appeals: the appeal through a registered group matches the verified household; the one asking for an OTP is flagged."),
-    ScenarioStep(n=7, title="The whole record", show="Household story from first SOS to appeals, then the live Jac graph and Results.")
+    ScenarioStep(n=7, title="Delivery closes the loop", show="Citizen tracker: Help delivered. Show the household story from first SOS to delivery and appeals, then the live Jac graph and Results.")
 ];
 
 def state_of(hub: EkataHub) -> ScenarioState {
@@ -139,7 +139,12 @@ def scenario_next_in(hub: EkataHub) -> ScenarioView {
         refresh_appeals(hub);
         happened = "Two appeals arrived. Each was checked against the verified household and the registry.";
     } elif n == 7 {
-        happened = "The story is complete.";
+        req = find_request(hub, st.req_id);
+        if req is not None {
+            at(hub, "19:25");
+            answer_request(hub, req.req_id, req.ngo, "delivered");
+        }
+        happened = "The relief group recorded delivery at 19:25. The citizen sees Help delivered; the verified household record retains the complete evidence trail.";
     } else {
         return view_of(st, "The story is complete. Reset to run it again.");
     }

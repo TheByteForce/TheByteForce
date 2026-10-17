@@ -243,7 +243,7 @@ def:pub MapLegend(withRoute: bool = False) -> JsxElement {
         {if withRoute {
             <span className="flex items-center gap-1.5">
                 <span className="h-1 w-5 rounded bg-[#14212B]"></span>
-                Planned route
+                Planned route (not checked for flooding)
             </span>
         }}
     </div>
@@ -260,6 +260,7 @@ def:pub RouteSummary(route: RoutePlan) -> JsxElement {
                     {f"From {route.origin_label}: {len(route.stops)} stops, {route.people} people, about {route.duration_min} min, {route.distance_km} km" + ("" if route.road else " (straight-line estimate)")}
                 </p>
                 <p className="mt-2 text-[15px] leading-relaxed">{route.reason}</p>
+                <p className="mt-2 text-sm text-muted-foreground">Road route, not checked for flooding. Verify access with the local response team.</p>
                 <ol className="mt-4 space-y-2.5">
                     {for s in route.stops {
                         <li key={"l" + s.id} className="flex gap-3">

@@ -40,7 +40,9 @@ walker Resolver {
         for inc in [here ->:Candidate:->[?:Incident]] {
             reasons: list[str] = [];
             for e in [edge here ->:Candidate:-> inc] { reasons = reasons + e.reasons; }
-            choices.append(inc.inc_id + ":" + inc.summary + ":" + inc.place + ":" + str(reasons));
+            pattern = pattern_for(reasons);
+            precedent = desk_precedents(pattern) if pattern != "" else "no precedents";
+            choices.append(inc.inc_id + ":" + inc.summary + ":" + inc.place + ":" + str(reasons) + ":precedent=" + precedent);
         }
         self.context = {"message": here.text, "choices": sorted(choices), "feedback": self.block_reason};
         cached: any = read_cached("resolver", self.context);
